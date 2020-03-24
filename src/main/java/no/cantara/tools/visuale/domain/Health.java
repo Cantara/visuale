@@ -11,6 +11,7 @@ public class Health {
      * "running since": "2020-03-23T09:11:49.070Z"
      */
 
+    private String ip = "";
     private String status = "";
     private String version = "";
     private String now = "";
@@ -48,10 +49,19 @@ public class Health {
         this.running_since = running_since;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     @Override
     public String toString() {
         return "Health{" +
-                "status='" + status + '\'' +
+                "ip='" + ip + '\'' +
+                ", status='" + status + '\'' +
                 ", version='" + version + '\'' +
                 ", now='" + now + '\'' +
                 ", running_since='" + running_since + '\'' +

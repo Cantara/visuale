@@ -13,13 +13,10 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import javax.ws.rs.core.Response;
+import java.util.*;
 
 @Path("/status")
 @RequestScoped
@@ -28,6 +25,7 @@ public class StatusResource {
     public static ObjectMapper mapper = new ObjectMapper();
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
 
+    Map<String, Health> healthResults = new HashMap<>();
 
     /**
      * Using constructor injection to get a configuration property.
@@ -65,8 +63,14 @@ public class StatusResource {
             Health h = new Health();
             Node n = new Node();
             n.setHealthInfo(h);
+            if (n.getIpAddresses() != null && healthResults.get(n.getIpAddresses()) != null) {
+                n.setHealthInfo(healthResults.get(n.getIpAddresses()));
+            }
             Node n2 = new Node();
-            n.setHealthInfo(h);
+            n2.setHealthInfo(h);
+            if (n2.getIpAddresses() != null && healthResults.get(n2.getIpAddresses()) != null) {
+                n2.setHealthInfo(healthResults.get(n2.getIpAddresses()));
+            }
 
             Service s = new Service();
             Set<Node> nodeSet = new HashSet<>();
@@ -85,5 +89,32 @@ public class StatusResource {
         }
         return json;
     }
+
+    /**
+     * Set the greeting to use in future messages.
+     *
+     * @param jsonObject JSON containing the new greeting
+     * @return {@link Response}
+     */
+    @SuppressWarnings("checkstyle:designforextension")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateHeartbeat(JsonObject jsonObject) {
+
+        if (!jsonObject.containsKey("status")) {
+            try {
+                Health updatedHealth = mapper.readValue(jsonObject.toString(), Health.class);
+                healthResults.put(updatedHealth.getIp(), updatedHealth);
+            } catch (Exception e) {
+                logger.error("Received unmappable json for health");
+            }
+        }
+
+        String newGreeting = jsonObject.getString("greeting");
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
 }
 
