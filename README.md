@@ -14,3 +14,11 @@ An real-time dashboard visualisation for real-world micro-service continous depl
 * instances which have not reported for 10 intervals should be marked with a yellow "not working properly" colour...
 * instances which are not reachable or have missed 50 updates should be marked red/dead...  
 * normal update interval from the service should be 5 or 10 second
+
+# Build and test
+
+```
+$ mvn clean package
+$ java -jar target/visuale*.jar
+$ wget http://localhost:8080/status/
+```
