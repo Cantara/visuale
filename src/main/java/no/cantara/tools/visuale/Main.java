@@ -30,7 +30,7 @@ public final class Main {
         // start the server
         Server server = startServer();
 
-        System.out.println("http://localhost:" + server.port() + "/greet");
+        System.out.println("http://localhost:" + server.port() + "/status");
     }
 
     /**
