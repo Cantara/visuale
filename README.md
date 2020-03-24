@@ -23,5 +23,5 @@ An real-time dashboard visualisation for real-world micro-service continous depl
 ```
 $ mvn clean package
 $ java -jar target/visuale*.jar
-$ wget http://localhost:8080/status/
+$ wget http://localhost:8088/status/
 ```
