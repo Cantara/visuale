@@ -79,7 +79,7 @@ public class StatusResource {
             serviceSet.add(s);
             e.setServices(serviceSet);
 
-            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(e);
+            json = mapper.writeValueAsString(e);
         } catch (Exception e) {
             logger.error("Unable to create json status:", e);
         }
