@@ -10,7 +10,7 @@
     <version>0.0.2-SNAPSHOT</version>
 
     <repositories>
-        <!-- Needed for parent  -->
+        <!-- Needed for parent    -->
         <repository>
             <id>cantara-releases</id>
             <name>Cantara Release Repository</name>
