@@ -18,10 +18,11 @@ class MainTest {
     @BeforeAll
     public static void startTheServer() throws Exception {
         server = Main.startServer();
+        Thread.sleep(5000);
     }
 
     @Test
-    void testHelloWorld() {
+    void testMockedStatus() {
 
         Client client = ClientBuilder.newClient();
 
