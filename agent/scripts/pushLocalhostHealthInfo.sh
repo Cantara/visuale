@@ -6,3 +6,4 @@ wget -v --post-data "health=${JSON}" -X POST  https://visuale.cantara.no/devtest
 # JSON2="`wget -qO- http://localhost:8080/info`";
 # wget -v --post-data "info=${JSON2}" -X POST  https://visuale.cantara.no/devtest/myservice
 
+

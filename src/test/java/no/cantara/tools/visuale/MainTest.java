@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.spi.CDI;
+import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -26,11 +27,11 @@ public class MainTest {
 
         Client client = ClientBuilder.newClient();
 
-//        JsonObject jsonObject = client
-//                .target(getConnectionString("/status"))
-//                .request()
-//                .get(JsonObject.class);
-//        Assertions.assertTrue(jsonObject.getString("message").length() > 20);
+        JsonObject jsonObject = client
+                .target(getConnectionString("/status"))
+                .request()
+                .get(JsonObject.class);
+        Assertions.assertTrue(jsonObject.getString("message").length() > 20);
 
 
         Response r = client
