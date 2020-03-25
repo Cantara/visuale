@@ -1,6 +1,5 @@
 export function ServicesMockData (){
-  return {
-    "name": "Quadim-QA",
+  return {"name": "Quadim-QA",
     "services": [
       {
         "name": "Overlord-Service",
@@ -51,6 +50,5 @@ export function ServicesMockData (){
           }
         ]
       }
-    ]
-  }
+    ]}
 }
