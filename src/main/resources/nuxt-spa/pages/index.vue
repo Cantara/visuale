@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
+
   </div>
 </template>
 
@@ -22,9 +23,12 @@ export default {
 .container {
   margin: 0 auto;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 2em;
+  grid-auto-flow: dense;
+  padding: 2em;
+  height:100vh;
 }
 </style>

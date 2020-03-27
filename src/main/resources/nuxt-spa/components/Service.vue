@@ -1,12 +1,14 @@
 <template>
   <div class="service-block">
-    <div class="marker">
-      <div>
-        <div class="title">
-          {{service.name}}
-        </div>
-        <div class="content">
-          <Node v-for="(node,index) in service.nodes" :key="index" :node="node"></Node>
+    <div>
+      <div class="marker">
+        <div>
+          <div class="title">
+            {{service.name}}
+          </div>
+          <div class="content" :style="gridStyle">
+            <Node v-for="(node,index) in service.nodes" :key="index" :node="node"></Node>
+          </div>
         </div>
       </div>
     </div>
@@ -25,13 +27,31 @@
         required: true,
         type: Object,
       }
-    }
+    },
+    computed: {
+      gridStyle() {
+        return {
+          gridTemplateColumns: `repeat(${this.autoGrid()},1fr)`
+        }
+      },
+    },
+    data() {
+      return {
+      }
+    },
+    methods:{
+      autoGrid(){
+        return  Math.round(Math.sqrt(this.service.nodes.length));
+        return Math.round(this.service.nodes.length / 2);
+      },
+
+    },
   }
 </script>
 
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
-  .service-block {
+  .service-block > div {
     border: 2px solid white;
   }
 
@@ -51,7 +71,5 @@
     padding:1em;
     display:grid;
     grid-gap: 1em;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
   }
 </style>
