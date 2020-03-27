@@ -1,9 +1,14 @@
 <template>
-  <div>
+  <div class="background">
     <nuxt />
   </div>
 </template>
-
+<style lang="scss" scoped>
+  @import '~/assets/styles/variables/_variables.scss';
+  .background {
+    background-color: $color--background;
+  }
+</style>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

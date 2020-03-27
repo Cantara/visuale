@@ -6,7 +6,17 @@
       {{node.ip}}
     </div>
     <div class="content">
-      Health
+
+      <table>
+        <tr>
+          <td>Health: </td>
+          <th>Ok</th>
+        </tr>
+        <tr>
+          <td>Version: </td>
+          <th>{{node.health[0].version}}</th>
+        </tr>
+      </table>
     </div>
   </div>
 
@@ -26,9 +36,11 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '~/assets/styles/variables/_variables.scss';
   .node-block {
-    border: 2px solid black;
+    border: 2px solid white;
+    border-radius: 10px;
   }
 
   .marker > div {
@@ -37,13 +49,21 @@
   }
 
   .title {
-    background: white none repeat scroll 0 0;
+    background: $color--background none repeat scroll 0 0;
     display: inline-block;
-    padding: 0 2px;
-    margin: 0 2em;
+    padding: 0 0.6em;
+    margin: 0 0.6em;
+    color:white;
   }
   .content{
-    padding:1em;
-
+    padding:0.5em;
+    color:white;
+  }
+  td {
+    color:$color--description;
+    text-align: right;
+  }
+  th{
+    text-align:left;
   }
 </style>

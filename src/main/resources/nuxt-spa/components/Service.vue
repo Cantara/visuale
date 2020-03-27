@@ -29,9 +29,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '~/assets/styles/variables/_variables.scss';
   .service-block {
-    border: 2px solid black;
+    border: 2px solid white;
   }
 
   .marker > div {
@@ -40,15 +41,16 @@
   }
 
   .title {
-    background: white none repeat scroll 0 0;
+    background: $color--background none repeat scroll 0 0;
     display: inline-block;
-    padding: 0 2px;
-    margin: 0 2em;
+    padding: 0 0.6em;
+    margin: 0 0.6em;
+    color: white;
   }
   .content{
     padding:1em;
     display:grid;
-    grid-gap: 20px 20px;
+    grid-gap: 1em;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
   }
