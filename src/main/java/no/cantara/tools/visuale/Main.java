@@ -62,7 +62,7 @@ public final class Main {
                         .build())
                 .build();
 
-        ServerConfiguration serverConfig = ServerConfiguration.builder()
+        ServerConfiguration serverConfig = ServerConfiguration.builder().port(8080)
                 .build();
 
         WebServer ws = WebServer.create(serverConfig, routing);
