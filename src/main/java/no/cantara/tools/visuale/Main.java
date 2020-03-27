@@ -57,7 +57,7 @@ public final class Main {
         Routing routing = Routing.builder()
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
-                .register("/", StaticContentSupport.builder("nuxt-spa/dist")
+                .register("/", StaticContentSupport.builder("/staticspa")
                         .welcomeFileName("index.html")
                         .build())
                 .build();
@@ -71,6 +71,7 @@ public final class Main {
         ws.start()
                 .thenApply(webServer -> {
                     String endpoint = "http://localhost:" + webServer.port();
+                    System.out.println("Visit Dashboard at: " + endpoint + "/");
                     System.out.println("Health checks available on: " + endpoint + "/health");
                     System.out.println("Environment status available on:  " + endpoint + "/status");
                     return null;
