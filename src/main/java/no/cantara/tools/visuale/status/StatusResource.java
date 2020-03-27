@@ -1,10 +1,11 @@
 package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.helidon.webserver.Routing;
+import io.helidon.webserver.Service;
 import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.Node;
-import no.cantara.tools.visuale.domain.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +19,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
+//import no.cantara.tools.visuale.domain.Service;
+
 @Path("/status")
 @RequestScoped
-public class StatusResource {
+public class StatusResource implements Service {
     private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
     public static ObjectMapper mapper = new ObjectMapper();
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
@@ -44,8 +47,8 @@ public class StatusResource {
     @SuppressWarnings("checkstyle:designforextension")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject getDefaultMessage() {
-        return createResponse("World");
+    public String getStatusMessage() {
+        return createResponse("World").toString();
     }
 
 
@@ -72,14 +75,14 @@ public class StatusResource {
                 n2.setHealthInfo(healthResults.get(n2.getIpAddresses()));
             }
 
-            Service s = new Service();
+            no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service();
             Set<Node> nodeSet = new HashSet<>();
             nodeSet.add(n);
             nodeSet.add(n2);
             s.setNodes(nodeSet);
 
             Environment e = new Environment();
-            Set<Service> serviceSet = new HashSet<>();
+            Set<no.cantara.tools.visuale.domain.Service> serviceSet = new HashSet<>();
             serviceSet.add(s);
             e.setServices(serviceSet);
 
@@ -116,5 +119,9 @@ public class StatusResource {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @Override
+    public void update(Routing.Rules rules) {
+
+    }
 }
 

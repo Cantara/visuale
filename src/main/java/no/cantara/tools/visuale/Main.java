@@ -7,6 +7,7 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
+import no.cantara.tools.visuale.status.StatusResource;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public final class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static String applicationInstanceName = "visuale";
+
+    private static final StatusResource statusResource = new StatusResource();
 
     /**
      * Cannot be instantiated.
@@ -57,12 +60,14 @@ public final class Main {
         Routing routing = Routing.builder()
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
+                .get("/status", (req, res) -> res.send(statusResource.getStatusMessage()))
                 .register("/", StaticContentSupport.builder("/staticspa")
                         .welcomeFileName("index.html")
                         .build())
+//                .register("/",new StatusResource())
                 .build();
 
-        ServerConfiguration serverConfig = ServerConfiguration.builder()
+        ServerConfiguration serverConfig = ServerConfiguration.builder().port(8080)
                 .build();
 
         WebServer ws = WebServer.create(serverConfig, routing);
@@ -73,7 +78,7 @@ public final class Main {
                     String endpoint = "http://localhost:" + webServer.port();
                     System.out.println("Visit Dashboard at: " + endpoint + "/");
                     System.out.println("Health checks available on: " + endpoint + "/health");
-                    System.out.println("Environment status available on:  " + endpoint + "/status");
+                    System.out.println("Environment status available on:  " + endpoint + "/status/");
                     return null;
                 });
     }
