@@ -5,6 +5,7 @@ import io.helidon.health.checks.HealthChecks;
 import io.helidon.microprofile.server.Server;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
+import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -56,6 +57,9 @@ public final class Main {
         Routing routing = Routing.builder()
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
+                .register("/ui", StaticContentSupport.builder("WEB")
+                        .welcomeFileName("index.html")
+                        .build())
                 .build();
 
         ServerConfiguration serverConfig = ServerConfiguration.builder()
