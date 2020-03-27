@@ -57,7 +57,7 @@ public final class Main {
         Routing routing = Routing.builder()
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
-                .register("/ui", StaticContentSupport.builder("WEB")
+                .register("/", StaticContentSupport.builder("nuxt-spa/dist")
                         .welcomeFileName("index.html")
                         .build())
                 .build();
