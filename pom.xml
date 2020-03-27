@@ -128,7 +128,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>net.whydah.sso.ServerRunner</mainClass>
+                    <mainClass>no.cantara.tools.visuale.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
