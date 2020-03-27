@@ -138,7 +138,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>net.whydah.sso.ServerRunner</Main-Class>
+                            <Main-Class>no.cantara.tools.visuale.Main</Main-Class>
                         </manifestEntries>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
