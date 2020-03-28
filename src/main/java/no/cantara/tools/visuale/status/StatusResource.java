@@ -2,6 +2,8 @@ package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.webserver.Routing;
+import io.helidon.webserver.ServerRequest;
+import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
 import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
@@ -14,6 +16,8 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,12 +25,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletionStage;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
-//import no.cantara.tools.visuale.domain.Service;
-
-@Path("/status")
+@Path("status")
 @RequestScoped
 public class StatusResource implements Service {
     private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
@@ -38,6 +41,16 @@ public class StatusResource implements Service {
     private static Environment environment;
 
     /**
+     * A service registers itself by updating the routine rules.
+     *
+     * @param rules the routing rules.
+     */
+    @Override
+    public void update(Routing.Rules rules) {
+        rules.get("/status", this::showEnvironment).put("/status", this::updateHealfInfo);
+    }
+
+    /**
      * Using constructor injection to get a configuration property.
      * By default this gets the value from META-INF/microprofile-config
      */
@@ -46,35 +59,6 @@ public class StatusResource implements Service {
         initializeEnvironment(MOCK_ENVORONMENT, "QuadimDemo");
     }
 
-    public static void initializeEnvironment(String envJson, String envoronment_name) {
-        environment = new Environment().withName(envoronment_name);
-        try {
-            environment = mapper.readValue(envJson, Environment.class);
-            for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
-                for (Node node : service.getNodes()) {
-                    if (node.getName() == null || node.getName().length() < 2) {
-                        node.setName(service.getName());
-                    }
-                    healthResults.put(node.getIp() + node.getName(), node);
-                }
-            }
-            environment.setName(envoronment_name);
-        } catch (Exception e) {
-            logger.error("Unable to inizialise dashboard environment", e);
-        }
-    }
-
-    public static Map<String, Node> getHealthStatusMap() {
-        return healthResults;
-    }
-
-    public static int getHealthStatusMapSize() {
-        return healthResults.size();
-    }
-
-    public static Environment getEnvironment() {
-        return environment;
-    }
 
     /**
      * Return a wordly greeting message.
@@ -84,7 +68,7 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String showEnvironment() {
+    public Response showEnvironment(final ServerRequest request, final ServerResponse response) {
         String msg = environment.toString();
         try {
             msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
@@ -92,26 +76,45 @@ public class StatusResource implements Service {
         } catch (Exception e) {
             logger.error("Unable to serialize environment", e);
         }
-        return msg;
+        response.status(200).send(msg);
+        return Response.status(Response.Status.OK).build();
     }
 
 
     /**
      * Set the greeting to use in future messages.
      *
-     * @param jsonObject JSON containing the new greeting
      * @return {@link Response}
      */
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateHealfInfo(String jsonObject) {
-        //if (!jsonObject.containsKey("status")) {
-        updateHealthMap(jsonObject.toString());
-        //}
+    public Response updateHealfInfo(final ServerRequest request, final ServerResponse response) {
+        final Health[] health = {new Health()};
+
+        CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
+        request.content().as(Health.class).thenApply(e ->
+        {
+            return updateHealthMap(new Health().withName(e.getName()).withStatus(e.getStatus())
+                    .withVersion(e.getVersion()).withIp(e.getIp())
+                    .withNow(e.getNow()).withRunningSince(e.getRunningSince()));
+        }).thenCompose(p -> response.status(204).send());
+
+        updateHealthMap(health[0]);
+
+//            )
+//                    .thenCompose(p -> response.status(204).send());
+//            }
+        response.status(204).send();
+
 
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+
+    public String updateHealthMap2(String json) {
+        updateHealthMap(json);
+        return json;
     }
 
     public static int updateHealthMap(String json) {
@@ -169,10 +172,45 @@ public class StatusResource implements Service {
     }
 
 
-    @Override
-    public void update(Routing.Rules rules) {
-
+    public static void initializeEnvironment(String envJson, String envoronment_name) {
+        environment = new Environment().withName(envoronment_name);
+        try {
+            environment = mapper.readValue(envJson, Environment.class);
+            for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
+                for (Node node : service.getNodes()) {
+                    if (node.getName() == null || node.getName().length() < 2) {
+                        node.setName(service.getName());
+                    }
+                    healthResults.put(node.getIp() + node.getName(), node);
+                }
+            }
+            environment.setName(envoronment_name);
+        } catch (Exception e) {
+            logger.error("Unable to inizialise dashboard environment", e);
+        }
     }
 
+    public static Map<String, Node> getHealthStatusMap() {
+        return healthResults;
+    }
+
+    public static int getHealthStatusMapSize() {
+        return healthResults.size();
+    }
+
+    public static Environment getEnvironment() {
+        return environment;
+    }
+
+    @JsonbCreator
+    @SuppressWarnings("checkstyle:ParameterNumber")
+    public static Health of(@JsonbProperty("name") String name, @JsonbProperty("status") String status,
+                            @JsonbProperty("now") String now, @JsonbProperty("runningSince") String runningSince,
+                            @JsonbProperty("version") String version, @JsonbProperty("ip") String ip) {
+
+        Health e = new Health(status, name, now, runningSince, version, ip);
+        updateHealthMap(e);
+        return e;
+    }
 }
 

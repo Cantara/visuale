@@ -138,6 +138,19 @@ public class Health {
         return this;
     }
 
+    public Health() {
+
+    }
+
+    public Health(String status, String name, String now, String runningSince, String version, String ip) {
+        this.status = status;
+        this.name = name;
+        this.now = now;
+        this.runningSince = runningSince;
+        this.version = version;
+        this.ip = ip;
+    }
+
     @Override
     public String toString() {
         return "Health{" +
@@ -149,4 +162,6 @@ public class Health {
                 ", ip='" + ip + '\'' +
                 '}';
     }
+
+
 }

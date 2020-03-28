@@ -1,9 +1,10 @@
 #!/bin/bash
 
 JSON="`wget -qO- http://localhost:8080/health`";
-wget -v --post-data "health=${JSON}" -X POST  https://visuale.cantara.no/devtest/myservice
+wget --method=PUT --body-data="${JSON}"  https://visuale.cantara.no/status
 
 # JSON2="`wget -qO- http://localhost:8080/info`";
-# wget -v --post-data "info=${JSON2}" -X POST  https://visuale.cantara.no/devtest/myservice
+# wget --method=PUT --body-data="${JSON}"  http://localhost:35277/status
 
+# JSON=$(<exampleJsonHealth.json ); wget --method=PUT --body-data="${JSON}"  http://localhost:35277/status
 

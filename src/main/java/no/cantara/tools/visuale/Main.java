@@ -2,6 +2,7 @@ package no.cantara.tools.visuale;
 
 import io.helidon.health.HealthSupport;
 import io.helidon.health.checks.HealthChecks;
+import io.helidon.media.jsonb.server.JsonBindingSupport;
 import io.helidon.microprofile.server.Server;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
@@ -55,6 +56,7 @@ public final class Main {
         // load logging configuration
         setupLogging();
         startHealthReportSimulator();
+        StatusResource statusResource = new StatusResource();
 
         HealthSupport health = HealthSupport.builder()
                 .add(HealthChecks.healthChecks())
@@ -66,10 +68,13 @@ public final class Main {
                 .build();
 
         Routing routing = Routing.builder()
+                .register(JsonBindingSupport.create())
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
-                .get("/status", (req, res) -> res.send(statusResource.showEnvironment()))
-                .put("/status", (req, res) -> res.send(statusResource.updateHealfInfo(req.content().toString())))
+//                .register("/status",statusResource)
+                .register(statusResource)
+//                .get("/status", (req, res) -> res.send(statusResource.showEnvironment()))
+//                .put("/status", (req, res) -> res.send(statusResource.updateHealfInfo(req)))
                 .register("/", StaticContentSupport.builder("/staticspa")
                         .welcomeFileName("index.html")
                         .build())
@@ -92,6 +97,7 @@ public final class Main {
                 });
     }
 
+
     /**
      * Start the server.
      *
@@ -103,7 +109,6 @@ public final class Main {
         // and Application classes annotated as @ApplicationScoped
         return Server.create().start();
     }
-
     /**
      * Configure logging from logging.properties file.
      */
