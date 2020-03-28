@@ -18,6 +18,8 @@ public class Health {
 
     @JsonProperty("Status")
     private String status;
+    @JsonProperty("Name")
+    private String name;
     @JsonProperty("now")
     private String now;
     @JsonProperty("running since")
@@ -42,6 +44,21 @@ public class Health {
 
     public Health withStatus(String status) {
         this.status = status;
+        return this;
+    }
+
+    @JsonProperty("Name")
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty("Name")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Health withName(String name) {
+        this.name = name;
         return this;
     }
 

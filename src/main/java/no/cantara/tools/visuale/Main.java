@@ -7,6 +7,7 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
+import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.status.StatusResource;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -18,8 +19,13 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
+import java.time.Instant;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 
 /**
@@ -29,6 +35,7 @@ public final class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static String applicationInstanceName = "visuale";
+    private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 2;
 
     private static final StatusResource statusResource = new StatusResource();
 
@@ -47,6 +54,7 @@ public final class Main {
     public static void main(final String[] args) throws IOException {
         // load logging configuration
         setupLogging();
+        startHealthReportSimulator();
 
         HealthSupport health = HealthSupport.builder()
                 .add(HealthChecks.healthChecks())
@@ -141,4 +149,31 @@ public final class Main {
 
         return ipAdresses;
     }
+
+
+    private static void startHealthReportSimulator() {
+        ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+
+        Runnable task1 = () -> {
+
+            Health health = new Health().withName(applicationInstanceName).withVersion(getVersion()).withStatus("OK").withIp(getMyIPAddresssesString()).withNow(Instant.now().toString());
+            StatusResource.updateHealthMap(health);
+        };
+
+        // init Delay = 5, repeat the task every 60 second
+        ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+
+
+        ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
+
+        Runnable task2 = () -> {
+
+            Health health = new Health().withName(applicationInstanceName + " 2").withVersion(getVersion()).withStatus("OK").withIp(getMyIPAddresssesString()).withNow(Instant.now().toString());
+            StatusResource.updateHealthMap(health);
+        };
+
+        // init Delay = 5, repeat the task every 60 second
+        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task1, 15, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+    }
+
 }

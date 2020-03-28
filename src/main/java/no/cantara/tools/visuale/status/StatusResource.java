@@ -88,6 +88,12 @@ public class StatusResource implements Service {
 
     private JsonObject createResponse(String who) {
         String msg = environment.toString();
+        try {
+            msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
+
+        } catch (Exception e) {
+            logger.error("Unable to serialize environment", e);
+        }
 
         return JSON.createObjectBuilder()
                 .add("message", msg)
@@ -114,15 +120,18 @@ public class StatusResource implements Service {
     }
 
     public static int updateHealthMap(String json) {
+        logger.debug("Received health update: {}", json);
         try {
             Health updatedHealth = mapper.readValue(json, Health.class);
             Node node = healthResults.get(updatedHealth.getIp());
             if (node == null) {
+                logger.debug("Added new service from health update: {}", updatedHealth);
                 node = new Node().withIp(updatedHealth.getIp()).withHealth(updatedHealth);
                 no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service().withNode(node).withName("Unknown_Service:" + UUID.randomUUID().toString());
                 environment.addService(s);
                 healthResults.put(node.getIp(), node);
             } else {
+                logger.debug("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);
             }
         } catch (Exception e) {
@@ -132,14 +141,17 @@ public class StatusResource implements Service {
     }
 
     public static int updateHealthMap(Health updatedHealth) {
+        logger.debug("Received health update: {}", updatedHealth);
         try {
             Node node = healthResults.get(updatedHealth.getIp());
             if (node == null) {
+                logger.debug("Added new service from health update: {}", updatedHealth);
                 node = new Node().withIp(updatedHealth.getIp()).withHealth(updatedHealth);
                 no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service().withNode(node).withName("Unknown_Service:" + UUID.randomUUID().toString());
                 environment.addService(s);
                 healthResults.put(node.getIp(), node);
             } else {
+                logger.debug("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);
             }
             return node.getHealth().size();
