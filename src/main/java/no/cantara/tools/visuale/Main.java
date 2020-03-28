@@ -55,6 +55,30 @@ public final class Main {
     public static void main(final String[] args) throws IOException {
         // load logging configuration
         setupLogging();
+
+        WebServer ws = startServer(8080);
+    }
+
+
+    /**
+     * Start the server.
+     *
+     * @return the created {@link Server} instance
+     */
+    static public Server startMPServer() {
+        // Server will automatically pick up configuration from
+        // microprofile-config.properties
+        // and Application classes annotated as @ApplicationScoped
+        return Server.create().start();
+    }
+
+
+    /**
+     * Start the server.
+     *
+     * @return the created {@link Server} instance
+     */
+    static public WebServer startServer(int port) {
         startHealthReportSimulator();
         StatusResource statusResource = new StatusResource();
 
@@ -81,9 +105,16 @@ public final class Main {
 //                .register("/",new StatusResource())
                 .build();
 
-        ServerConfiguration serverConfig = ServerConfiguration.builder().port(8080)
-                .build();
-//.port(8080)
+        ServerConfiguration serverConfig = null;
+        if (port != 0) {
+            serverConfig = ServerConfiguration.builder().port(port)
+                    .build();
+
+        } else {
+            serverConfig = ServerConfiguration.builder()
+                    .build();
+
+        }
         WebServer ws = WebServer.create(serverConfig, routing);
         // start the server
         //Server server = startServer();
@@ -95,20 +126,9 @@ public final class Main {
                     System.out.println("Environment status available on:  " + endpoint + "/status/");
                     return null;
                 });
+        return ws;
     }
 
-
-    /**
-     * Start the server.
-     *
-     * @return the created {@link Server} instance
-     */
-    static public Server startServer() {
-        // Server will automatically pick up configuration from
-        // microprofile-config.properties
-        // and Application classes annotated as @ApplicationScoped
-        return Server.create().start();
-    }
     /**
      * Configure logging from logging.properties file.
      */
