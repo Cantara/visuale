@@ -120,7 +120,7 @@ public final class Main {
         if (mavenVersionResource != null) {
             try {
                 mavenProperties.load(mavenVersionResource.openStream());
-                return mavenProperties.getProperty("version", "missing version info in " + resourcePath) + " [" + applicationInstanceName + " - " + getMyIPAddresssesString() + "]";
+                return mavenProperties.getProperty("version", "missing version info in " + resourcePath);
             } catch (IOException e) {
                 log.warn("Problem reading version resource from classpath: ", e);
             }
