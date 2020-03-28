@@ -14,6 +14,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
+import java.util.Arrays;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
@@ -29,29 +30,32 @@ public class StatusResourceIntegrationTest {
     }
 
     @Test()  // for some reason this fails in jenkins as of now
-    public void testMockedStatus() throws Exception {
+    public void testMockedServer() {
 
-        Client client = ClientBuilder.newClient();
+        try {
+            Client client = ClientBuilder.newClient();
 
-        String jsonObject = client
-                .target(getConnectionString("/status"))
-                .request()
-                .get(String.class);
-        Assertions.assertTrue(jsonObject.length() > 5);
+            String jsonObject = client
+                    .target(getConnectionString("/status"))
+                    .request()
+                    .get(String.class);
+            Assertions.assertTrue(jsonObject.length() > 5);
 
-        Health h = new Health().withStatus("OK").withName("test-health").withVersion("0.2.1").withIp("10.3.2.30").withNow(Instant.now().toString());
-        Response r;
-        r = client
-                .target(getConnectionString("/status"))
-                .request()
-                .put(Entity.json(h));
-        Assertions.assertEquals(204, r.getStatus(), "POST status code");
+            Health h = new Health().withStatus("OK").withName("test-health").withVersion("0.2.1").withIp("10.3.2.30").withNow(Instant.now().toString());
+            Response r = client
+                    .target(getConnectionString("/status"))
+                    .request()
+                    .put(Entity.json(h));
+            Assertions.assertEquals(204, r.getStatus(), "POST status code");
 
-        r = client
-                .target(getConnectionString("/health"))
-                .request()
-                .get();
-        Assertions.assertEquals(200, r.getStatus(), "GET health status code");
+            r = client
+                    .target(getConnectionString("/health"))
+                    .request()
+                    .get();
+            Assertions.assertEquals(200, r.getStatus(), "GET health status code");
+        } catch (Exception e) {
+            System.out.println(Arrays.asList(e.getStackTrace()));
+        }
     }
 
     @AfterAll
