@@ -68,7 +68,8 @@ public final class Main {
         Routing routing = Routing.builder()
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
-                .get("/status", (req, res) -> res.send(statusResource.getStatusMessage()))
+                .get("/status", (req, res) -> res.send(statusResource.showEnvironment()))
+                .put("/status", (req, res) -> res.send(statusResource.updateHealfInfo(req.content().toString())))
                 .register("/", StaticContentSupport.builder("/staticspa")
                         .welcomeFileName("index.html")
                         .build())
@@ -96,7 +97,7 @@ public final class Main {
      *
      * @return the created {@link Server} instance
      */
-    static Server startServer() {
+    static public Server startServer() {
         // Server will automatically pick up configuration from
         // microprofile-config.properties
         // and Application classes annotated as @ApplicationScoped

@@ -84,7 +84,7 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getStatusMessage() {
+    public String showEnvironment() {
         String msg = environment.toString();
         try {
             msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
@@ -93,21 +93,6 @@ public class StatusResource implements Service {
             logger.error("Unable to serialize environment", e);
         }
         return msg;
-    }
-
-
-    private JsonObject createResponse(String who) {
-        String msg = environment.toString();
-        try {
-            msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
-
-        } catch (Exception e) {
-            logger.error("Unable to serialize environment", e);
-        }
-
-        return JSON.createObjectBuilder()
-                .add("message", msg)
-                .build();
     }
 
 
@@ -121,10 +106,10 @@ public class StatusResource implements Service {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateHeartbeat(JsonObject jsonObject) {
-        if (!jsonObject.containsKey("status")) {
-            updateHealthMap(jsonObject.toString());
-        }
+    public Response updateHealfInfo(String jsonObject) {
+        //if (!jsonObject.containsKey("status")) {
+        updateHealthMap(jsonObject.toString());
+        //}
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
