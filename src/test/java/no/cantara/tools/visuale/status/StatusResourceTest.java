@@ -14,7 +14,7 @@ class StatusResourceTest {
     public static ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void testEnvironment() {
+    public void testEnvironment() throws Exception {
         StatusResource.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
         Environment environment = StatusResource.getEnvironment();
         for (int n = 10; n < 20; n++) {
@@ -28,8 +28,7 @@ class StatusResourceTest {
             System.out.println("n:" + n + " - r:" + result);
         }
         Map<String, Node> nodeMap = StatusResource.getHealthStatusMap();
-        Environment environment2 = StatusResource.getEnvironment();
-        System.out.println(StatusResource.getEnvironment());
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment));
     }
 
 
