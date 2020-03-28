@@ -37,6 +37,7 @@ public final class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static String applicationInstanceName = "visuale";
     private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 2;
+    private static final Instant server_started = Instant.now();
 
     private static final StatusResource statusResource = new StatusResource();
 
@@ -182,7 +183,8 @@ public final class Main {
 
         Runnable task1 = () -> {
 
-            Health health = new Health().withName(applicationInstanceName).withVersion(getVersion()).withStatus("OK").withIp(getMyIPAddresssesString()).withNow(Instant.now().toString());
+            Health health = new Health().withName(applicationInstanceName).withVersion(getVersion()).withStatus("OK")
+                    .withIp(getMyIPAddresssesString()).withNow(Instant.now().toString()).withRunningSince(server_started.toString());
             StatusResource.updateHealthMap(health);
         };
 
@@ -195,12 +197,13 @@ public final class Main {
         Runnable task2 = () -> {
 
 
-            Health health = new Health().withName(applicationInstanceName + " 2").withVersion(getVersion()).withStatus("OK").withIp(getMyIPAddresssesString()).withNow(Instant.now().toString());
+            Health health = new Health().withName(applicationInstanceName + " 2").withVersion(getVersion()).withStatus("OK")
+                    .withIp(getMyIPAddresssesString()).withNow(Instant.now().toString()).withRunningSince(server_started.toString());
             StatusResource.updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task1, 15, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 15, 5 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
     }
 
 }
