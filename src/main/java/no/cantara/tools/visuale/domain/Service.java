@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -49,6 +50,14 @@ public class Service {
 
     public Service withNodes(Set<Node> nodes) {
         this.nodes = nodes;
+        return this;
+    }
+
+    public Service withNode(Node node) {
+        if (this.nodes == null) {
+            this.nodes = new HashSet<>();
+        }
+        this.nodes.add(node);
         return this;
     }
 

@@ -48,8 +48,15 @@ public class Node {
         this.health = health;
     }
 
-    public void addHealth(Health health) {
-        this.health.add(health);
+    public void addHealth(Health healthValue) {
+        if (health == null || health.size() > 5) {  // simple housecleaning
+            this.health = new HashSet<>();
+        }
+        if (healthValue.getIp() == null || healthValue.getIp().length() < 5) {
+            healthValue.setIp(getIp());
+        }
+
+        this.health.add(healthValue);
     }
 
     public Node withHealth(Health health) {

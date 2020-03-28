@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +46,13 @@ public class Environment {
     @JsonProperty("services")
     public void setServices(Set<Service> services) {
         this.services = services;
+    }
+
+    public void addService(Service service) {
+        if (this.services == null) {
+            this.services = new HashSet<>();
+        }
+        this.services.add(service);
     }
 
     public Environment withServices(Set<Service> services) {

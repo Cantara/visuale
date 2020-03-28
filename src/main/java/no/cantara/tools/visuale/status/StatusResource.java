@@ -20,6 +20,9 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
 //import no.cantara.tools.visuale.domain.Service;
 
@@ -30,9 +33,9 @@ public class StatusResource implements Service {
     public static ObjectMapper mapper = new ObjectMapper();
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
 
-    Map<String, Node> healthResults = new HashMap<>();
+    private static Map<String, Node> healthResults = new HashMap<>();
 
-    private Environment environment;
+    private static Environment environment;
 
     /**
      * Using constructor injection to get a configuration property.
@@ -40,18 +43,34 @@ public class StatusResource implements Service {
      */
     @Inject
     public StatusResource() {
+        initializeEnvironment(MOCK_ENVORONMENT, "QuadimDemo");
+    }
+
+    public static void initializeEnvironment(String envJson, String envoronment_name) {
+        environment = new Environment().withName(envoronment_name);
         try {
-            Environment environment = mapper.readValue(getMockStatus, Environment.class);
+            environment = mapper.readValue(envJson, Environment.class);
             for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
                 for (Node node : service.getNodes()) {
                     healthResults.put(node.getIp(), node);
                 }
-
             }
+            environment.setName(envoronment_name);
         } catch (Exception e) {
-            environment = new Environment();
+            logger.error("Unable to inizialise dashboard environment", e);
         }
+    }
 
+    public static Map<String, Node> getHealthStatusMap() {
+        return healthResults;
+    }
+
+    public static int getHealthStatusMapSize() {
+        return healthResults.size();
+    }
+
+    public static Environment getEnvironment() {
+        return environment;
     }
 
     /**
@@ -87,197 +106,54 @@ public class StatusResource implements Service {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateHeartbeat(JsonObject jsonObject) {
-
         if (!jsonObject.containsKey("status")) {
-            try {
-                Health updatedHealth = mapper.readValue(jsonObject.toString(), Health.class);
-                Node node = healthResults.get(updatedHealth.getIp());
-                node.addHealth(updatedHealth);
-//                healthResults.put(updatedHealth.getIp(), updatedHealth);
-            } catch (Exception e) {
-                logger.error("Received unmappable json for health");
-            }
+            updateHealthMap(jsonObject.toString());
         }
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+    public static int updateHealthMap(String json) {
+        try {
+            Health updatedHealth = mapper.readValue(json, Health.class);
+            Node node = healthResults.get(updatedHealth.getIp());
+            if (node == null) {
+                node = new Node().withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+                no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service().withNode(node).withName("Unknown_Service:" + UUID.randomUUID().toString());
+                environment.addService(s);
+                healthResults.put(node.getIp(), node);
+            } else {
+                node.addHealth(updatedHealth);
+            }
+        } catch (Exception e) {
+            logger.error("Received unmappable json for health", e);
+        }
+        return 0;
+    }
+
+    public static int updateHealthMap(Health updatedHealth) {
+        try {
+            Node node = healthResults.get(updatedHealth.getIp());
+            if (node == null) {
+                node = new Node().withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+                no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service().withNode(node).withName("Unknown_Service:" + UUID.randomUUID().toString());
+                environment.addService(s);
+                healthResults.put(node.getIp(), node);
+            } else {
+                node.addHealth(updatedHealth);
+            }
+            return node.getHealth().size();
+        } catch (Exception e) {
+            logger.error("Received unmappable health", e);
+        }
+        return 0;
+    }
+
 
     @Override
     public void update(Routing.Rules rules) {
 
     }
 
-    private String getMockStatus = "{\"name\": \"Quadim-QA\",\n" +
-            "    \"services\": [\n" +
-            "      {\n" +
-            "        \"name\": \"Overlord-Service\",\n" +
-            "        \"nodes\": [\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.23\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.24\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.25\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.26\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          }\n" +
-            "        ]\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"name\": \"Service-2\",\n" +
-            "        \"nodes\": [\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.27\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.29\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          }\n" +
-            "        ]\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"name\": \"Service-2\",\n" +
-            "        \"nodes\": [\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.27\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.29\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.27\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.29\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.27\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.29\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.29\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          },\n" +
-            "          {\n" +
-            "            \"ip\": \"10.45.54.29\",\n" +
-            "            \"health\": [\n" +
-            "              {\n" +
-            "                \"Status\": \"true\",\n" +
-            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
-            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
-            "                \"version\": \"0.61.34\"\n" +
-            "              }\n" +
-            "            ]\n" +
-            "          }\n" +
-            "        ]\n" +
-            "      }\n" +
-            "    ]}\n";
 }
 
