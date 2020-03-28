@@ -1,70 +1,128 @@
+
 package no.cantara.tools.visuale.domain;
 
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "Status",
+        "now",
+        "running since",
+        "version"
+})
 public class Health {
-    /**
-     * "Status": "true",
-     * "Version": "0.62.38-SNAPSHOT [Quadim CV Backend API - 172.31.33.86  fe80:0:0:0:473:a6ff:feb8:2e76%eth0  172.31.33.86  0:0:0:0:0:0:0:1%lo  127.0.0.1]",
-     * "IndexSizes": "OverlordIndex:5 - OverlordProfileIndex:9 - JsonResumeIndex:0 - SkillIndex:7 - MeasurementIndex:4",
-     * "Database Backend": "jdbc:h2:mem:overlordbase",
-     * "DatabaseSizes": "Overlords: 0 - OverlordProfileMappingSpecificationEntity: 0 - SkillEntity: 4 - MeasurementEntity: 4 - FileStore files: 3 - AcquitisionProcessEntity: 1 - Companies: 1 - Users: 1",
-     * "now": "2020-03-24T18:34:35.987Z",
-     * "running since": "2020-03-23T09:11:49.070Z"
-     */
 
-    private String ip = "";
-    private String status = "";
-    private String version = "";
-    private String now = "";
-    private String running_since = "";
+    @JsonProperty("Status")
+    private String status;
+    @JsonProperty("now")
+    private String now;
+    @JsonProperty("running since")
+    private String runningSince;
+    @JsonProperty("version")
+    private String version;
+    @JsonProperty("ip")
+    private String ip;
 
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("Status")
     public String getStatus() {
         return status;
     }
 
+    @JsonProperty("Status")
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getVersion() {
-        return version;
+    public Health withStatus(String status) {
+        this.status = status;
+        return this;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getNow() {
-        return now;
-    }
-
-    public void setNow(String now) {
-        this.now = now;
-    }
-
-    public String getRunning_since() {
-        return running_since;
-    }
-
-    public void setRunning_since(String running_since) {
-        this.running_since = running_since;
-    }
-
+    @JsonProperty("ip")
     public String getIp() {
         return ip;
     }
 
+    @JsonProperty("ip")
     public void setIp(String ip) {
         this.ip = ip;
     }
 
+    public Health withIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
+
+    @JsonProperty("now")
+    public String getNow() {
+        return now;
+    }
+
+    @JsonProperty("now")
+    public void setNow(String now) {
+        this.now = now;
+    }
+
+    public Health withNow(String now) {
+        this.now = now;
+        return this;
+    }
+
+    @JsonProperty("running since")
+    public String getRunningSince() {
+        return runningSince;
+    }
+
+    @JsonProperty("running since")
+    public void setRunningSince(String runningSince) {
+        this.runningSince = runningSince;
+    }
+
+    public Health withRunningSince(String runningSince) {
+        this.runningSince = runningSince;
+        return this;
+    }
+
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
+    @JsonProperty("version")
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public Health withVersion(String version) {
+        this.version = version;
+        return this;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
+    public Health withAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+        return this;
+    }
+
     @Override
     public String toString() {
-        return "Health{" +
-                "ip='" + ip + '\'' +
-                ", status='" + status + '\'' +
-                ", version='" + version + '\'' +
-                ", now='" + now + '\'' +
-                ", running_since='" + running_since + '\'' +
-                '}';
+        return new ToStringBuilder(this).append("status", status).append("now", now).append("runningSince", runningSince).append("version", version).append("additionalProperties", additionalProperties).toString();
     }
+
 }

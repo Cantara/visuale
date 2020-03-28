@@ -1,42 +1,85 @@
+
 package no.cantara.tools.visuale.domain;
 
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "ip",
+        "health"
+})
 public class Node {
 
-    private String nodeId = "";
-    private String ipAddresses = "";
-    private Health healthInfo;
+    @JsonProperty("ip")
+    private String ip;
+    @JsonProperty("health")
+    private Set<Health> health = new HashSet<>();
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-
-    public String getNodeId() {
-        return nodeId;
+    @JsonProperty("ip")
+    public String getIp() {
+        return ip;
     }
 
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
+    @JsonProperty("ip")
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public String getIpAddresses() {
-        return ipAddresses;
+    public Node withIp(String ip) {
+        this.ip = ip;
+        return this;
     }
 
-    public void setIpAddresses(String ipAddresses) {
-        this.ipAddresses = ipAddresses;
+    @JsonProperty("health")
+    public Set<Health> getHealth() {
+        return health;
     }
 
-    public Health getHealthInfo() {
-        return healthInfo;
+    @JsonProperty("health")
+    public void setHealth(Set<Health> health) {
+        this.health = health;
     }
 
-    public void setHealthInfo(Health healthInfo) {
-        this.healthInfo = healthInfo;
+    public void addHealth(Health health) {
+        this.health.add(health);
+    }
+
+    public Node withHealth(Health health) {
+        addHealth(health);
+        return this;
+    }
+
+    public Node withHealth(Set<Health> health) {
+        this.health = health;
+        return this;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
+    public Node withAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+        return this;
     }
 
     @Override
     public String toString() {
-        return "Node{" +
-                "nodeId='" + nodeId + '\'' +
-                ", ipAddresses='" + ipAddresses + '\'' +
-                ", healthInfo=" + healthInfo +
-                '}';
+        return new ToStringBuilder(this).append("ip", ip).append("health", health).append("additionalProperties", additionalProperties).toString();
     }
+
 }

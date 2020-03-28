@@ -17,7 +17,9 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 //import no.cantara.tools.visuale.domain.Service;
 
@@ -28,7 +30,9 @@ public class StatusResource implements Service {
     public static ObjectMapper mapper = new ObjectMapper();
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
 
-    Map<String, Health> healthResults = new HashMap<>();
+    Map<String, Node> healthResults = new HashMap<>();
+
+    private Environment environment;
 
     /**
      * Using constructor injection to get a configuration property.
@@ -36,6 +40,17 @@ public class StatusResource implements Service {
      */
     @Inject
     public StatusResource() {
+        try {
+            Environment environment = mapper.readValue(getMockStatus, Environment.class);
+            for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
+                for (Node node : service.getNodes()) {
+                    healthResults.put(node.getIp(), node);
+                }
+
+            }
+        } catch (Exception e) {
+            environment = new Environment();
+        }
 
     }
 
@@ -53,45 +68,13 @@ public class StatusResource implements Service {
 
 
     private JsonObject createResponse(String who) {
-        String msg = getDummyMessage();
+        String msg = environment.toString();
 
         return JSON.createObjectBuilder()
                 .add("message", msg)
                 .build();
     }
 
-    private String getDummyMessage() {
-        String json = "{}";
-        try {
-            Health h = new Health();
-            Node n = new Node();
-            n.setHealthInfo(h);
-            if (n.getIpAddresses() != null && healthResults.get(n.getIpAddresses()) != null) {
-                n.setHealthInfo(healthResults.get(n.getIpAddresses()));
-            }
-            Node n2 = new Node();
-            n2.setHealthInfo(h);
-            if (n2.getIpAddresses() != null && healthResults.get(n2.getIpAddresses()) != null) {
-                n2.setHealthInfo(healthResults.get(n2.getIpAddresses()));
-            }
-
-            no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service();
-            Set<Node> nodeSet = new HashSet<>();
-            nodeSet.add(n);
-            nodeSet.add(n2);
-            s.setNodes(nodeSet);
-
-            Environment e = new Environment();
-            Set<no.cantara.tools.visuale.domain.Service> serviceSet = new HashSet<>();
-            serviceSet.add(s);
-            e.setServices(serviceSet);
-
-            json = mapper.writeValueAsString(e);
-        } catch (Exception e) {
-            logger.error("Unable to create json status:", e);
-        }
-        return json;
-    }
 
     /**
      * Set the greeting to use in future messages.
@@ -108,13 +91,13 @@ public class StatusResource implements Service {
         if (!jsonObject.containsKey("status")) {
             try {
                 Health updatedHealth = mapper.readValue(jsonObject.toString(), Health.class);
-                healthResults.put(updatedHealth.getIp(), updatedHealth);
+                Node node = healthResults.get(updatedHealth.getIp());
+                node.addHealth(updatedHealth);
+//                healthResults.put(updatedHealth.getIp(), updatedHealth);
             } catch (Exception e) {
                 logger.error("Received unmappable json for health");
             }
         }
-
-        String newGreeting = jsonObject.getString("greeting");
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -123,5 +106,178 @@ public class StatusResource implements Service {
     public void update(Routing.Rules rules) {
 
     }
+
+    private String getMockStatus = "{\"name\": \"Quadim-QA\",\n" +
+            "    \"services\": [\n" +
+            "      {\n" +
+            "        \"name\": \"Overlord-Service\",\n" +
+            "        \"nodes\": [\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.23\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.24\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.25\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.26\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          }\n" +
+            "        ]\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"name\": \"Service-2\",\n" +
+            "        \"nodes\": [\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.27\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.29\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          }\n" +
+            "        ]\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"name\": \"Service-2\",\n" +
+            "        \"nodes\": [\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.27\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.29\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.27\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.29\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.27\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.29\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.29\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          },\n" +
+            "          {\n" +
+            "            \"ip\": \"10.45.54.29\",\n" +
+            "            \"health\": [\n" +
+            "              {\n" +
+            "                \"Status\": \"true\",\n" +
+            "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
+            "                \"version\": \"0.61.34\"\n" +
+            "              }\n" +
+            "            ]\n" +
+            "          }\n" +
+            "        ]\n" +
+            "      }\n" +
+            "    ]}\n";
 }
 
