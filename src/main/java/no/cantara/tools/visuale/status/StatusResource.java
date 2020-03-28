@@ -16,8 +16,6 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
-import javax.json.bind.annotation.JsonbCreator;
-import javax.json.bind.annotation.JsonbProperty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -202,15 +200,5 @@ public class StatusResource implements Service {
         return environment;
     }
 
-    @JsonbCreator
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public static Health of(@JsonbProperty("name") String name, @JsonbProperty("status") String status,
-                            @JsonbProperty("now") String now, @JsonbProperty("runningSince") String runningSince,
-                            @JsonbProperty("version") String version, @JsonbProperty("ip") String ip) {
-
-        Health e = new Health(status, name, now, runningSince, version, ip);
-        updateHealthMap(e);
-        return e;
-    }
 }
 
