@@ -168,6 +168,7 @@ public final class Main {
 
         Runnable task2 = () -> {
 
+
             Health health = new Health().withName(applicationInstanceName + " 2").withVersion(getVersion()).withStatus("OK").withIp(getMyIPAddresssesString()).withNow(Instant.now().toString());
             StatusResource.updateHealthMap(health);
         };
