@@ -52,7 +52,10 @@ public class StatusResource implements Service {
             environment = mapper.readValue(envJson, Environment.class);
             for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
                 for (Node node : service.getNodes()) {
-                    healthResults.put(node.getIp(), node);
+                    if (node.getName() == null || node.getName().length() < 2) {
+                        node.setName(service.getName());
+                    }
+                    healthResults.put(node.getIp() + node.getName(), node);
                 }
             }
             environment.setName(envoronment_name);
@@ -82,7 +85,14 @@ public class StatusResource implements Service {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getStatusMessage() {
-        return createResponse("World").toString();
+        String msg = environment.toString();
+        try {
+            msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
+
+        } catch (Exception e) {
+            logger.error("Unable to serialize environment", e);
+        }
+        return msg;
     }
 
 
@@ -123,13 +133,19 @@ public class StatusResource implements Service {
         logger.debug("Received health update: {}", json);
         try {
             Health updatedHealth = mapper.readValue(json, Health.class);
-            Node node = healthResults.get(updatedHealth.getIp());
+            Node node = healthResults.get(updatedHealth.getIp() + updatedHealth.getName());
             if (node == null) {
                 logger.debug("Added new service from health update: {}", updatedHealth);
-                node = new Node().withIp(updatedHealth.getIp()).withHealth(updatedHealth);
-                no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service().withNode(node).withName("Unknown_Service:" + UUID.randomUUID().toString());
+                String name = updatedHealth.getName();
+                if (name == null || name.length() < 2) {
+                    name = "Unknown - " + UUID.randomUUID().toString();
+                }
+                node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+
+                no.cantara.tools.visuale.domain.Service s =
+                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
                 environment.addService(s);
-                healthResults.put(node.getIp(), node);
+                healthResults.put(node.getIp() + node.getName(), node);
             } else {
                 logger.debug("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);
@@ -143,13 +159,19 @@ public class StatusResource implements Service {
     public static int updateHealthMap(Health updatedHealth) {
         logger.debug("Received health update: {}", updatedHealth);
         try {
-            Node node = healthResults.get(updatedHealth.getIp());
+            Node node = healthResults.get(updatedHealth.getIp() + updatedHealth.getName());
             if (node == null) {
                 logger.debug("Added new service from health update: {}", updatedHealth);
-                node = new Node().withIp(updatedHealth.getIp()).withHealth(updatedHealth);
-                no.cantara.tools.visuale.domain.Service s = new no.cantara.tools.visuale.domain.Service().withNode(node).withName("Unknown_Service:" + UUID.randomUUID().toString());
+                String name = updatedHealth.getName();
+                if (name == null || name.length() < 2) {
+                    name = "Unknown - " + UUID.randomUUID().toString();
+                }
+                node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+
+                no.cantara.tools.visuale.domain.Service s =
+                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
                 environment.addService(s);
-                healthResults.put(node.getIp(), node);
+                healthResults.put(node.getIp() + node.getName(), node);
             } else {
                 logger.debug("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);

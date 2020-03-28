@@ -2,7 +2,6 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,15 +9,17 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "Status",
+        "name",
+        "version",
         "now",
         "running since",
-        "version"
+        "ip"
 })
 public class Health {
 
     @JsonProperty("Status")
     private String status;
-    @JsonProperty("Name")
+    @JsonProperty("Nanameme")
     private String name;
     @JsonProperty("now")
     private String now;
@@ -47,12 +48,12 @@ public class Health {
         return this;
     }
 
-    @JsonProperty("Name")
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
-    @JsonProperty("Name")
+    @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
     }
@@ -139,7 +140,13 @@ public class Health {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("status", status).append("now", now).append("runningSince", runningSince).append("version", version).append("additionalProperties", additionalProperties).toString();
+        return "Health{" +
+                "status='" + status + '\'' +
+                ", name='" + name + '\'' +
+                ", now='" + now + '\'' +
+                ", runningSince='" + runningSince + '\'' +
+                ", version='" + version + '\'' +
+                ", ip='" + ip + '\'' +
+                '}';
     }
-
 }
