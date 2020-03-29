@@ -4,7 +4,12 @@
 
 An real-time dashboard visualisation for real-world micro-service continous deployment environments 
 
-You may have a look and push data at the latest version which is reset frequently here: https://visuale.cantara.no/
+You may have a look and push data at the latest version which is reset frequently here:
+* https://visuale.cantara.no/
+
+![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale-early-dashboard-visualisation.png)
+
+# Some key targets for the project
 
 * a dashboard which display each service (and each service instance) with cached/real info a-la what the /health and/or /info endpoint for each service produce.....   
 * the "cluster" instances should be grouped as a service...   
