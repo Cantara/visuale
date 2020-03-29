@@ -4,10 +4,11 @@
 
 An real-time dashboard visualisation for real-world micro-service continous deployment environments 
 
+![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale-early-dashboard-visualisation.png)
+
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
 
-![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale-early-dashboard-visualisation.png)
 
 # Some key targets for the project
 
