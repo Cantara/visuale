@@ -46,7 +46,7 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", this::showEnvironment).put("/status", this::updateHealfInfo);
+        rules.get("/status", this::showEnvironment).put("/status", this::updateFullHealfInfo).put("/status/{env}/{service}/{node}", this::updateFullHealfInfo);
     }
 
     /**
@@ -89,8 +89,6 @@ public class StatusResource implements Service {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateHealfInfo(final ServerRequest request, final ServerResponse response) {
-        final Health[] health = {new Health()};
-
         CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
         request.content().as(Health.class).thenApply(e ->
         {
@@ -99,17 +97,35 @@ public class StatusResource implements Service {
                     .withNow(e.getNow()).withRunningSince(e.getRunningSince()));
         }).thenCompose(p -> response.status(204).send());
 
-        updateHealthMap(health[0]);
-
-//            )
-//                    .thenCompose(p -> response.status(204).send());
-//            }
         response.status(204).send();
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 
+    /**
+     * Set the greeting to use in future messages.
+     *
+     * @return {@link Response}
+     */
+    @SuppressWarnings("checkstyle:designforextension")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateFullHealfInfo(final ServerRequest request, final ServerResponse response) {
+
+        String env = request.path().param("env");
+        String service = request.path().param("service");
+        String node = request.path().param("node");
+
+        CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
+        response.status(204).send();
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+
+    public String updateHealthMap3(String service, String node, String json) {
+        updateHealthMap(json);
+        return json;
+    }
 
     public String updateHealthMap2(String json) {
         updateHealthMap(json);
@@ -120,7 +136,7 @@ public class StatusResource implements Service {
         logger.debug("Received health update: {}", json);
         try {
             Health updatedHealth = HealthMapper.fromRealWorldJson(json);
-            Node node = healthResults.get(updatedHealth.getIp() + updatedHealth.getName());
+            Node node = healthResults.get(updatedHealth.getLookupKey());
             if (node == null) {
                 logger.debug("Added new service from health update: {}", updatedHealth);
                 String name = updatedHealth.getName();
@@ -132,7 +148,7 @@ public class StatusResource implements Service {
                 no.cantara.tools.visuale.domain.Service s =
                         new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
                 environment.addService(s);
-                healthResults.put(node.getIp() + node.getName(), node);
+                healthResults.put(node.getLookupKey(), node);
             } else {
                 logger.debug("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);
@@ -146,7 +162,7 @@ public class StatusResource implements Service {
     public static int updateHealthMap(Health updatedHealth) {
         logger.debug("Received health update: {}", updatedHealth);
         try {
-            Node node = healthResults.get(updatedHealth.getIp() + updatedHealth.getName());
+            Node node = healthResults.get(updatedHealth.getLookupKey());
             if (node == null) {
                 logger.debug("Added new service from health update: {}", updatedHealth);
                 String name = updatedHealth.getName();
@@ -158,7 +174,7 @@ public class StatusResource implements Service {
                 no.cantara.tools.visuale.domain.Service s =
                         new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
                 environment.addService(s);
-                healthResults.put(node.getIp() + node.getName(), node);
+                healthResults.put(node.getLookupKey(), node);
             } else {
                 logger.debug("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);
@@ -180,7 +196,7 @@ public class StatusResource implements Service {
                     if (node.getName() == null || node.getName().length() < 2) {
                         node.setName(service.getName());
                     }
-                    healthResults.put(node.getIp() + node.getName(), node);
+                    healthResults.put(node.getLookupKey(), node);
                 }
             }
             environment.setName(envoronment_name);

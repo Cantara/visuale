@@ -25,6 +25,14 @@ public class Node {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+
+    @JsonIgnore
+    public String getLookupKey() {
+        String key = getName().trim() + ":" + getIp().trim();
+        return key;
+    }
+
+
     @JsonProperty("name")
     public String getName() {
         return name;
