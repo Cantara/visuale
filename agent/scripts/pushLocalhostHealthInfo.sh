@@ -7,4 +7,6 @@ wget --method=PUT --body-data="${JSON}"  https://visuale.cantara.no/status
 # wget --method=PUT --body-data="${JSON}"  http://localhost:35277/status
 
 # JSON=$(<exampleJsonHealth.json ); wget --method=PUT --body-data="${JSON}"   https://visuale.cantara.no/status
+#
+# JSON=$(<exampleJsonHealth.json ); wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/test/myservice/mynode
 

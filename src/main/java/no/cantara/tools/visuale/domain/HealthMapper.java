@@ -16,6 +16,9 @@ public class HealthMapper {
     private static boolean tryCustomDeserializer = true;
 
     public static Health fromRealWorldJson(String json) {
+        if (json == null || json.length() < 1) {
+            return new Health().withStatus("DOWN");
+        }
 
         Health health = new Health();
         try {

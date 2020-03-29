@@ -1,6 +1,9 @@
 package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.helidon.common.http.Http;
+import io.helidon.common.reactive.Multi;
+import io.helidon.media.jsonp.server.JsonSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
@@ -17,11 +20,13 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.*;
-import java.util.concurrent.CompletionStage;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
@@ -44,7 +49,8 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", this::showEnvironment).put("/status", this::updateHealfInfo).put("/status/{env}/{service}/{node}", this::updateFullHealfInfo);
+        rules.get("/status", JsonSupport.create(), this::showEnvironment).put("/status", JsonSupport.create(),
+                this::updateHealthInfo).put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
     }
 
     /**
@@ -83,11 +89,28 @@ public class StatusResource implements Service {
      */
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void updateHealfInfo(final ServerRequest request, final ServerResponse response) {
-        CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
+    public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
+        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
+        StringBuilder sb = new StringBuilder();
+        Multi.from(request.content()).subscribe(chunk -> sb.append(chunk).append("-"));
+        Health myHealth = HealthMapper.fromRealWorldJson(sb.toString());
+        if (myHealth.getIp() == null || myHealth.getIp().length() < 1) {
+            myHealth.setIp(request.remoteAddress());
+        }
+        if (myHealth.getName() == null || myHealth.getName().length() < 1) {
+            myHealth.setName(request.remoteAddress());
+        }
+        updateHealthMap(myHealth);
 
         response.status(204).send();
+    }
+
+    private void updateHealthInfoFromJson(JsonObject jo, ServerResponse response) {
+        if (jo != null || jo.toString().length() < 1) {
+            Health myHealth = HealthMapper.fromRealWorldJson(jo.toString());
+            updateHealthMap(myHealth);
+        }
+        response.status(Http.Status.NO_CONTENT_204).send();
     }
 
     /**
@@ -97,11 +120,14 @@ public class StatusResource implements Service {
      */
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void updateFullHealfInfo(final ServerRequest request, final ServerResponse response) {
+    public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");
+        StringBuilder sb = new StringBuilder();
+        Multi.from(request.content()).subscribe(chunk -> sb.append(chunk).append("-"));
+        Health myHealth = HealthMapper.fromRealWorldJson(sb.toString());
+
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
@@ -132,8 +158,16 @@ public class StatusResource implements Service {
                     }
                 }
             }
-            CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
+            //   CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
         }
+        if (myHealth.getIp() == null || myHealth.getIp().length() < 1) {
+            myHealth.setIp(request.remoteAddress());
+        }
+        if (myHealth.getName() == null || myHealth.getName().length() < 1) {
+            myHealth.setName(request.remoteAddress());
+        }
+        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
+
         response.status(204).send();
     }
 
@@ -144,6 +178,11 @@ public class StatusResource implements Service {
     }
 
     public String updateHealthMap2(String json) {
+        updateHealthMap(json);
+        return json;
+    }
+
+    public Health updateHealthMapO(Health json) {
         updateHealthMap(json);
         return json;
     }
