@@ -4,10 +4,7 @@ package no.cantara.tools.visuale.domain;
 import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -19,7 +16,7 @@ public class Environment {
     @JsonProperty("name")
     private String name;
     @JsonProperty("services")
-    private Set<Service> services = null;
+    private Set<Service> services = new TreeSet<Service>(new MyServiceNameComp());
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -40,6 +37,7 @@ public class Environment {
 
     @JsonProperty("services")
     public Set<Service> getServices() {
+
         return services;
     }
 
@@ -50,13 +48,14 @@ public class Environment {
 
     public void addService(Service service) {
         if (this.services == null) {
-            this.services = new HashSet<>();
+            this.services = new TreeSet<Service>(new MyServiceNameComp());
         }
         this.services.add(service);
     }
 
     public Environment withServices(Set<Service> services) {
-        this.services = services;
+        this.services = new TreeSet<Service>(new MyServiceNameComp());
+        services.addAll(services);
         return this;
     }
 
@@ -80,4 +79,14 @@ public class Environment {
         return new ToStringBuilder(this).append("name", name).append("services", services).append("additionalProperties", additionalProperties).toString();
     }
 
+    public class MyServiceNameComp implements Comparator<Service> {
+
+        @Override
+        public int compare(Service e1, Service e2) {
+            if (e1.getName() != null && e2.getName() != null) {
+                return e1.getName().compareTo(e2.getName());
+            }
+            return 1;
+        }
+    }
 }

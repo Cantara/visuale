@@ -4,10 +4,7 @@ package no.cantara.tools.visuale.domain;
 import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -44,8 +41,9 @@ public class Service {
     }
 
     @JsonProperty("nodes")
-    public void setNodes(Set<Node> nodes) {
-        this.nodes = nodes;
+    public void setNodes(Set<Node> nodesV) {
+        this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+        nodes.addAll(nodesV);
     }
 
     public Service withNodes(Set<Node> nodes) {
@@ -55,7 +53,7 @@ public class Service {
 
     public Service withNode(Node node) {
         if (this.nodes == null) {
-            this.nodes = new HashSet<>();
+            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
         }
         this.nodes.add(node);
         return this;
@@ -76,9 +74,24 @@ public class Service {
         return this;
     }
 
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", name).append("nodes", nodes).append("additionalProperties", additionalProperties).toString();
+    }
+
+    public class MyNodeNameComp implements Comparator<Node> {
+
+        @Override
+        public int compare(Node e1, Node e2) {
+            if (e1.getName() != null && e2.getName() != null) {
+                return e1.getName().compareTo(e2.getName());
+            }
+            if (e1.getIp() != null && e2.getIp() != null) {
+                return e1.getIp().compareTo(e2.getIp());
+            }
+            return 1;
+        }
     }
 
 }
