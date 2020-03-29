@@ -67,16 +67,14 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response showEnvironment(final ServerRequest request, final ServerResponse response) {
+    public void showEnvironment(final ServerRequest request, final ServerResponse response) {
         String msg = environment.toString();
         try {
             msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
-
         } catch (Exception e) {
             logger.error("Unable to serialize environment", e);
         }
         response.status(200).send(msg);
-        return Response.status(Response.Status.OK).build();
     }
 
 
@@ -88,7 +86,7 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateHealfInfo(final ServerRequest request, final ServerResponse response) {
+    public void updateHealfInfo(final ServerRequest request, final ServerResponse response) {
         CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
         request.content().as(Health.class).thenApply(e ->
         {
@@ -98,7 +96,6 @@ public class StatusResource implements Service {
         }).thenCompose(p -> response.status(204).send());
 
         response.status(204).send();
-        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     /**
@@ -109,7 +106,7 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateFullHealfInfo(final ServerRequest request, final ServerResponse response) {
+    public void updateFullHealfInfo(final ServerRequest request, final ServerResponse response) {
 
         String env = request.path().param("env");
         String service = request.path().param("service");
@@ -117,8 +114,6 @@ public class StatusResource implements Service {
 
         CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
         response.status(204).send();
-
-        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
 
@@ -134,29 +129,31 @@ public class StatusResource implements Service {
 
     public static int updateHealthMap(String json) {
         logger.debug("Received health update: {}", json);
-        try {
-            Health updatedHealth = HealthMapper.fromRealWorldJson(json);
-            Node node = healthResults.get(updatedHealth.getLookupKey());
-            if (node == null) {
-                logger.debug("Added new service from health update: {}", updatedHealth);
-                String name = updatedHealth.getName();
-                if (name == null || name.length() < 2) {
-                    name = "Unknown - " + UUID.randomUUID().toString();
-                }
-                node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
-
-                no.cantara.tools.visuale.domain.Service s =
-                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
-                environment.addService(s);
-                healthResults.put(node.getLookupKey(), node);
-            } else {
-                logger.debug("Updated service from health update: {}", updatedHealth);
-                node.addHealth(updatedHealth);
-            }
-        } catch (Exception e) {
-            logger.error("Received unmappable json for health", e);
-        }
-        return 0;
+        Health updatedHealth = HealthMapper.fromRealWorldJson(json);
+        return updateHealthMap(updatedHealth);
+//        try {
+//            Health updatedHealth = HealthMapper.fromRealWorldJson(json);
+//            Node node = healthResults.get(updatedHealth.getLookupKey());
+//            if (node == null) {
+//                logger.debug("Added new service from health update: {}", updatedHealth);
+//                String name = updatedHealth.getName();
+//                if (name == null || name.length() < 2) {
+//                    name = "Unknown - " + UUID.randomUUID().toString();
+//                }
+//                node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+//
+//                no.cantara.tools.visuale.domain.Service s =
+//                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
+//                environment.addService(s);
+//                healthResults.put(node.getLookupKey(), node);
+//            } else {
+//                logger.debug("Updated service from health update: {}", updatedHealth);
+//                node.addHealth(updatedHealth);
+//            }
+//        } catch (Exception e) {
+//            logger.error("Received unmappable json for health", e);
+//        }
+//        return 0;
     }
 
     public static int updateHealthMap(Health updatedHealth) {
