@@ -19,7 +19,7 @@ public class Health {
 
     @JsonProperty("Status")
     private String status;
-    @JsonProperty("Nanameme")
+    @JsonProperty("name")
     private String name;
     @JsonProperty("now")
     private String now;
