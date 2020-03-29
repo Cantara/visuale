@@ -20,10 +20,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
@@ -46,7 +43,7 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", this::showEnvironment).put("/status", this::updateFullHealfInfo).put("/status/{env}/{service}/{node}", this::updateFullHealfInfo);
+        rules.get("/status", this::showEnvironment).put("/status", this::updateHealfInfo).put("/status/{env}/{service}/{node}", this::updateFullHealfInfo);
     }
 
     /**
@@ -88,12 +85,6 @@ public class StatusResource implements Service {
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateHealfInfo(final ServerRequest request, final ServerResponse response) {
         CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
-        request.content().as(Health.class).thenApply(e ->
-        {
-            return updateHealthMap(new Health().withName(e.getName()).withStatus(e.getStatus())
-                    .withVersion(e.getVersion()).withIp(e.getIp())
-                    .withNow(e.getNow()).withRunningSince(e.getRunningSince()));
-        }).thenCompose(p -> response.status(204).send());
 
         response.status(204).send();
     }
@@ -107,12 +98,40 @@ public class StatusResource implements Service {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateFullHealfInfo(final ServerRequest request, final ServerResponse response) {
-
-        String env = request.path().param("env");
-        String service = request.path().param("service");
-        String node = request.path().param("node");
-
-        CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
+        String envName = request.path().param("env");
+        String serviceName = request.path().param("service");
+        String nodeName = request.path().param("node");
+        boolean foundNode = false;
+        boolean foundService = false;
+        boolean foundEnvironment = false;
+        if (environment.getName().equalsIgnoreCase(envName)) {
+            foundEnvironment = true;
+            Set<no.cantara.tools.visuale.domain.Service> serviceSet = environment.getServices();
+            for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
+                if (service.getName().equalsIgnoreCase(serviceName)) {
+                    Set<Node> nodeSet = service.getNodes();
+                    foundService = true;
+                    for (Node node : nodeSet) {
+                        if (node.getName().equalsIgnoreCase(nodeName)) {
+                            foundNode = true;
+                        }
+                    }
+                }
+            }
+            if (!foundService) {
+                Node node = new Node().withName(nodeName);
+                no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
+                environment.addService(service);
+            } else if (!foundNode) {
+                for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
+                    if (service.getName().equalsIgnoreCase(serviceName)) {
+                        Node node = new Node().withName(nodeName);
+                        service.withNode(node);
+                    }
+                }
+            }
+            CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
+        }
         response.status(204).send();
     }
 
