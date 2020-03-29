@@ -27,6 +27,12 @@ You may have a look and push data at the latest version which is reset frequentl
 
 ```
 $ mvn clean package
-$ java -jar target/visuale*.jar
+$ java -jar target/visuale.jar
 $ wget http://localhost:8088/status/
 ```
+
+Docker instructions will follow here soon....
+
+# Some simple agent scripts to push health to visuale
+
+* Look here:  https://github.com/Cantara/visuale/tree/master/agent/scripts
