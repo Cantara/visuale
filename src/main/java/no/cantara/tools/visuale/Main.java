@@ -187,7 +187,7 @@ public final class Main {
 
         Runnable task1 = () -> {
 
-            Health health = new Health().withName(applicationInstanceName).withVersion(getVersion()).withStatus("OK")
+            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
                     .withIp(getMyIPAddresssString())
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString());
             StatusResource.updateHealthMap(health);
@@ -202,7 +202,7 @@ public final class Main {
         Runnable task2 = () -> {
 
 
-            Health health = new Health().withName(applicationInstanceName + " 2").withVersion(getVersion()).withStatus("OK")
+            Health health = new Health().withName(applicationInstanceName + " 2" + "-service").withVersion(getVersion()).withStatus("OK")
                     .withIp(getMyIPAddresssString())
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString());
             StatusResource.updateHealthMap(health);
