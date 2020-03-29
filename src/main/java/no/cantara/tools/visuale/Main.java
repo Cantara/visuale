@@ -57,7 +57,7 @@ public final class Main {
         // load logging configuration
         setupLogging();
 
-        WebServer ws = startServer(0);
+        WebServer ws = startServer(8080);
     }
 
 
