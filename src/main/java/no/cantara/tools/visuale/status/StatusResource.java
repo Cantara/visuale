@@ -35,6 +35,7 @@ public class StatusResource implements Service {
     private static Map<String, Node> healthResults = new HashMap<>();
 
     private static Environment environment;
+    private static final boolean STRICT_EMVIRONMANT = false;
 
     /**
      * A service registers itself by updating the routine rules.
@@ -104,7 +105,8 @@ public class StatusResource implements Service {
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
-        if (environment.getName().equalsIgnoreCase(envName)) {
+
+        if (!STRICT_EMVIRONMANT || environment.getName().equalsIgnoreCase(envName)) {
             foundEnvironment = true;
             Set<no.cantara.tools.visuale.domain.Service> serviceSet = environment.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
