@@ -172,48 +172,13 @@ public class StatusResource implements Service {
     }
 
 
-    public String updateHealthMap3(String service, String node, String json) {
-        updateHealthMap(json);
-        return json;
-    }
 
-    public String updateHealthMap2(String json) {
-        updateHealthMap(json);
-        return json;
-    }
-
-    public Health updateHealthMapO(Health json) {
-        updateHealthMap(json);
-        return json;
-    }
 
     public static int updateHealthMap(String json) {
         logger.debug("Received health update: {}", json);
         Health updatedHealth = HealthMapper.fromRealWorldJson(json);
         return updateHealthMap(updatedHealth);
-//        try {
-//            Health updatedHealth = HealthMapper.fromRealWorldJson(json);
-//            Node node = healthResults.get(updatedHealth.getLookupKey());
-//            if (node == null) {
-//                logger.debug("Added new service from health update: {}", updatedHealth);
-//                String name = updatedHealth.getName();
-//                if (name == null || name.length() < 2) {
-//                    name = "Unknown - " + UUID.randomUUID().toString();
-//                }
-//                node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
-//
-//                no.cantara.tools.visuale.domain.Service s =
-//                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
-//                environment.addService(s);
-//                healthResults.put(node.getLookupKey(), node);
-//            } else {
-//                logger.debug("Updated service from health update: {}", updatedHealth);
-//                node.addHealth(updatedHealth);
-//            }
-//        } catch (Exception e) {
-//            logger.error("Received unmappable json for health", e);
-//        }
-//        return 0;
+
     }
 
     public static int updateHealthMap(Health updatedHealth) {
