@@ -3,10 +3,7 @@ package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -110,6 +107,20 @@ public class Node {
     public Node withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return Objects.equals(name, node.name) &&
+                Objects.equals(ip, node.ip);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, ip);
     }
 
     @Override

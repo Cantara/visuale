@@ -2,7 +2,6 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.*;
 
@@ -76,7 +75,11 @@ public class Environment {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", name).append("services", services).append("additionalProperties", additionalProperties).toString();
+        return "Environment{" +
+                "name='" + name + '\'' +
+                ", services=" + getServices() +
+                ", additionalProperties=" + additionalProperties +
+                '}';
     }
 
     public class MyServiceNameComp implements Comparator<Service> {

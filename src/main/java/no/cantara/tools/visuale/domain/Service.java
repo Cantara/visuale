@@ -2,7 +2,6 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.*;
 
@@ -74,10 +73,27 @@ public class Service {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Service service = (Service) o;
+        return Objects.equals(name, service.name) &&
+                Objects.equals(nodes, service.nodes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, nodes);
+    }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("name", name).append("nodes", nodes).append("additionalProperties", additionalProperties).toString();
+        return "Service{" +
+                "name='" + name + '\'' +
+                ", nodes=" + getNodes() +
+                ", additionalProperties=" + additionalProperties +
+                '}';
     }
 
     public class MyNodeNameComp implements Comparator<Node> {

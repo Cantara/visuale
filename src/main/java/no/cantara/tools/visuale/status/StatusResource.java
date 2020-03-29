@@ -57,7 +57,10 @@ public class StatusResource implements Service {
      */
     @Inject
     public StatusResource() {
-        initializeEnvironment(MOCK_ENVORONMENT, "QuadimDemo");
+        if (environment == null) {
+            initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
+
+        }
     }
 
 
@@ -193,10 +196,10 @@ public class StatusResource implements Service {
                     healthResults.put(node.getLookupKey(), node);
                 }
             }
-            environment.setName(envoronment_name);
         } catch (Exception e) {
             logger.error("Unable to initialise dashboard environment", e);
         }
+        environment.setName(envoronment_name);
     }
 
     public static Map<String, Node> getHealthStatusMap() {

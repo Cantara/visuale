@@ -35,7 +35,15 @@ public class Health {
 
     @JsonIgnore
     public String getLookupKey() {
-        String key = getName().trim() + ":" + getIp().trim();
+        String name = getName();
+        String ip = getIp();
+        if (name == null) {
+            name = "";
+        }
+        if (ip == null) {
+            ip = "";
+        }
+        String key = name.trim() + ":" + ip.trim();
         return key;
     }
 
