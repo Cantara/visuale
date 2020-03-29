@@ -7,6 +7,7 @@ import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
 import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
+import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.domain.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +119,7 @@ public class StatusResource implements Service {
     public static int updateHealthMap(String json) {
         logger.debug("Received health update: {}", json);
         try {
-            Health updatedHealth = mapper.readValue(json, Health.class);
+            Health updatedHealth = HealthMapper.fromRealWorldJson(json);
             Node node = healthResults.get(updatedHealth.getIp() + updatedHealth.getName());
             if (node == null) {
                 logger.debug("Added new service from health update: {}", updatedHealth);
@@ -184,7 +185,7 @@ public class StatusResource implements Service {
             }
             environment.setName(envoronment_name);
         } catch (Exception e) {
-            logger.error("Unable to inizialise dashboard environment", e);
+            logger.error("Unable to initialise dashboard environment", e);
         }
     }
 
