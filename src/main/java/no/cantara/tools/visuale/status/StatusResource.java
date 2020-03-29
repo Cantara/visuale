@@ -1,8 +1,6 @@
 package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.helidon.common.http.Http;
-import io.helidon.common.reactive.Multi;
 import io.helidon.media.jsonp.server.JsonSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
@@ -91,27 +89,10 @@ public class StatusResource implements Service {
     @PUT
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
-        StringBuilder sb = new StringBuilder();
-        Multi.from(request.content()).subscribe(chunk -> sb.append(chunk).append("-"));
-        Health myHealth = HealthMapper.fromRealWorldJson(sb.toString());
-        if (myHealth.getIp() == null || myHealth.getIp().length() < 1) {
-            myHealth.setIp(request.remoteAddress());
-        }
-        if (myHealth.getName() == null || myHealth.getName().length() < 1) {
-            myHealth.setName(request.remoteAddress());
-        }
-        updateHealthMap(myHealth);
 
         response.status(204).send();
     }
 
-    private void updateHealthInfoFromJson(JsonObject jo, ServerResponse response) {
-        if (jo != null || jo.toString().length() < 1) {
-            Health myHealth = HealthMapper.fromRealWorldJson(jo.toString());
-            updateHealthMap(myHealth);
-        }
-        response.status(Http.Status.NO_CONTENT_204).send();
-    }
 
     /**
      * Set the greeting to use in future messages.
@@ -124,9 +105,6 @@ public class StatusResource implements Service {
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");
-        StringBuilder sb = new StringBuilder();
-        Multi.from(request.content()).subscribe(chunk -> sb.append(chunk).append("-"));
-        Health myHealth = HealthMapper.fromRealWorldJson(sb.toString());
 
         boolean foundNode = false;
         boolean foundService = false;
@@ -160,26 +138,20 @@ public class StatusResource implements Service {
             }
             //   CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
         }
-        if (myHealth.getIp() == null || myHealth.getIp().length() < 1) {
-            myHealth.setIp(request.remoteAddress());
-        }
-        if (myHealth.getName() == null || myHealth.getName().length() < 1) {
-            myHealth.setName(request.remoteAddress());
-        }
         request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
-
         response.status(204).send();
     }
 
+    private Health updateHealthInfoFromJson(JsonObject jo, ServerResponse response) {
+        Health myHealth = null;
+        if (jo != null || jo.toString().length() < 1) {
+            myHealth = HealthMapper.fromRealWorldJson(jo.toString());
+            updateHealthMap(myHealth);
+        }
 
-
-
-    public static int updateHealthMap(String json) {
-        logger.debug("Received health update: {}", json);
-        Health updatedHealth = HealthMapper.fromRealWorldJson(json);
-        return updateHealthMap(updatedHealth);
-
+        return myHealth;
     }
+
 
     public static int updateHealthMap(Health updatedHealth) {
         logger.debug("Received health update: {}", updatedHealth);
