@@ -177,6 +177,10 @@ public final class Main {
         return ipAdresses;
     }
 
+    public static String getMyIPAddresssString() {
+        String fullString = getMyIPAddresssesString();
+        return fullString.substring(0, fullString.indexOf(" "));
+    }
 
     private static void startHealthReportSimulator() {
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
@@ -184,13 +188,13 @@ public final class Main {
         Runnable task1 = () -> {
 
             Health health = new Health().withName(applicationInstanceName).withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssesString().substring(0, getMyIPAddresssesString().indexOf(" ")))
+                    .withIp(getMyIPAddresssString())
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString());
             StatusResource.updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 15, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
 
 
         ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
@@ -199,13 +203,13 @@ public final class Main {
 
 
             Health health = new Health().withName(applicationInstanceName + " 2").withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssesString().substring(0, getMyIPAddresssesString().indexOf(" ")))
+                    .withIp(getMyIPAddresssString())
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString());
             StatusResource.updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 15, 5 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 35, 5 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
     }
 
 }
