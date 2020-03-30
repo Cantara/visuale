@@ -78,13 +78,12 @@ public class Service {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Service service = (Service) o;
-        return Objects.equals(name, service.name) &&
-                Objects.equals(nodes, service.nodes);
+        return Objects.equals(name, service.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, nodes);
+        return Objects.hash(name);
     }
 
     @Override
