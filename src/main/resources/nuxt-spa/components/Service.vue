@@ -43,8 +43,8 @@
       autoGrid(){
         let squareRoot = Math.sqrt(this.service.nodes.length);
         if(this.isInt(squareRoot))
-          return  Math.sqrt(this.service.nodes.length);
-        return Math.round(Math.sqrt(this.service.nodes.length) + 1);
+          return  squareRoot;
+        return Math.round(squareRoot + 1);
       },
 
       isInt(n) {
