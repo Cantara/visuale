@@ -1,17 +1,22 @@
 <template>
-  <div class="container">
-    <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
-
+  <div>
+    <PollingService></PollingService>
+    <div class="container">
+      <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
+    </div>
   </div>
+
 </template>
 
 <script>
 import {mapState} from 'vuex';
 import Service from "../components/Service";
+import PollingService from "../components/PollingService";
 export default {
 
   components: {
-    Service
+    Service,
+    PollingService
   },
   computed:{
     ...mapState(['services'])

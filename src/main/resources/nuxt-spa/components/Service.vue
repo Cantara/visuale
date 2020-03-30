@@ -31,12 +31,7 @@
     computed: {
       gridStyle() {
         return {
-          gridTemplateColumns: `repeat(2,minmax(130px,1fr))`
-        }
-      },
-      flexStyle(){
-        return {
-          flex: `0 0 ${this.autoFlex()}%`
+          gridTemplateColumns: `repeat(${this.autoGrid()},minmax(130px,1fr))`
         }
       },
     },
@@ -44,14 +39,8 @@
       return{}
     },
     methods:{
-      autoFlex(){
-      return  Math.floor(100 / this.autoGrid());
-      },
       autoGrid(){
-        let squareRoot = Math.sqrt(this.service.nodes.length);
-        if(this.isInt(squareRoot))
-          return  squareRoot;
-        return Math.round(squareRoot + 1);
+        return this.service.nodes.length === 1 ? 1 :2;
       },
       isInt(n) {
         return n % 1 === 0;
