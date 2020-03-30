@@ -32,6 +32,7 @@ public class Health {
     private String ip;
 
     //@JsonIgnore
+    @JsonProperty("additionalProperties")
     private Map<String, String> additionalProperties = new HashMap<String, String>();
 
     @JsonIgnore
