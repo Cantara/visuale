@@ -25,7 +25,7 @@ public class StatusResourceIntegrationTest {
     @BeforeAll
     public static void startTheServer() throws Exception {
         server = Main.startServer(0);
-        StatusResource.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
+        StatusService.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
         //Thread.sleep(5000);
     }
 

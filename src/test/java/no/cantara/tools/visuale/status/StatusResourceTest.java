@@ -15,19 +15,19 @@ class StatusResourceTest {
 
     @Test
     public void testEnvironment() throws Exception {
-        StatusResource.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
-        Environment environment = StatusResource.getEnvironment();
+        StatusService.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
+        Environment environment = StatusService.getEnvironment();
         for (int n = 10; n < 20; n++) {
             Health h = new Health().withIp("10.45.54." + n).withVersion("1.3." + n).withStatus("OK");
-            int result = StatusResource.updateHealthMap(h);
+            int result = StatusService.updateHealthMap(h);
             System.out.println("n:" + n + " - r:" + result);
         }
         for (int n = 10; n < 20; n++) {
             Health h = new Health().withIp("20.45.54." + n).withVersion("1.5." + n).withStatus("OK");
-            int result = StatusResource.updateHealthMap(h);
+            int result = StatusService.updateHealthMap(h);
             System.out.println("n:" + n + " - r:" + result);
         }
-        Map<String, Node> nodeMap = StatusResource.getHealthStatusMap();
+        Map<String, Node> nodeMap = StatusService.getHealthStatusMap();
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment));
     }
 

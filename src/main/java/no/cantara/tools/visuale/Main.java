@@ -10,6 +10,7 @@ import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.status.StatusResource;
+import no.cantara.tools.visuale.status.StatusService;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.slf4j.Logger;
@@ -189,8 +190,9 @@ public final class Main {
 
             Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
                     .withIp(getMyIPAddresssString())
-                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString());
-            StatusResource.updateHealthMap(health);
+                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
+                    .withAdditionalProperty("simulated", "true");
+            StatusService.updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
@@ -204,8 +206,9 @@ public final class Main {
 
             Health health = new Health().withName(applicationInstanceName + " 2" + "-service").withVersion(getVersion()).withStatus("OK")
                     .withIp(getMyIPAddresssString())
-                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString());
-            StatusResource.updateHealthMap(health);
+                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
+                    .withAdditionalProperty("simulated", "true");
+            StatusService.updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second

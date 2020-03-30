@@ -1,7 +1,7 @@
 package no.cantara.tools.visuale;
 
 import io.helidon.webserver.WebServer;
-import no.cantara.tools.visuale.status.StatusResource;
+import no.cantara.tools.visuale.status.StatusService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +20,7 @@ public class MainTest {
     @BeforeAll
     public static void startTheServer() throws Exception {
         server = Main.startServer(0);
-        StatusResource.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
+        StatusService.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
         //Thread.sleep(5000);
     }
 
