@@ -1,0 +1,14 @@
+{
+  "Status": "true",
+  "Version": "2.5.38-SNAPSHOT [Whydah-SSOLoginWebApp-1 - 172.31.48.218  fe80:0:0:0:1064:c3ff:fe70:b12e%eth0  172.31.48.218  0:0:0:0:0:0:0:1%lo  127.0.0.1]",
+  "DEFCON": "DEFCON5",
+  "hasApplicationToken": "true",
+  "hasValidApplicationToken": "true",
+  "hasApplicationsMetadata": "false",
+  "now": "2020-03-30T10:36:53.366Z",
+  "running since": "2020-03-30T01:02:35.729Z",
+  "securitytokenservice_health": "https://whydahdev.cantara.no/tokenservice/health",
+  "useradminservice_health": "https://whydahdev.cantara.no/useradminservice/health",
+  "statisticsservice_health": "https://whydahdev.cantara.no/reporter/health",
+  "crmservice_health": "https://whydahdev.cantara.no/crmservice/health"
+}

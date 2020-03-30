@@ -18,6 +18,10 @@ class HealthMapperTest {
         health = HealthMapper.fromRealWorldJson(whydahHealth);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(whydahTest2);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
     }
 
 
@@ -62,4 +66,20 @@ class HealthMapperTest {
             "  \"now\": \"2020-03-28T20:32:00.696Z\",\n" +
             "  \"running since\": \"2020-03-28T01:02:11.974Z\"" +
             "} ";
+
+    String whydahTest2 = "{\n" +
+            "  \"Status\": \"true\",\n" +
+            "  \"Version\": \"2.5.38-SNAPSHOT [Whydah-SSOLoginWebApp-1 - 172.31.48.218  fe80:0:0:0:1064:c3ff:fe70:b12e%eth0  172.31.48.218  0:0:0:0:0:0:0:1%lo  127.0.0.1]\",\n" +
+            "  \"DEFCON\": \"DEFCON5\",\n" +
+            "  \"hasApplicationToken\": \"true\",\n" +
+            "  \"hasValidApplicationToken\": \"true\",\n" +
+            "  \"hasApplicationsMetadata\": \"false\",\n" +
+            "  \"now\": \"2020-03-30T10:36:53.366Z\",\n" +
+            "  \"running since\": \"2020-03-30T01:02:35.729Z\",\n" +
+            "\n" +
+            "  \"securitytokenservice_health\": \"https://whydahdev.cantara.no/tokenservice/health\" ,\n" +
+            "  \"useradminservice_health\": \"https://whydahdev.cantara.no/useradminservice/health\" ,\n" +
+            "  \"statisticsservice_health\": \"https://whydahdev.cantara.no/reporter/health\" ,\n" +
+            "  \"crmservice_health\": \"https://whydahdev.cantara.no/crmservice/health\" \n" +
+            "}";
 }

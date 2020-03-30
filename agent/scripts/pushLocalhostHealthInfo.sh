@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JSON="`wget -qO- http://localhost:8080/health`";
+JSON="`wget -qO- https://whydahdev.cantara.no/sso/health`";
 wget --method=PUT --body-data="${JSON}"  https://visuale.cantara.no/status
 
 # JSON2="`wget -qO- http://localhost:8080/info`";
