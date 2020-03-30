@@ -25,25 +25,30 @@ public class StatusService {
     private static Map<String, Node> healthResults = new HashMap<>();
 
     private static Environment environment;
+    private String environmentAsString;
+
     private static final boolean STRICT_EMVIRONMANT = false;
 
     static {
         if (environment == null) {
             initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
+
         }
+
     }
 
     public StatusService() {
+        updateEnvironmentAsString();
     }
 
     public StatusService(String environmentJson, String environmentName) {
         environment = null;
         initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
-
+        updateEnvironmentAsString();
     }
 
 
-    public static int updateHealthMap(Health updatedHealth) {
+    public synchronized static int updateHealthMap(Health updatedHealth) {
         logger.debug("Received health update: {}", updatedHealth);
         try {
             Node node = healthResults.get(updatedHealth.getLookupKey());
@@ -94,12 +99,15 @@ public class StatusService {
                 Node node = new Node().withName(nodeName);
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
                 environment.addService(service);
+                updateEnvironmentAsString();
             } else if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
                         Node node = new Node().withName(nodeName);
                         node.addHealth(health);
                         service.withNode(node);
+                        updateEnvironmentAsString();
+
                     }
                 }
             }
@@ -143,4 +151,15 @@ public class StatusService {
         return environment;
     }
 
+    private void updateEnvironmentAsString() {
+        try {
+            environmentAsString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
+        } catch (Exception e) {
+            logger.error("Unable to uodate environmentAsString", e);
+        }
+    }
+
+    public String getEnvironmentAsString() {
+        return environmentAsString;
+    }
 }

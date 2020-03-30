@@ -36,7 +36,7 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", JsonSupport.create(), this::showEnvironment).options("/status", JsonSupport.create(), this::showEnvironment).put("/status", JsonSupport.create(),
+        rules.get("/status", JsonSupport.create(), this::showEnvironment).options("/status", JsonSupport.create(), this::showEnvironmentO).put("/status", JsonSupport.create(),
                 this::updateHealthInfo).put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
     }
 
@@ -58,19 +58,31 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public void showEnvironment(final ServerRequest request, final ServerResponse response) {
-        String msg = statusService.getEnvironment().toString();
-        try {
-            msg = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(statusService.getEnvironment());
-        } catch (Exception e) {
-            logger.error("Unable to serialize environment", e);
-        }
-        response.headers().add("Content-Type: application/json"
+    public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
+        String msg = new String(statusService.getEnvironmentAsString());
+//        response.headers().add("Content-Type: application/json"
+//                , "Access-Control-Allow-Origin: *"
+//                , "Access-Control-Allow-Methods: GET, OPTIONS"
+//                , "Access-Control-Allow-Headers: *"
+//                , "Access-Control-Allow-Credentials: true");
+        response.status(200).send(msg);
+    }
+
+    /**
+     * Return a wordly greeting message.
+     *
+     * @return {@link JsonObject}
+     */
+    @SuppressWarnings("checkstyle:designforextension")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public synchronized void showEnvironmentO(final ServerRequest request, final ServerResponse response) {
+        String msg = new String(statusService.getEnvironmentAsString());
+        response.status(200).headers().add("Content-Type: application/json"
                 , "Access-Control-Allow-Origin: *"
                 , "Access-Control-Allow-Methods: GET, OPTIONS"
                 , "Access-Control-Allow-Headers: *"
                 , "Access-Control-Allow-Credentials: true");
-        response.status(200).send(msg);
     }
 
     /**
