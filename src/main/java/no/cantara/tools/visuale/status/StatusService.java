@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
@@ -28,23 +32,26 @@ public class StatusService {
     private String environmentAsString;
 
     private static final boolean STRICT_EMVIRONMANT = false;
+    ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
+
 
     static {
         if (environment == null) {
             initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
-
         }
 
     }
 
     public StatusService() {
         updateEnvironmentAsString();
+        startSyncThread();
     }
 
     public StatusService(String environmentJson, String environmentName) {
         environment = null;
         initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
         updateEnvironmentAsString();
+        startSyncThread();
     }
 
 
@@ -107,7 +114,6 @@ public class StatusService {
                         node.addHealth(health);
                         service.withNode(node);
                         updateEnvironmentAsString();
-
                     }
                 }
             }
@@ -161,5 +167,13 @@ public class StatusService {
 
     public String getEnvironmentAsString() {
         return environmentAsString;
+    }
+
+    private void startSyncThread() {
+        Runnable task2 = () -> {
+            updateEnvironmentAsString();
+        };
+        // init Delay = 5, repeat the task every 60 second
+        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 3, 1, TimeUnit.SECONDS);
     }
 }
