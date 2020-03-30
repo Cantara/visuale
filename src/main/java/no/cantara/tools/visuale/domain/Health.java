@@ -13,7 +13,8 @@ import java.util.Map;
         "version",
         "now",
         "running since",
-        "ip"
+        "ip",
+        "additionalProperties"
 })
 public class Health {
 
@@ -30,8 +31,8 @@ public class Health {
     @JsonProperty("ip")
     private String ip;
 
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    //@JsonIgnore
+    private Map<String, String> additionalProperties = new HashMap<String, String>();
 
     @JsonIgnore
     public String getLookupKey() {
@@ -138,17 +139,23 @@ public class Health {
     }
 
     @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
+    public Map<String, String> getAdditionalProperties() {
         return this.additionalProperties;
     }
 
     @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
+    public void setAdditionalProperty(String name, String value) {
         this.additionalProperties.put(name, value);
     }
 
-    public Health withAdditionalProperty(String name, Object value) {
+    public Health withAdditionalProperty(String name, String value) {
         this.additionalProperties.put(name, value);
+        return this;
+    }
+
+
+    public Health withAdditionalProperties(Map<String, String> additionalProperties1) {
+        this.additionalProperties.putAll(additionalProperties1);
         return this;
     }
 

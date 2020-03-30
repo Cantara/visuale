@@ -28,28 +28,8 @@ public class HealthDeserializer extends StdDeserializer<Health> {
     public Health deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         JsonNode jsonnode = jp.getCodec().readTree(jp);
         Iterator<String> fieldNames = jsonnode.fieldNames();
-        Map<String, String> jsonFlattenedMap = new HashMap<>();
-        while (fieldNames.hasNext()) {
-            String fieldName = fieldNames.next();
-            JsonNode fieldvalueNode = jsonnode.get(fieldName);
-            Iterator<String> subFieldNames = fieldvalueNode.fieldNames();
-            while (subFieldNames.hasNext()) {
-                String subfieldName = fieldNames.next();
-                JsonNode subfieldvalueNode = fieldvalueNode.get(fieldName);
-                if (fieldvalueNode.isTextual()) {
-                    String subfieldValue = subfieldvalueNode.textValue();
-                    String combinedkey = fieldName + ":" + subfieldName;
-                    jsonFlattenedMap.put(combinedkey.toLowerCase(), subfieldValue);
-
-                }
-
-            }
-            if (fieldvalueNode.isTextual()) {
-                String fieldValue = fieldvalueNode.textValue();
-                jsonFlattenedMap.put(fieldName.toLowerCase(), fieldValue);
-            }
-        }
-        String statusValue = jsonFlattenedMap.get("status");
+        Map<String, String> jsonFlattenedMap = getFlattenedJsonMap(jsonnode, fieldNames);
+        String statusValue = jsonFlattenedMap.remove("status");
         if (statusValue == null || statusValue.length() < 1) {
             statusValue = "";
         }
@@ -57,11 +37,11 @@ public class HealthDeserializer extends StdDeserializer<Health> {
         if ("true".equalsIgnoreCase(statusValue.toLowerCase())) {
             statusValue = "OK";
         }
-        String nowValue = jsonFlattenedMap.get("now");
-        String ipValue = jsonFlattenedMap.get("ip");
-        String versionValue = jsonFlattenedMap.get("version");
-        String runningSinceValue = jsonFlattenedMap.get("running since");
-        String nameValue = jsonFlattenedMap.get("name");
+        String nowValue = jsonFlattenedMap.remove("now");
+        String ipValue = jsonFlattenedMap.remove("ip");
+        String versionValue = jsonFlattenedMap.remove("version");
+        String runningSinceValue = jsonFlattenedMap.remove("running since");
+        String nameValue = jsonFlattenedMap.remove("name");
 
         if (ipValue == null || ipValue.length() < 1 && versionValue.length() > 30) {
             int beginindex = 1 + versionValue.lastIndexOf("-");
@@ -95,10 +75,41 @@ public class HealthDeserializer extends StdDeserializer<Health> {
             }
         }
 
+        Map<String, String> additionalProperties = new HashMap<String, String>();
+        for (String key : jsonFlattenedMap.keySet()) {
+            additionalProperties.put(key, jsonFlattenedMap.get(key));
+        }
+
         Health customSerializedhealth = new Health().withStatus(statusValue).withName(nameValue)
                 .withIp(ipValue).withVersion(versionValue).withNow(nowValue)
-                .withRunningSince(runningSinceValue);
+                .withRunningSince(runningSinceValue)
+                .withAdditionalProperties(additionalProperties);
         return customSerializedhealth;
+    }
+
+    private Map<String, String> getFlattenedJsonMap(JsonNode jsonnode, Iterator<String> fieldNames) {
+        Map<String, String> jsonFlattenedMap = new HashMap<>();
+        while (fieldNames.hasNext()) {
+            String fieldName = fieldNames.next();
+            JsonNode fieldvalueNode = jsonnode.get(fieldName);
+            Iterator<String> subFieldNames = fieldvalueNode.fieldNames();
+            while (subFieldNames.hasNext()) {
+                String subfieldName = fieldNames.next();
+                JsonNode subfieldvalueNode = fieldvalueNode.get(fieldName);
+                if (fieldvalueNode.isTextual()) {
+                    String subfieldValue = subfieldvalueNode.textValue();
+                    String combinedkey = fieldName + ":" + subfieldName;
+                    jsonFlattenedMap.put(combinedkey.toLowerCase(), subfieldValue);
+
+                }
+
+            }
+            if (fieldvalueNode.isTextual()) {
+                String fieldValue = fieldvalueNode.textValue();
+                jsonFlattenedMap.put(fieldName.toLowerCase(), fieldValue);
+            }
+        }
+        return jsonFlattenedMap;
     }
 }
 
