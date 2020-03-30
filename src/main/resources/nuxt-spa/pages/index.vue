@@ -23,12 +23,9 @@ export default {
 .container {
   margin: 0 auto;
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  grid-gap: 2em;
-  grid-auto-flow: dense;
-  padding: 2em;
+  display: flex;
+  flex-flow: column wrap;
+  padding: 1em;
   height:100vh;
 }
 </style>

@@ -1,12 +1,11 @@
 <template>
-    <div class="node-block">
+    <div class="node-block" :style="flexStyle">
 <div class="marker">
   <div>
     <div class="title">
       {{node.ip}}
     </div>
     <div class="content">
-
       <table>
         <tr>
           <td>Health: </td>
@@ -31,7 +30,11 @@
           node:{
             required: true,
             type:Object
-          }
+          },
+        flexStyle:{
+            required:false,
+          type:Object
+        }
       }
     }
 </script>
@@ -41,6 +44,7 @@
   .node-block {
     border: 2px solid white;
     border-radius: 10px;
+    padding: 0.1em;
   }
 
   .marker > div {
@@ -56,7 +60,7 @@
     color:white;
   }
   .content{
-    padding:0.5em;
+    padding:0;
     color:white;
   }
   td {

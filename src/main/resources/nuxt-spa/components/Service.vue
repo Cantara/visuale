@@ -1,16 +1,16 @@
 <template>
   <div class="service-block">
-
       <div class="marker">
         <div>
           <div class="title">
             {{service.name}}
           </div>
-          <div class="content" :style="gridStyle">
-            <Node v-for="(node,index) in service.nodes" :key="index" :node="node"></Node>
+          <div>
+            <div class="content"  :style="gridStyle">
+              <Node v-for="(node,index) in service.nodes" :key="index" :node="node"></Node>
+            </div>
           </div>
         </div>
-
     </div>
   </div>
 </template>
@@ -31,22 +31,21 @@
     computed: {
       gridStyle() {
         return {
-          gridTemplateColumns: `repeat(${this.autoGrid()}, minmax(150px,1fr))`
+          gridTemplateColumns: `repeat(2,minmax(130px,1fr))`
         }
       },
       flexStyle(){
         return {
-          flex: `1 0 ${this.autoFlex()}%`
+          flex: `0 0 ${this.autoFlex()}%`
         }
       },
     },
     data() {
-      return {
-      }
+      return{}
     },
     methods:{
       autoFlex(){
-        Math.floor(100 / this.autoGrid());
+      return  Math.floor(100 / this.autoGrid());
       },
       autoGrid(){
         let squareRoot = Math.sqrt(this.service.nodes.length);
@@ -54,12 +53,10 @@
           return  squareRoot;
         return Math.round(squareRoot + 1);
       },
-
       isInt(n) {
         return n % 1 === 0;
-      }
-
-    },
+      },
+    }
   }
 </script>
 
@@ -68,8 +65,12 @@
   .service-block{
   }
   .service-block {
+
+    margin: 0.35em;
+  }
+  .marker{
     border: 2px solid white;
-    margin: 0.5em;
+    display:inline-block;
   }
 
   .marker > div {
@@ -86,10 +87,9 @@
     color: white;
   }
   .content{
-    padding:0.7em;
-    //display:grid;
-    //grid-gap: 0.7em;
-    flex-wrap: wrap;
-    display: flex;
+    padding:0.55em;
+    display: inline-grid;
+    grid-gap: 0.55em;
+
   }
 </style>
