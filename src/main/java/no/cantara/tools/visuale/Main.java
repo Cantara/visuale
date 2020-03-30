@@ -200,8 +200,8 @@ public final class Main {
         Runnable task2 = () -> {
 
 
-            Health health = new Health().withName(applicationInstanceName + " 2" + "-service").withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssString())
+            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
+                    .withIp(getMyIPAddresssString().replace("3", "4"))
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
                     .withAdditionalProperty("simulated", "true");
             StatusService.updateHealthMap(health);
@@ -209,6 +209,33 @@ public final class Main {
 
         // init Delay = 5, repeat the task every 60 second
         ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 35, 5 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+        ScheduledExecutorService ses3 = Executors.newScheduledThreadPool(1);
+        Runnable task3 = () -> {
+
+
+            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
+                    .withIp(getMyIPAddresssString().replace("4", "5"))
+                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
+                    .withAdditionalProperty("simulated", "true");
+            StatusService.updateHealthMap(health);
+        };
+
+        // init Delay = 5, repeat the task every 60 second
+        ScheduledFuture<?> scheduledFuture3 = ses3.scheduleAtFixedRate(task2, 12, 3 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+
+        ScheduledExecutorService ses4 = Executors.newScheduledThreadPool(1);
+        Runnable task4 = () -> {
+
+
+            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
+                    .withIp(getMyIPAddresssString().replace("5", "6"))
+                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
+                    .withAdditionalProperty("simulated", "true");
+            StatusService.updateHealthMap(health);
+        };
+
+        // init Delay = 5, repeat the task every 60 second
+        ScheduledFuture<?> scheduledFuture4 = ses4.scheduleAtFixedRate(task2, 11, 2 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
     }
 
 }
