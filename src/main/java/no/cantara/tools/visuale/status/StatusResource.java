@@ -66,6 +66,7 @@ public class StatusResource implements Service {
             logger.error("Unable to serialize environment", e);
         }
         response.headers().add("Access-Control-Allow-Origin: *");
+        response.headers().add("Access-Control-Allow-Methods: GET, OPTIONS");
         response.status(200).send(msg);
     }
 
