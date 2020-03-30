@@ -27,7 +27,6 @@ import javax.ws.rs.core.Response;
 public class StatusResource implements Service {
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
     public static ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-    ;
     StatusService statusService;
 
     /**
@@ -66,6 +65,7 @@ public class StatusResource implements Service {
         } catch (Exception e) {
             logger.error("Unable to serialize environment", e);
         }
+        response.headers().add("Access-Control-Allow-Origin: *");
         response.status(200).send(msg);
     }
 
