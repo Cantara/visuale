@@ -65,8 +65,7 @@ public class StatusResource implements Service {
         } catch (Exception e) {
             logger.error("Unable to serialize environment", e);
         }
-        response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: GET, OPTIONS");
-        response.headers().contentType(io.helidon.common.http.MediaType.APPLICATION_JSON);
+        response.headers().add("Content-Type: application/json", "Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: GET, OPTIONS");
         response.status(200).send(msg);
     }
 
@@ -80,9 +79,7 @@ public class StatusResource implements Service {
     @PUT
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
-        response.headers().add("Access-Control-Allow-Origin: *");
-        response.headers().add("Access-Control-Allow-Methods: PUT, OPTIONS");
-        response.headers().contentType(io.helidon.common.http.MediaType.APPLICATION_JSON);
+        response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
         response.status(204).send();
     }
 
@@ -105,9 +102,7 @@ public class StatusResource implements Service {
         statusService.updateEnvironment(envName, serviceName, nodeName, h);
 
         request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
-        response.headers().add("Access-Control-Allow-Origin: *");
-        response.headers().add("Access-Control-Allow-Methods: GET, OPTIONS");
-        response.headers().contentType(io.helidon.common.http.MediaType.APPLICATION_JSON);
+        response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
         response.status(204).send();
     }
 
