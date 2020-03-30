@@ -50,11 +50,12 @@
   .marker > div {
     padding: 0 3px;
     margin-top: -0.8em;
+    text-align: center;
   }
 
   .title {
     background: $color--background none repeat scroll 0 0;
-    display: inline-block;
+    display: inline;
     padding: 0 0.6em;
     margin: 0 0.6em;
     color:white;

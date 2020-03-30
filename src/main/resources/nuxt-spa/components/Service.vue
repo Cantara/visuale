@@ -66,6 +66,7 @@
     display: block;
     padding: 0 3px;
     margin-top: -0.8em;
+    text-align: center;
   }
 
   .title {
