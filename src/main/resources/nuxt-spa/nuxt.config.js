@@ -18,7 +18,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading:  false,
   /*
   ** Global CSS
   */
@@ -40,7 +40,8 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   /*
   ** Axios module configuration
@@ -48,6 +49,11 @@ export default {
   */
   axios: {
     baseURL:"https://visuale.cantara.no",
+
+    proxy:true,
+  },
+  proxy: {
+    '/api/': { target: 'http://localhost:8080/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
   },
   /*
   ** Build configuration
