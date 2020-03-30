@@ -5,7 +5,7 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>0.4.6-SNAPSHOT</version>
+    <version>0.4.9-SNAPSHOT</version>
 
     <repositories>
         <!-- Needed for parent    -->

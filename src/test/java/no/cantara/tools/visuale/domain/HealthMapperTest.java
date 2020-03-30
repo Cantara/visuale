@@ -1,15 +1,23 @@
 package no.cantara.tools.visuale.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HealthMapperTest {
 
+    ObjectMapper mapper = new ObjectMapper();
+
     @Test
-    public void testHealthMapper() {
+    public void testHealthMapper() throws Exception {
         Health health = HealthMapper.fromRealWorldJson(quadimhealth);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(whydahHealth);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
     }
 
 
