@@ -1,6 +1,6 @@
 <template>
   <div class="service-block">
-    <div>
+
       <div class="marker">
         <div>
           <div class="title">
@@ -10,7 +10,7 @@
             <Node v-for="(node,index) in service.nodes" :key="index" :node="node"></Node>
           </div>
         </div>
-      </div>
+
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@
     computed: {
       gridStyle() {
         return {
-          gridTemplateColumns: `repeat(${this.autoGrid()},1fr)`
+          gridTemplateColumns: `repeat(${this.autoGrid()}, minmax(150px,1fr))`
         }
       },
     },
@@ -41,9 +41,15 @@
     },
     methods:{
       autoGrid(){
-        return  Math.round(Math.sqrt(this.service.nodes.length));
-        return Math.round(this.service.nodes.length / 2);
+        let squareRoot = Math.sqrt(this.service.nodes.length);
+        if(this.isInt(squareRoot))
+          return  Math.sqrt(this.service.nodes.length);
+        return Math.round(Math.sqrt(this.service.nodes.length) + 1);
       },
+
+      isInt(n) {
+        return n % 1 === 0;
+      }
 
     },
   }
@@ -51,11 +57,15 @@
 
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
-  .service-block > div {
+  .service-block{
+  }
+  .service-block {
     border: 2px solid white;
+    margin: 0.5em;
   }
 
   .marker > div {
+    display: block;
     padding: 0 3px;
     margin-top: -0.8em;
   }
@@ -68,8 +78,8 @@
     color: white;
   }
   .content{
-    padding:1em;
+    padding:0.7em;
     display:grid;
-    grid-gap: 1em;
+    grid-gap: 0.7em;
   }
 </style>
