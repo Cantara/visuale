@@ -97,14 +97,10 @@ public final class Main {
                 .register(JsonBindingSupport.create())
                 .register(health)
                 .get("/hello", (req, res) -> res.send("Hello World!"))
-//                .register("/status",statusResource)
                 .register(statusResource)
-//                .get("/status", (req, res) -> res.send(statusResource.showEnvironment()))
-//                .put("/status", (req, res) -> res.send(statusResource.updateHealfInfo(req)))
                 .register("/", StaticContentSupport.builder("/staticspa")
                         .welcomeFileName("index.html")
                         .build())
-//                .register("/",new StatusResource())
                 .build();
 
         ServerConfiguration serverConfig = null;
