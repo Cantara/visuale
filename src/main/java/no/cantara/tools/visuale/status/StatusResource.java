@@ -65,10 +65,13 @@ public class StatusResource implements Service {
         } catch (Exception e) {
             logger.error("Unable to serialize environment", e);
         }
-        response.headers().add("Content-Type: application/json", "Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: GET, OPTIONS");
+        response.headers().add("Content-Type: application/json"
+                , "Access-Control-Allow-Origin: *"
+                , "Access-Control-Allow-Methods: GET, OPTIONS"
+                , "Access-Control-Allow-Headers: *"
+                , "Access-Control-Allow-Credentials: true");
         response.status(200).send(msg);
     }
-
 
     /**
      * Set the greeting to use in future messages.
