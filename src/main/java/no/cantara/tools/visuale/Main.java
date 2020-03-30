@@ -221,7 +221,7 @@ public final class Main {
         };
 
         // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture3 = ses3.scheduleAtFixedRate(task2, 12, 3 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture3 = ses3.scheduleAtFixedRate(task3, 12, 3 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
 
         ScheduledExecutorService ses4 = Executors.newScheduledThreadPool(1);
         Runnable task4 = () -> {
@@ -235,7 +235,7 @@ public final class Main {
         };
 
         // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture4 = ses4.scheduleAtFixedRate(task2, 11, 2 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+        ScheduledFuture<?> scheduledFuture4 = ses4.scheduleAtFixedRate(task4, 11, 2 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
     }
 
 }
