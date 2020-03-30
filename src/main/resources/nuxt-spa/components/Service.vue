@@ -34,12 +34,20 @@
           gridTemplateColumns: `repeat(${this.autoGrid()}, minmax(150px,1fr))`
         }
       },
+      flexStyle(){
+        return {
+          flex: `1 0 ${this.autoFlex()}%`
+        }
+      },
     },
     data() {
       return {
       }
     },
     methods:{
+      autoFlex(){
+        Math.floor(100 / this.autoGrid());
+      },
       autoGrid(){
         let squareRoot = Math.sqrt(this.service.nodes.length);
         if(this.isInt(squareRoot))
@@ -79,7 +87,9 @@
   }
   .content{
     padding:0.7em;
-    display:grid;
-    grid-gap: 0.7em;
+    //display:grid;
+    //grid-gap: 0.7em;
+    flex-wrap: wrap;
+    display: flex;
   }
 </style>
