@@ -9,7 +9,7 @@
       data() {
         return {
           polling: null,
-          interval: 3000,
+          interval: 5000,
         }
       },
       methods: {
