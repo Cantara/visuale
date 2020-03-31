@@ -38,7 +38,8 @@ export default {
   }
 .container {
   margin: 0 auto;
-  display: flex;
+  display: inline-flex;
+  max-width: 100vw;
   flex-flow: column wrap;
   padding: 0 1em 1em;
 }
