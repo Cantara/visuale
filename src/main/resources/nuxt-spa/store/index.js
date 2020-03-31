@@ -1,7 +1,6 @@
-import {ServicesMockData} from "../mock_data/ServicesMockData";
 
 export const state = () => ({
-  services: ServicesMockData(),
+  services: {},
 
 });
 export const mutations = {
@@ -11,7 +10,8 @@ export const mutations = {
 };
 export const actions ={
   async fetchData({commit}) {
-    return await this.$axios.$get('/status').then((response) => {
+
+    return await this.$axios.$get('/api/status').then((response) => {
       commit ('setData', response);
       return response;
     })

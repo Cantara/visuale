@@ -12,7 +12,7 @@
           <th>Ok</th>
         </tr>
         <tr>
-          <td>Version: </td>
+          <td>Ver: </td>
           <th>{{node.health[0].version}}</th>
         </tr>
       </table>

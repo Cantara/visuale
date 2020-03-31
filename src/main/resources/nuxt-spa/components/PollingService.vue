@@ -14,6 +14,7 @@
       },
       methods: {
         startAutoPoller () {
+          this.fetchData();
           this.polling = setInterval(() => {
             this.fetchData();
           }, this.interval)
