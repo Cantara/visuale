@@ -87,7 +87,7 @@
   .content{
     padding:0.55em;
     display: inline-grid;
-    grid-gap: 0.55em;
+    grid-gap: 0.6em;
 
   }
 </style>

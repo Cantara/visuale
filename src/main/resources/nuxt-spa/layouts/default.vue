@@ -1,6 +1,11 @@
 <template>
   <div class="background">
     <nuxt />
+    <footer>
+ <!--     Created by:
+      Marius Årnes - https://github.com/appartiff
+      Totto - https://github.com/totto-->
+    </footer>
   </div>
 </template>
 <style lang="scss" scoped>
