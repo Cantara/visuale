@@ -4,7 +4,7 @@
 
 An real-time dashboard visualisation for real-world micro-service continous deployment environments 
 
-![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
+![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/f9d30bcee79b6fe1b82fc0203972bb3c0322923a/doc/images/Visuale-in-action.png)
 
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
@@ -20,11 +20,12 @@ You may have a look and push data at the latest version which is reset frequentl
 - :heavy_check_mark: initial version will be open, i.e. not need any auth... 
 - :heavy_check_mark: the UI should be continuously updating...   
 - :heavy_check_mark: semantic version, running since and some instance info like internal IP are the most important values....    
-- nodes which have not reported for 10 intervals should be marked with a yellow "not working properly" colour...
-- nodes which are not reachable or have missed 50 updates should be marked red/dead...  
+- :white_check_mark: nodes which have not reported for 10 intervals should be marked with a yellow "not working properly" colour...
+- :white_check_mark: nodes which are not reachable or have missed 50 updates should be marked red/dead...  
 - :white_check_mark: normal update interval from the service should be 5 or 10 second
 - :heavy_check_mark: old/long running services (>7 days) should be marked as insecure/vulnerable due to lack of patching
 - :white_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
+- :heavy_check_mark: service indicator of the service live resillience/availabillity 
 
 # Build and test
 
