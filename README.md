@@ -63,3 +63,12 @@ wget //http://localhost:8080/
 # Some simple agent scripts to push health to visuale
 
 * Look here:  https://github.com/Cantara/visuale/tree/master/agent/scripts
+
+
+### Visuale on mobile phones
+
+And if you thought this was only for dashboards, we know that time is urgent, so you can check tha status off all your environments conviniently on your phone on your way to work
+
+![A shapshot of an early ersion of the visuale dashboard from a mobile phone](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale%20on%20mobile.jpg)
+
+
