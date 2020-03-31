@@ -76,9 +76,9 @@
     background: $color--background none repeat scroll 0 0;
     display: inline-block;
     padding: 0 0.6em;
+    float:left;
     margin: 0 0.6em;
     color: white;
-    height: 1rem;
     line-height: 1rem; /* <-- this is what you must define */
   }
   .content{
