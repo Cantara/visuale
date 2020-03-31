@@ -4,7 +4,7 @@
 
 An real-time dashboard visualisation for real-world micro-service continous deployment environments 
 
-![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/f9d30bcee79b6fe1b82fc0203972bb3c0322923a/doc/images/Visuale-in-action.png)
+![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
 #### Legend
 - battery symbol: SLA/HA quality. Calculated based on the number of healthy nodes weigthed against distributed system norms
@@ -63,3 +63,12 @@ wget //http://localhost:8080/
 # Some simple agent scripts to push health to visuale
 
 * Look here:  https://github.com/Cantara/visuale/tree/master/agent/scripts
+
+
+### Visuale on mobile phones
+
+And if you thought this was only for dashboards, we know that time is urgent, so you can check tha status off all your environments conviniently on your phone on your way to work
+
+![A shapshot of an early ersion of the visuale dashboard from a mobile phone](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale%20on%20mobile.jpg)
+
+
