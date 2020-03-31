@@ -87,9 +87,9 @@ public final class Main {
         StatusResource statusResource;
         if (usingMockEnvironment) {
             statusResource = new StatusResource();
+            statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
         } else {
             statusResource = new StatusResource();
-            statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
         }
 
 
