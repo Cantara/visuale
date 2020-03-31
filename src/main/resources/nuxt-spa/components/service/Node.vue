@@ -54,12 +54,7 @@
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
 
-  .warning {
-    color: $color--warning;
-  }
-  .success{
-    color:$color--success;
-  }
+
 
   .node-block {
     border: 2px solid white;
@@ -89,6 +84,7 @@
     padding:0;
     list-style:none;
     text-align:left;
+    font-size:0.9rem;
   }
   li {
     color:white;

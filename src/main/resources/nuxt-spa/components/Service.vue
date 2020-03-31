@@ -3,10 +3,10 @@
       <div class="marker">
         <div>
           <div class="title">
-            {{service.name}}
+           <ServiceBattery :nodes="service.nodes"/> {{service.name}}
           </div>
           <div>
-            <div class="content"  :style="gridStyle">
+            <div class="content" :style="gridStyle">
               <Node v-for="(node,index) in service.nodes" :key="index" :node="node"></Node>
             </div>
           </div>
@@ -16,11 +16,14 @@
 </template>
 
 <script>
+
   import Node from "./service/Node";
+  import ServiceBattery from "./service/ServiceBattery";
   export default {
     name: "Service",
     components:{
-      Node
+      Node,
+      ServiceBattery
     },
     props:{
       service: {
@@ -75,6 +78,8 @@
     padding: 0 0.6em;
     margin: 0 0.6em;
     color: white;
+    height: 1rem;
+    line-height: 1rem; /* <-- this is what you must define */
   }
   .content{
     padding:0.55em;

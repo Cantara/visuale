@@ -1,0 +1,13 @@
+@import '~/assets/styles/variables/_variables.scss';
+.warning {
+  color: $color--warning;
+}
+.success{
+  color:$color--success;
+}
+.normal {
+  color:$color--normal;
+}
+.danger {
+  color:$color--danger;
+}
