@@ -8,8 +8,8 @@ An real-time dashboard visualisation for real-world micro-service continous depl
 
 #### Legend
 - battery symbol: SLA/HA quality. Calculated based on the number of healthy nodes weigthed against distributed system norms
-- fuel guage: the node seems to have been running long, meaning that its infrastructure and dependencies may need security patching
-- traffic light: the observed heartbeat state of the node, signalling which nodes which are not healthy
+- fuel gauge symbol: the node seems to have been running long, meaning that its infrastructure and dependencies may need security patching
+- traffic light symbol: the observed heartbeat state of the node, signalling which nodes which are not healthy
 
 ## Test yourself
 You may have a look and push data at the latest version which is reset frequently here:
