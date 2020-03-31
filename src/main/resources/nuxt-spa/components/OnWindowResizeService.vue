@@ -9,13 +9,16 @@
       name: "OnWindowResizeService",
       methods:{
         ...mapMutations({
-          setHeight: 'layout/setWindowHeight' // map `this.add()` to `this.$store.commit('increment')`
+          setWindowHeight: 'layout/setWindowHeight',
+          setHeadingHeight: 'layout/setHeadingHeight'
         }),
         handleResize() {
-          this.setHeight(window.innerHeight);
+          var heading = document.getElementById('heading').offsetHeight;
+          this.setWindowHeight(window.innerHeight);
+          this.setHeadingHeight(heading);
         }
       },
-      created() {
+      mounted() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
       },

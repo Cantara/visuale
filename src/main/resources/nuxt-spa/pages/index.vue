@@ -1,9 +1,9 @@
 <template>
-  <div class="dashboard">
-    <h1>{{services.name}}</h1>
+  <div id="dashboard">
+    <h1 id="heading">{{services.name}}</h1>
     <PollingService></PollingService>
     <OnWindowResizeService></OnWindowResizeService>
-    <div class="container">
+    <div class="container" :style="{ height:dashboardContainerHeight+ 'px'}">
       <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
   </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import {mapState,mapGetters} from 'vuex';
 import Service from "../components/Service";
 import PollingService from "../components/PollingService";
 import OnWindowResizeService from "../components/OnWindowResizeService";
@@ -23,14 +23,17 @@ export default {
     OnWindowResizeService
   },
   computed:{
-    ...mapState(['services'])
+    ...mapState(['services']),
+    ...mapGetters({
+      dashboardContainerHeight: 'layout/dashboardContainerHeight',
+    }),
   }
 }
 </script>
 
 <style lang="scss" scoped >
   @import '~/assets/styles/variables/_variables.scss';
-  .dashboard{
+  #dashboard{
     min-height: 100vh;
   }
 .container {
@@ -38,10 +41,10 @@ export default {
   display: flex;
   flex-flow: column wrap;
   padding: 0 1em 1em;
-  height:100%;
 }
   h1{
     padding: 0.25em 1em;
+    height: 2em;
     color: $color--description;
   }
 </style>
