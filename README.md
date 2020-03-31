@@ -24,6 +24,7 @@ You may have a look and push data at the latest version which is reset frequentl
 - nodes which are not reachable or have missed 50 updates should be marked red/dead...  
 - :white_check_mark: normal update interval from the service should be 5 or 10 second
 - :heavy_check_mark: old/long running services (>7 days) should be marked as insecure/vulnerable due to lack of patching
+- :white_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
 
 # Build and test
 
