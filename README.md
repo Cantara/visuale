@@ -26,6 +26,7 @@ You may have a look and push data at the latest version which is reset frequentl
 - :heavy_check_mark: old/long running services (>7 days) should be marked as insecure/vulnerable due to lack of patching
 - :white_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
 - :heavy_check_mark: service indicator of the service live resillience/availabillity 
+- :white_check_mark: mobile friendly - so you can check your environments on the bus on the way to work 
 
 # Build and test
 
