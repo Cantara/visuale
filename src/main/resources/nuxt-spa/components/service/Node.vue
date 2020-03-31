@@ -3,7 +3,7 @@
     <div class="marker">
       <div>
         <div class="title">
-          {{node.ip | truncateText(13)}}
+         <span>{{node.ip | truncateText(13)}}</span>
         </div>
         <div class="content">
           <ul>
@@ -59,12 +59,11 @@
   .node-block {
     border: 2px solid white;
     border-radius: 10px;
-    padding: 0.11em;
   }
 
   .marker > div {
     padding: 0 3px;
-    margin-top: -0.8em;
+    margin-top: -0.7em;
     text-align: center;
   }
 
@@ -74,6 +73,7 @@
     padding: 0 0.6em;
     margin: 0 0.3em;
     color: white;
+
   }
 
   .content {
@@ -81,7 +81,7 @@
     color: white;
   }
   ul{
-    padding:0;
+    padding: 0.2em;
     list-style:none;
     text-align:left;
     font-size:0.9rem;

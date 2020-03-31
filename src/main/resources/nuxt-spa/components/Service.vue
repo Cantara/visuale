@@ -3,7 +3,7 @@
       <div class="marker">
         <div>
           <div class="title">
-           <ServiceBattery :nodes="service.nodes"/> {{service.name |truncateText(41)}}
+           <ServiceBattery :nodes="service.nodes"/><span>{{service.name |truncateText(41)}} </span>
           </div>
           <div>
             <div class="content" :style="gridStyle">
@@ -68,18 +68,21 @@
   .marker > div {
     display: block;
     padding: 0 3px;
-    margin-top: -0.8em;
+    margin-top: -0.7em;
     text-align: center;
   }
 
   .title {
     background: $color--background none repeat scroll 0 0;
-    display: inline-block;
+    display: flex;
     padding: 0 0.6em;
     float:left;
     margin: 0 0.3em;
     color: white;
-    line-height: 1rem; /* <-- this is what you must define */
+    line-height: 1rem;
+  }
+  .title > span {
+    padding: 0 0.7em;
   }
   .content{
     padding:0.55em;
