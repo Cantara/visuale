@@ -59,7 +59,7 @@
   .node-block {
     border: 2px solid white;
     border-radius: 10px;
-    padding: 0.1em;
+    padding: 0.11em;
   }
 
   .marker > div {
