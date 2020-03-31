@@ -67,7 +67,7 @@
 
   .marker > div {
     display: block;
-    padding: 0 3px;
+    padding: 0;
     margin-top: -0.7em;
     text-align: center;
   }

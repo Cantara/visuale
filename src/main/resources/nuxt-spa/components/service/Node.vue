@@ -62,7 +62,7 @@
   }
 
   .marker > div {
-    padding: 0 3px;
+    padding: 0;
     margin-top: -0.7em;
     text-align: center;
   }
@@ -81,7 +81,7 @@
     color: white;
   }
   ul{
-    padding: 0.2em;
+    padding: 0 0.2em 0.3em 0.3em;
     list-style:none;
     text-align:left;
     font-size:0.9rem;
