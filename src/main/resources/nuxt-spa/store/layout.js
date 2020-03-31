@@ -1,6 +1,7 @@
 export const state = () => ({
   windowHeight: window.innerHeight,
   headingHeight: 0,
+  mobile: false,
 });
 export const mutations = {
   setWindowHeight(state, payload) {
@@ -8,6 +9,10 @@ export const mutations = {
   },
   setHeadingHeight(state, payload) {
     state.headingHeight = payload;
+  },
+  changeMobileState(state, payload)
+  {
+    state.mobile = payload;
   }
 };
 export const getters = {

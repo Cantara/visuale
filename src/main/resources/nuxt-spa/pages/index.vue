@@ -1,5 +1,5 @@
 <template>
-  <div id="dashboard">
+  <div id="dashboard" :class="isMobile ? '' : 'desktop-dashboard'">
     <h1 id="heading">{{services.name}}</h1>
     <PollingService></PollingService>
     <OnWindowResizeService></OnWindowResizeService>
@@ -24,9 +24,13 @@ export default {
   },
   computed:{
     ...mapState(['services']),
+    ...mapState('layout', ['mobile']),
     ...mapGetters({
       dashboardContainerHeight: 'layout/dashboardContainerHeight',
     }),
+    isMobile(){
+      return this.mobile;
+    }
   }
 }
 </script>
@@ -34,6 +38,9 @@ export default {
 <style lang="scss" scoped >
   @import '~/assets/styles/variables/_variables.scss';
   #dashboard{
+
+  }
+  .desktop-dashboard {
     min-height: 100vh;
   }
 .container {
@@ -45,7 +52,6 @@ export default {
 }
   h1{
     padding: 0.25em 1em;
-    height: 2em;
     color: $color--description;
   }
 </style>
