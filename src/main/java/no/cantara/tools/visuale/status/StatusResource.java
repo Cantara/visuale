@@ -36,8 +36,12 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", JsonSupport.create(), this::showEnvironment).options("/status", JsonSupport.create(), this::showEnvironmentO).put("/status", JsonSupport.create(),
-                this::updateHealthInfo).put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
+        rules.get("/status", JsonSupport.create(), this::showEnvironment)
+                .options("/status", JsonSupport.create(), this::showEnvironmentO)
+                .get("/api/status", JsonSupport.create(), this::showEnvironment)
+                .options("/api/status", JsonSupport.create(), this::showEnvironmentO)
+                .put("/status", JsonSupport.create(), this::updateHealthInfo)
+                .put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
     }
 
     /**
