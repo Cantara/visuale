@@ -48,7 +48,7 @@ sudo docker run --rm -p 8080:8080 visuale:latest
 wget //http://localhost:8080/
 ```
 * Dashboard: http://localhost:8080/
-* DockerHub: https://hub.docker.com/repository/docker/cantara/visuale/general
+* DockerHub: https://hub.docker.com/r/cantara/visuale
 
 
 # Some simple agent scripts to push health to visuale
