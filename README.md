@@ -6,6 +6,12 @@ An real-time dashboard visualisation for real-world micro-service continous depl
 
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/f9d30bcee79b6fe1b82fc0203972bb3c0322923a/doc/images/Visuale-in-action.png)
 
+#### Legend
+- battery symbol: SLA/HA quality. Calculated based on the number of healthy nodes weigthed against distributed system norms
+- fuel guage: the node seems to have been running long, meaning that its infrastructure and dependencies may need security patching
+- traffic light: the observed heartbeat state of the node, signalling which nodes which are not healthy
+
+## Test yourself
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
 
