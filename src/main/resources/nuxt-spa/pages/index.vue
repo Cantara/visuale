@@ -58,10 +58,10 @@ export default {
   display: inline-flex;
   max-width: 100vw;
   flex-flow: column wrap;
-  padding: 0 1em 1em;
+  padding: 0 0.7em 0.7em;
 }
   h1{
-    padding: 0.25em 1em;
+    padding: 0.35em 0.7em;
     height:2em;
     color: $color--description;
   }
