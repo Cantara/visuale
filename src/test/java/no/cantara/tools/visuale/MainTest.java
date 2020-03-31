@@ -1,7 +1,6 @@
 package no.cantara.tools.visuale;
 
 import io.helidon.webserver.WebServer;
-import no.cantara.tools.visuale.status.StatusService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,15 +11,12 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 
-import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
-
 public class MainTest {
     private static WebServer server;
 
     @BeforeAll
     public static void startTheServer() throws Exception {
-        server = Main.startServer(0);
-        StatusService.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
+        server = Main.startServer(0, true);
         //Thread.sleep(5000);
     }
 
@@ -38,7 +34,7 @@ public class MainTest {
 
 
             String jsonObject = client
-                    .target(getConnectionString("/status"))
+                    .target(getConnectionString("/api/status"))
                     .request()
                     .get(String.class);
             Assertions.assertTrue(jsonObject.toString().length() > 5);

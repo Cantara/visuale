@@ -23,24 +23,18 @@ public class StatusService {
 
     private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
     public static ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-    ;
+
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
-    private static Map<String, Node> healthResults = new HashMap<>();
+    private Map<String, Node> healthResults = new HashMap<>();
 
-    private static Environment environment;
+    private Environment environment = new Environment();
+    ;
     private String environmentAsString;
 
-    private static final boolean STRICT_EMVIRONMANT = false;
+    private final boolean STRICT_EMVIRONMANT = false;
     ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
 
-
-    static {
-        if (environment == null) {
-            initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
-        }
-
-    }
 
     public StatusService() {
         updateEnvironmentAsString();
@@ -55,7 +49,7 @@ public class StatusService {
     }
 
 
-    public synchronized static int updateHealthMap(Health updatedHealth) {
+    public synchronized int updateHealthMap(Health updatedHealth) {
         logger.debug("Received health update: {}", updatedHealth);
         try {
             Node node = healthResults.get(updatedHealth.getLookupKey());
@@ -123,7 +117,7 @@ public class StatusService {
     }
 
 
-    public static void initializeEnvironment(String envJson, String envoronment_name) {
+    public void initializeEnvironment(String envJson, String envoronment_name) {
         environment = new Environment().withName(envoronment_name);
         try {
             environment = mapper.readValue(envJson, Environment.class);
@@ -141,19 +135,19 @@ public class StatusService {
         environment.setName(envoronment_name);
     }
 
-    public static Map<String, Node> getHealthStatusMap() {
+    public Map<String, Node> getHealthStatusMap() {
         return healthResults;
     }
 
-    public static int getHealthStatusMapSize() {
+    public int getHealthStatusMapSize() {
         return healthResults.size();
     }
 
     public void setEnvironment(Environment environment) {
-        StatusService.environment = environment;
+        this.environment = environment;
     }
 
-    public static Environment getEnvironment() {
+    public Environment getEnvironment() {
         return environment;
     }
 
