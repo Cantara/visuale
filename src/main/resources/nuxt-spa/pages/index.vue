@@ -3,7 +3,7 @@
     <h1 id="heading">{{services.name}}</h1>
     <PollingService></PollingService>
     <OnWindowResizeService></OnWindowResizeService>
-    <div class="container" :style="{ height:dashboardContainerHeight+ 'px'}">
+    <div class="container" :style="dashboardHeight">
       <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
   </div>
@@ -30,6 +30,13 @@ export default {
     }),
     isMobile(){
       return this.mobile;
+    },
+    dashboardHeight () {
+      if(!this.mobile)
+        return {
+        'height': this.dashboardContainerHeight + 'px'
+      };
+
     }
   }
 }
