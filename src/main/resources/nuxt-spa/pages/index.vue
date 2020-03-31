@@ -34,8 +34,11 @@ export default {
     dashboardHeight () {
       if(!this.mobile)
         return {
-        'height': this.dashboardContainerHeight + 'px'
+        'height': this.dashboardContainerHeight + 'px',
       };
+      return {
+        'padding-top': '2em',
+      }
 
     }
   }
@@ -59,6 +62,7 @@ export default {
 }
   h1{
     padding: 0.25em 1em;
+    height:2em;
     color: $color--description;
   }
 </style>
