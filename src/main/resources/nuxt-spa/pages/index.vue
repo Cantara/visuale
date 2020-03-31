@@ -2,6 +2,7 @@
   <div class="dashboard">
     <h1>{{services.name}}</h1>
     <PollingService></PollingService>
+    <OnWindowResizeService></OnWindowResizeService>
     <div class="container">
       <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
@@ -13,11 +14,13 @@
 import {mapState} from 'vuex';
 import Service from "../components/Service";
 import PollingService from "../components/PollingService";
+import OnWindowResizeService from "../components/OnWindowResizeService";
 export default {
 
   components: {
     Service,
-    PollingService
+    PollingService,
+    OnWindowResizeService
   },
   computed:{
     ...mapState(['services'])
