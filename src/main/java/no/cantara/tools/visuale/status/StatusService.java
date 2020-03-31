@@ -37,7 +37,7 @@ public class StatusService {
 
     static {
         if (environment == null) {
-            initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
+            initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
         }
 
     }
@@ -49,7 +49,7 @@ public class StatusService {
 
     public StatusService(String environmentJson, String environmentName) {
         environment = null;
-        initializeEnvironment(MOCK_ENVORONMENT, "Visuale-Devtest-Environment");
+        initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
         updateEnvironmentAsString();
         startSyncThread();
     }
