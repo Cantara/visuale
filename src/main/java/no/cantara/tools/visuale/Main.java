@@ -10,7 +10,6 @@ import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.status.StatusResource;
-import no.cantara.tools.visuale.status.StatusService;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.slf4j.Logger;
@@ -29,6 +28,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
+
+import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
 /**
  * The application main class.
@@ -58,7 +59,7 @@ public final class Main {
         // load logging configuration
         setupLogging();
 
-        WebServer ws = startServer(8080);
+        WebServer ws = startServer(8080, true);
     }
 
 
@@ -80,9 +81,17 @@ public final class Main {
      *
      * @return the created {@link Server} instance
      */
-    static public WebServer startServer(int port) {
+    static public WebServer startServer(int port, boolean usingMockEnvironment) {
         startHealthReportSimulator();
-        StatusResource statusResource = new StatusResource();
+
+        StatusResource statusResource;
+        if (usingMockEnvironment) {
+            statusResource = new StatusResource();
+            statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
+        } else {
+            statusResource = new StatusResource();
+        }
+
 
         HealthSupport health = HealthSupport.builder()
                 .add(HealthChecks.healthChecks())
@@ -188,7 +197,7 @@ public final class Main {
                     .withIp(getMyIPAddresssString())
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
                     .withAdditionalProperty("simulated", "true");
-            StatusService.updateHealthMap(health);
+            statusResource.getStatusService().updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
@@ -204,7 +213,7 @@ public final class Main {
                     .withIp(getMyIPAddresssString().replace("3", "4"))
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
                     .withAdditionalProperty("simulated", "true");
-            StatusService.updateHealthMap(health);
+            statusResource.getStatusService().updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
@@ -217,7 +226,7 @@ public final class Main {
                     .withIp(getMyIPAddresssString().replace("4", "5"))
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
                     .withAdditionalProperty("simulated", "true");
-            StatusService.updateHealthMap(health);
+            statusResource.getStatusService().updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second
@@ -231,7 +240,7 @@ public final class Main {
                     .withIp(getMyIPAddresssString().replace("5", "6"))
                     .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
                     .withAdditionalProperty("simulated", "true");
-            StatusService.updateHealthMap(health);
+            statusResource.getStatusService().updateHealthMap(health);
         };
 
         // init Delay = 5, repeat the task every 60 second

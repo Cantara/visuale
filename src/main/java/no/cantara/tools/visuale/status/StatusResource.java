@@ -63,12 +63,7 @@ public class StatusResource implements Service {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
-        String msg = new String(statusService.getEnvironmentAsString());
-//        response.headers().add("Content-Type: application/json"
-//                , "Access-Control-Allow-Origin: *"
-//                , "Access-Control-Allow-Methods: GET, OPTIONS"
-//                , "Access-Control-Allow-Headers: *"
-//                , "Access-Control-Allow-Credentials: true");
+        String msg = statusService.getEnvironmentAsString();
         response.status(200).send(msg);
     }
 
