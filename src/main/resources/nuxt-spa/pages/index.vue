@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="dashboard">
+    <h1>{{services.name}}</h1>
     <PollingService></PollingService>
     <div class="container">
       <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
@@ -24,13 +25,20 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped >
+  @import '~/assets/styles/variables/_variables.scss';
+  .dashboard{
+    min-height: 100vh;
+  }
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
   flex-flow: column wrap;
-  padding: 1em;
-  height:100vh;
+  padding: 0 1em 1em;
+  height:100%;
 }
+  h1{
+    padding: 0.25em 1em;
+    color: $color--description;
+  }
 </style>
