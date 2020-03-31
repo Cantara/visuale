@@ -32,7 +32,7 @@ $ java -jar target/visuale.jar
 $ wget http://localhost:8088/status/
 ```
 
-Docker instructions will follow here soon....
+## Docker
 ```
 cd Docker
 
@@ -40,8 +40,14 @@ cd Docker
 sudo docker build -t visuale .
 
 # Run
+sudo docker run --rm -p 8080:8080 visuale:latest
 
+# Test
+wget //http://localhost:8080/
 ```
+* Dashboard: http://localhost:8080/
+* DockerHub: https://hub.docker.com/repository/docker/cantara/visuale/general
+
 
 # Some simple agent scripts to push health to visuale
 
