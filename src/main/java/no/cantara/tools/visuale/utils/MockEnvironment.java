@@ -6,7 +6,7 @@ public class MockEnvironment {
     public static final String MOCK_ENVORONMENT = "{\"name\": \"Quadim-QA\",\n" +
             "    \"services\": [\n" +
             "      {\n" +
-            "        \"name\": \"Overlord-Service\",\n" +
+            "        \"name\": \"Quadim Overlord-Service\",\n" +
             "        \"nodes\": [\n" +
             "          {\n" +
             "            \"ip\": \"10.45.54.23\",\n" +
@@ -55,7 +55,7 @@ public class MockEnvironment {
             "        ]\n" +
             "      },\n" +
             "      {\n" +
-            "        \"name\": \"Overlord Profil Service\",\n" +
+            "        \"name\": \"Quadim Overlord Profil Service\",\n" +
             "        \"nodes\": [\n" +
             "          {\n" +
             "            \"ip\": \"10.45.54.27\",\n" +
