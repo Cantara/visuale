@@ -1,6 +1,7 @@
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Cantara/visuale) ![Build Status](https://jenkins.quadim.ai/buildStatus/icon?job=visuale) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![Known Vulnerabilities](https://snyk.io/test/github/Cantara/visuale/badge.svg)](https://snyk.io/test/github/Cantara/visuale)
 
-# visuale
+![Visuale logo](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale.png)
+# Visuale
 
 An real-time dashboard visualisation for real-world micro-service continous deployment environments 
 
