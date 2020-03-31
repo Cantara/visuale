@@ -40,7 +40,7 @@
     },
     methods:{
       autoGrid(){
-        return this.service.nodes.length === 1 ? 1 :2;
+        return 2;
       },
       isInt(n) {
         return n % 1 === 0;

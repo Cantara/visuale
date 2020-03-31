@@ -1,46 +1,66 @@
 <template>
-    <div class="node-block" :style="flexStyle">
-<div class="marker">
-  <div>
-    <div class="title">
-      {{node.ip}}
-    </div>
-    <div class="content">
-      <table>
-        <tr>
-          <td>Health: </td>
-          <th>Ok</th>
-        </tr>
-        <tr>
-          <td>Ver: </td>
-          <th>{{node.health[0].version}}</th>
-        </tr>
-      </table>
+  <div class="node-block" :style="flexStyle">
+    <div class="marker">
+      <div>
+        <div class="title">
+          {{node.ip}}
+        </div>
+        <div class="content">
+          <ul>
+            <li><span>Health: </span>Ok</li>
+            <li><span>Ver: </span>{{node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing'}}</li>
+            <li><span>Uptime: </span>{{daysSince}} Days <font-awesome-icon :class="daysSince > 7 ? 'warning':'success'"  :icon="faGasPump"/></li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
-
-</div>
-    </div>
 </template>
 
 <script>
-    export default {
-        name: "Node",
-      props:{
-          node:{
-            required: true,
-            type:Object
-          },
-        flexStyle:{
-            required:false,
-          type:Object
-        }
+  import { faGasPump } from '@fortawesome/free-solid-svg-icons'
+  export default {
+    name: "Node",
+    props: {
+      node: {
+        required: true,
+        type: Object
+      },
+      flexStyle: {
+        required: false,
+        type: Object
       }
+    },
+    computed:{
+      faGasPump(){
+        return faGasPump;
+      },
+      daysSince(){
+        return this.getDaysSince(this.node.health[0]['running since']);
+      }
+    },
+    methods: {
+      getDaysSince(date2) {
+        let d1 = new Date();
+        let d2 = new Date(date2);
+        return Math.floor((d1 - d2) / (1000 * 3600 * 24));
+      }
+
     }
+  }
 </script>
 
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
+
+  .warning {
+    color: $color--warning;
+  }
+  .success{
+    color:$color--success;
+  }
+
   .node-block {
     border: 2px solid white;
     border-radius: 10px;
@@ -58,17 +78,32 @@
     display: inline;
     padding: 0 0.6em;
     margin: 0 0.6em;
-    color:white;
+    color: white;
   }
-  .content{
+
+  .content {
+    padding: 0;
+    color: white;
+  }
+  ul{
     padding:0;
+    list-style:none;
+    text-align:left;
+  }
+  li {
     color:white;
+    font-weight: 700;
+  }
+  span{
+    color: $color--description!important;
+    font-weight:400;
   }
   td {
-    color:$color--description;
+    color: $color--description;
     text-align: right;
   }
-  th{
-    text-align:left;
+
+  th {
+    text-align: left;
   }
 </style>

@@ -184,6 +184,4 @@ public class Health {
                 ", ip='" + ip + '\'' +
                 '}';
     }
-
-
 }
