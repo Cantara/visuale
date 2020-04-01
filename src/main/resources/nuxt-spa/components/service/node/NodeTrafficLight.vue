@@ -22,16 +22,12 @@
         },
         trafficStatus(){
           if(this.node.is_healthy && !this.node.is_unstable)
-          {
             return 'success';
-          }
          if(this.node.is_healthy && this.node.is_unstable)
             return 'warning';
          if(!this.node.is_healthy)
-          {
-            console.log('danger');
             return 'danger';
-          }
+
 
         }
       }
