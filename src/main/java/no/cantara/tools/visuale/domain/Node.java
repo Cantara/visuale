@@ -2,16 +2,22 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
         "ip",
+        "last_seen",
         "health"
 })
 public class Node {
+    public static final Logger logger = LoggerFactory.getLogger(Node.class);
 
     @JsonProperty("name")
     private String name;
@@ -59,6 +65,28 @@ public class Node {
         this.ip = ip;
         return this;
     }
+
+    @JsonProperty("last_seen")
+    public String getlastSeen() {
+        String lastSeen = "";
+        Instant lastSeenInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(lastSeenInstant)) {
+                    lastSeenInstant = reqInstant;
+                    lastSeen = h.getNow();
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health");
+            }
+
+        }
+        return lastSeen;
+    }
+
 
     @JsonProperty("health")
     public Set<Health> getHealth() {
