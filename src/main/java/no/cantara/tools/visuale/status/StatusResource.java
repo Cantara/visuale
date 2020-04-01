@@ -41,7 +41,9 @@ public class StatusResource implements Service {
                 .get("/api/status", JsonSupport.create(), this::showEnvironment)
                 .options("/api/status", JsonSupport.create(), this::showEnvironmentO)
                 .put("/status", JsonSupport.create(), this::updateHealthInfo)
-                .put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
+                .put("/api/status", JsonSupport.create(), this::updateHealthInfo)
+                .put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo)
+                .put("/api/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
     }
 
     /**
