@@ -16,12 +16,12 @@ class NodeTest {
         String latest = Instant.now().minus(3, ChronoUnit.MINUTES).toString();
         Health h1 = new Health().withNow(Instant.now().minus(5, ChronoUnit.MINUTES).toString());
         // latest = "2020-04-01T14:20:26.557Z";
-        
+
         Health h2 = new Health().withNow(latest);
         Node n = new Node().withHealth(h1).withHealth(h2);
         String lastSeen = n.getlastSeen();
         assertTrue(lastSeen.equalsIgnoreCase(latest));
-        assertTrue(n.getIsHealthy());
+        assertTrue(n.isHealthy());
     }
 
 
@@ -33,7 +33,7 @@ class NodeTest {
         Node n2 = new Node().withHealth(h11).withHealth(h12);
         String lastSeen = n2.getlastSeen();
         assertTrue(lastSeen.equalsIgnoreCase(latest));
-        assertFalse(n2.getIsHealthy());
+        assertFalse(n2.isHealthy());
     }
 
     @Test

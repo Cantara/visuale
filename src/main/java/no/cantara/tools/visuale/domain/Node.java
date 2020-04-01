@@ -16,6 +16,7 @@ import java.util.*;
         "ip",
         "last_seen",
         "is_healthy",
+        "is_unstable",
         "health"
 })
 public class Node {
@@ -91,7 +92,7 @@ public class Node {
 
 
     @JsonProperty("is_healthy")
-    public boolean getIsHealthy() {
+    public boolean isHealthy() {
         Instant lastSeenInstant = Instant.MIN;
         for (Health h : getHealth()) {
             try {
@@ -106,6 +107,29 @@ public class Node {
             }
         }
         Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
+        if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    @JsonProperty("is_unstable")
+    public boolean isUnstable() {
+        Instant lastSeenInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(lastSeenInstant)) {
+                    lastSeenInstant = reqInstant;
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health", e);
+            }
+        }
+        Instant five_minutes_ago = Instant.now().minus(30, ChronoUnit.SECONDS);
         if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
             return true;
         }
