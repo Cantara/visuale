@@ -24,7 +24,7 @@
       },
       computed:{
           nodesLength(){
-            return this.nodes.length;
+            return this.healthy_nodes;
           },
         faBatteryFull(){
           return faBatteryFull;

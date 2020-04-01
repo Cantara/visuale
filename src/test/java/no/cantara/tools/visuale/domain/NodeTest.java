@@ -3,6 +3,7 @@ package no.cantara.tools.visuale.domain;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,6 +15,8 @@ class NodeTest {
     public void testDateCalculations() {
         String latest = Instant.now().minus(3, ChronoUnit.MINUTES).toString();
         Health h1 = new Health().withNow(Instant.now().minus(5, ChronoUnit.MINUTES).toString());
+        latest = "2020-04-01T14:20:26.557Z";
+        ;
         Health h2 = new Health().withNow(latest);
         Node n = new Node().withHealth(h1).withHealth(h2);
         String lastSeen = n.getlastSeen();
@@ -31,5 +34,13 @@ class NodeTest {
         String lastSeen = n2.getlastSeen();
         assertTrue(lastSeen.equalsIgnoreCase(latest));
         assertFalse(n2.getIsHealthy());
+    }
+
+    @Test
+    public void datetests() {
+        String dateString = "2020-04-01T14:20:26.557Z";
+        OffsetDateTime date = OffsetDateTime.parse(dateString);
+        Instant reqInstant = date.toInstant();
+
     }
 }
