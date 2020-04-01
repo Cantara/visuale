@@ -3,7 +3,7 @@
       <div class="marker">
         <div>
           <div class="title">
-           <ServiceBattery :nodes="service.nodes"/><span>{{service.name |truncateText(28)}} </span>
+           <ServiceBattery :service="service"/><span>{{service.name |truncateText(28)}} </span>
           </div>
           <div>
             <div class="content" :style="gridStyle">
