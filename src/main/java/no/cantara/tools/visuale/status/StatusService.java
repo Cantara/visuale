@@ -27,9 +27,10 @@ public class StatusService {
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
     private Map<String, Node> healthResults = new HashMap<>();
+    private Set<Health> healthQueue = new HashSet<>();
 
     private Environment environment = new Environment();
-    ;
+
     private String environmentAsString;
 
     private final boolean STRICT_EMVIRONMANT = false;
@@ -49,31 +50,38 @@ public class StatusService {
     }
 
 
-    public synchronized int updateHealthMap(Health updatedHealth) {
+    public int updateHealthMap(Health updatedHealth) {
         logger.debug("Received health update: {}", updatedHealth);
-        try {
-            Node node = healthResults.get(updatedHealth.getLookupKey());
-            if (node == null) {
-                logger.debug("Added new service from health update: {}", updatedHealth);
-                String name = updatedHealth.getName();
-                if (name == null || name.length() < 2) {
-                    name = "Unknown - " + UUID.randomUUID().toString();
-                }
-                node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+        healthQueue.add(updatedHealth);
+        return healthResults.size();
+    }
 
-                no.cantara.tools.visuale.domain.Service s =
-                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
-                environment.addService(s);
-                healthResults.put(node.getLookupKey(), node);
-            } else {
-                logger.debug("Updated service from health update: {}", updatedHealth);
-                node.addHealth(updatedHealth);
+    private synchronized void processHealthQueue() {
+        for (Health updatedHealth : healthQueue) {
+            healthQueue.remove(updatedHealth);
+            logger.debug("Received health update: {}", updatedHealth);
+            try {
+                Node node = healthResults.get(updatedHealth.getLookupKey());
+                if (node == null) {
+                    logger.debug("Added new service from health update: {}", updatedHealth);
+                    String name = updatedHealth.getName();
+                    if (name == null || name.length() < 2) {
+                        name = "Unknown - " + UUID.randomUUID().toString();
+                    }
+                    node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+
+                    no.cantara.tools.visuale.domain.Service s =
+                            new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
+                    environment.addService(s);
+                    healthResults.put(node.getLookupKey(), node);
+                } else {
+                    logger.debug("Updated service from health update: {}", updatedHealth);
+                    node.addHealth(updatedHealth);
+                }
+            } catch (Exception e) {
+                logger.error("Received unmappable health", e);
             }
-            return node.getHealth().size();
-        } catch (Exception e) {
-            logger.error("Received unmappable health", e);
         }
-        return 0;
     }
 
     public boolean updateEnvironment(String envName, String serviceName, String nodeName, Health health) {
@@ -151,8 +159,9 @@ public class StatusService {
         return environment;
     }
 
-    private void updateEnvironmentAsString() {
+    private synchronized void updateEnvironmentAsString() {
         try {
+            processHealthQueue();
             environmentAsString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
         } catch (Exception e) {
             logger.error("Unable to uodate environmentAsString", e);

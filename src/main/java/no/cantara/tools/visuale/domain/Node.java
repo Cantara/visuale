@@ -17,6 +17,7 @@ import java.util.*;
         "last_seen",
         "is_healthy",
         "is_unstable",
+        "is_secure",
         "health"
 })
 public class Node {
@@ -113,6 +114,27 @@ public class Node {
         return false;
     }
 
+    @JsonProperty("is_secure")
+    public boolean isSecure() {
+        Instant uptimeInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                OffsetDateTime date = OffsetDateTime.parse(h.getRunningSince());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(uptimeInstant)) {
+                    uptimeInstant = reqInstant;
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse running since from health", e);
+            }
+        }
+        Instant seven_days_ago = Instant.now().minus(7, ChronoUnit.DAYS);
+        if (uptimeInstant.getEpochSecond() > seven_days_ago.getEpochSecond()) {
+            return true;
+        }
+        return false;
+    }
 
     @JsonProperty("is_unstable")
     public boolean isUnstable() {
