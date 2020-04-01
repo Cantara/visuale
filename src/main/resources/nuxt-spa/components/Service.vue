@@ -1,6 +1,6 @@
 <template>
-  <div class="service-block">
-      <div class="marker">
+  <div class="service-block" >
+      <div class="marker" :class="borderStatus">
         <div>
           <div class="title">
            <ServiceBattery :service="service"/><span>{{service.name |truncateText(34)}} </span>
@@ -37,6 +37,16 @@
           gridTemplateColumns: `repeat(${this.autoGrid()},minmax(143px,1fr))`
         }
       },
+      borderStatus(){
+     /*   if(this.service.healthy_nodes >= 3)
+          return 'border--color-success';
+        if(this.service.healthy_nodes === 2)
+          return 'border--color-normal';
+        if(this.service.healthy_nodes === 1)
+          return 'border--color-warning';*/
+        if(this.service.healthy_nodes===0)
+          return 'border--color-danger';
+      }
     },
     data() {
       return{}
@@ -61,7 +71,7 @@
     margin: 0.35em;
   }
   .marker{
-    border: 2px solid white;
+    border: 1px solid white;
     display:inline-block;
   }
 
