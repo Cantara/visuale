@@ -1,21 +1,24 @@
+import {ServicesMockData} from "../mock_data/ServicesMockData";
 
-function sortServicesByName(payload) {
-  payload.sort(function(a, b) {
-    const serviceA = a.name.toUpperCase();
-    const serviceB = b.name.toUpperCase();
-    return (serviceA < serviceB) ? -1 : (serviceA > serviceB) ? 1 : 0;
-  });
-
-}
 
 export const state = () => ({
-  services: {},
+  services: ServicesMockData(),
 
 });
 export const mutations = {
-  setData (state, payload) {
-   sortServicesByName(payload.services);
-    state.services = payload;
+   setData (state, payload) {
+   state.services = payload;
+  }
+};
+export const getters = {
+  sortedServices(state){
+    const service = _.cloneDeep(state.services);
+    service.services.sort(function(a, b) {
+      const serviceA = a.name.toUpperCase();
+      const serviceB = b.name.toUpperCase();
+      return (serviceA < serviceB) ? -1 : (serviceA > serviceB) ? 1 : 0;
+    });
+    return service;
   }
 };
 export const actions ={

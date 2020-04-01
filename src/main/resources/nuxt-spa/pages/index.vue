@@ -23,10 +23,10 @@ export default {
     OnWindowResizeService
   },
   computed:{
-    ...mapState(['services']),
     ...mapState('layout', ['mobile']),
     ...mapGetters({
       dashboardContainerHeight: 'layout/dashboardContainerHeight',
+      services: 'sortedServices',
     }),
     isMobile(){
       return this.mobile;
