@@ -31,6 +31,7 @@ export default {
   plugins: [
     {  src: "@/plugins/filters.js"}
   ],
+
   /*
   ** Nuxt.js dev-modules
   */
