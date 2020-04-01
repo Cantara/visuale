@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -14,6 +15,7 @@ import java.util.*;
         "name",
         "ip",
         "last_seen",
+        "is_healthy",
         "health"
 })
 public class Node {
@@ -87,6 +89,28 @@ public class Node {
         return lastSeen;
     }
 
+
+    @JsonProperty("is_healthy")
+    public boolean getIsHealthy() {
+        Instant lastSeenInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(lastSeenInstant)) {
+                    lastSeenInstant = reqInstant;
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health");
+            }
+        }
+        Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
+        if (lastSeenInstant.compareTo(five_minutes_ago) > 0) {
+            return true;
+        }
+        return false;
+    }
 
     @JsonProperty("health")
     public Set<Health> getHealth() {
