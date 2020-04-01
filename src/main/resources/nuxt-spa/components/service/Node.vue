@@ -7,7 +7,7 @@
         </div>
         <div class="content">
           <ul>
-            <li><span>Health: </span>Ok</li>
+            <li><span>Healthy: </span>{{node.is_healthy}}</li>
             <li><span>Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(12)}}</li>
             <li><span>Uptime: </span>{{daysSince}} Days <font-awesome-icon v-if="daysSince > 7" class="warning"  :icon="faGasPump"/></li>
           </ul>
