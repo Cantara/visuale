@@ -120,6 +120,7 @@ public class Node {
 
     @JsonProperty("is_secure")
     public boolean isSecure() {
+        boolean isSecure = false;
         Instant uptimeInstant = Instant.MIN;
         for (Health h : getHealth()) {
             try {
@@ -131,13 +132,14 @@ public class Node {
                 }
             } catch (Exception e) {
                 logger.error("Exception trying to parse running since from health", e);
+                isSecure = false;
             }
         }
         Instant seven_days_ago = Instant.now().minus(7, ChronoUnit.DAYS);
         if (uptimeInstant.getEpochSecond() > seven_days_ago.getEpochSecond()) {
-            return true;
+            isSecure = true;
         }
-        return false;
+        return isSecure;
     }
 
     @JsonProperty("is_unstable")
