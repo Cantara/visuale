@@ -71,6 +71,8 @@ typings/
 # Nuxt generate
 dist
 
+#mock data
+mock_data
 # vuepress build output
 .vuepress/dist
 
