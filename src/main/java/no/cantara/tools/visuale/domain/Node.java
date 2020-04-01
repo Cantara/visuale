@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -75,14 +75,14 @@ public class Node {
         for (Health h : getHealth()) {
             try {
                 // 2020-03-24T18:34:35.987Z
-                Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(h.getNow());
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
                 Instant reqInstant = date.toInstant();
                 if (reqInstant.isAfter(lastSeenInstant)) {
                     lastSeenInstant = reqInstant;
                     lastSeen = h.getNow();
                 }
             } catch (Exception e) {
-                logger.error("Exception trying to parse now from health");
+                logger.error("Exception trying to parse now from health", e);
             }
 
         }
@@ -96,17 +96,17 @@ public class Node {
         for (Health h : getHealth()) {
             try {
                 // 2020-03-24T18:34:35.987Z
-                Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(h.getNow());
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
                 Instant reqInstant = date.toInstant();
                 if (reqInstant.isAfter(lastSeenInstant)) {
                     lastSeenInstant = reqInstant;
                 }
             } catch (Exception e) {
-                logger.error("Exception trying to parse now from health");
+                logger.error("Exception trying to parse now from health", e);
             }
         }
         Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-        if (lastSeenInstant.compareTo(five_minutes_ago) > 0) {
+        if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
             return true;
         }
         return false;
