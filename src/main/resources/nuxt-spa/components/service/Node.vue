@@ -3,7 +3,7 @@
     <div class="marker">
       <div>
         <div class="title">
-        <NodeTrafficLight :node="node"/> <span>{{node.ip | truncateText(14)}}</span>
+        <NodeTrafficLight :node="node"/> <span>{{node.ip | truncateText(15)}}</span>
         </div>
         <div class="content">
           <ul>
@@ -81,7 +81,7 @@
     float: left;
   }
   .title >span {
-    padding: 0 0.35em;
+    padding: 0 0 0 0.35em;
   }
 
   .content {
