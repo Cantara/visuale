@@ -79,6 +79,7 @@
     color: white;
     line-height: 1rem;
     float: left;
+    font-size: 0.9rem;
   }
   .title >span {
     padding: 0 0 0 0.35em;
