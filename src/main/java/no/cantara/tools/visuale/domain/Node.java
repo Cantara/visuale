@@ -8,7 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -28,7 +32,7 @@ public class Node {
     @JsonProperty("ip")
     private String ip;
     @JsonProperty("health")
-    private Set<Health> health = new HashSet<>();
+    private Set<Health> health = new CopyOnWriteArraySet<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -170,7 +174,7 @@ public class Node {
 
     public void addHealth(Health healthValue) {
         if (health == null || health.size() > 5) {  // simple housecleaning
-            this.health = new HashSet<>();
+            this.health = new CopyOnWriteArraySet<>();
         }
         if (healthValue.getIp() == null || healthValue.getIp().length() < 5) {
             healthValue.setIp(getIp());

@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
@@ -27,7 +24,7 @@ public class StatusService {
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
     private Map<String, Node> healthResults = new HashMap<>();
-    private Set<Health> healthQueue = new HashSet<>();
+    private Set<Health> healthQueue = new CopyOnWriteArraySet<>();
 
     private Environment environment = new Environment();
 
