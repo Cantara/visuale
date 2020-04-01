@@ -1,9 +1,9 @@
 <template>
     <div>
-      <font-awesome-icon v-if="this.healthy_nodes >= 3" class="success" :icon="faBatteryFull"/>
-      <font-awesome-icon v-else-if="this.healthy_nodes === 2" class="normal" :icon="faBatteryHalf"/>
-      <font-awesome-icon v-else-if="this.healthy_nodes === 1" class="warning"  :icon="faBatteryQuarter"/>
-      <font-awesome-icon v-else-if="this.healthy_nodes === 0" class="danger" :icon="faBatteryEmpty"/>
+      <font-awesome-icon v-if="nodesLength >= 3" class="success" :icon="faBatteryFull"/>
+      <font-awesome-icon v-else-if="nodesLength === 2" class="normal" :icon="faBatteryHalf"/>
+      <font-awesome-icon v-else-if="nodesLength === 1" class="warning"  :icon="faBatteryQuarter"/>
+      <font-awesome-icon v-else-if="nodesLength === 0" class="danger" :icon="faBatteryEmpty"/>
     </div>
 </template>
 
