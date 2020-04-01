@@ -9,6 +9,7 @@ import java.util.*;
 @JsonPropertyOrder({
         "name",
         "healthy_nodes",
+        "need_codebase_chores",
         "nodes"
 })
 public class Service {
@@ -34,6 +35,20 @@ public class Service {
         this.name = name;
         return this;
     }
+
+
+    @JsonProperty("need_codebase_chores")
+    public boolean needCodeChores() {
+        int secure_nodes = 0;
+        for (Node n : nodes) {
+            if (n.isSecure()) {
+                secure_nodes++;
+            }
+
+        }
+        return secure_nodes == 0;
+    }
+
 
     @JsonProperty("healthy_nodes")
     public int getHealthyNodes() {
