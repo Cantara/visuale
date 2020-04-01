@@ -34,7 +34,7 @@
     computed: {
       gridStyle() {
         return {
-          gridTemplateColumns: `repeat(${this.autoGrid()},minmax(130px,1fr))`
+          gridTemplateColumns: `repeat(${this.autoGrid()},minmax(143px,1fr))`
         }
       },
     },

@@ -3,7 +3,7 @@
     <div class="marker">
       <div>
         <div class="title">
-         <span>{{node.ip | truncateText(16)}}</span>
+        <NodeTrafficLight :node="node"/> <span>{{node.ip | truncateText(14)}}</span>
         </div>
         <div class="content">
           <ul>
@@ -20,8 +20,12 @@
 
 <script>
   import { faGasPump } from '@fortawesome/free-solid-svg-icons'
+  import NodeTrafficLight from "./node/NodeTrafficLight";
   export default {
     name: "Node",
+    components:{
+      NodeTrafficLight
+    },
     props: {
       node: {
         required: true,
@@ -69,11 +73,15 @@
 
   .title {
     background: $color--background none repeat scroll 0 0;
-    display: inline;
+    display: flex;
     padding: 0 0.6em;
-    margin: 0 0.3em;
+    margin: 0 0.6em;
     color: white;
-
+    line-height: 1rem;
+    float: left;
+  }
+  .title >span {
+    padding: 0 0.35em;
   }
 
   .content {
