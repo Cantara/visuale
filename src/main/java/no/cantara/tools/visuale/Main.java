@@ -188,7 +188,7 @@ public final class Main {
     }
 
     private static void startHealthReportSimulator() {
-        ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+        ScheduledExecutorService ses = Executors.newScheduledThreadPool(4);
 
         Runnable task1 = () -> {
 
