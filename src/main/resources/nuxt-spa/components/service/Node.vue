@@ -3,7 +3,7 @@
     <div class="marker">
       <div>
         <div class="title">
-         <span>{{node.ip | truncateText(13)}}</span>
+         <span>{{node.ip | truncateText(16)}}</span>
         </div>
         <div class="content">
           <ul>
