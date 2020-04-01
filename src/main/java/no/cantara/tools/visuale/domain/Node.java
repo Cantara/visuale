@@ -2,16 +2,25 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
         "ip",
+        "last_seen",
+        "is_healthy",
+        "is_unstable",
         "health"
 })
 public class Node {
+    public static final Logger logger = LoggerFactory.getLogger(Node.class);
 
     @JsonProperty("name")
     private String name;
@@ -58,6 +67,73 @@ public class Node {
     public Node withIp(String ip) {
         this.ip = ip;
         return this;
+    }
+
+    @JsonProperty("last_seen")
+    public String getlastSeen() {
+        String lastSeen = "";
+        Instant lastSeenInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(lastSeenInstant)) {
+                    lastSeenInstant = reqInstant;
+                    lastSeen = h.getNow();
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health", e);
+            }
+
+        }
+        return lastSeen;
+    }
+
+
+    @JsonProperty("is_healthy")
+    public boolean isHealthy() {
+        Instant lastSeenInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(lastSeenInstant)) {
+                    lastSeenInstant = reqInstant;
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health", e);
+            }
+        }
+        Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
+        if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    @JsonProperty("is_unstable")
+    public boolean isUnstable() {
+        Instant lastSeenInstant = Instant.MIN;
+        for (Health h : getHealth()) {
+            try {
+                // 2020-03-24T18:34:35.987Z
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isAfter(lastSeenInstant)) {
+                    lastSeenInstant = reqInstant;
+                }
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health", e);
+            }
+        }
+        Instant five_minutes_ago = Instant.now().minus(30, ChronoUnit.SECONDS);
+        if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
+            return true;
+        }
+        return false;
     }
 
     @JsonProperty("health")

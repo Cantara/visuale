@@ -8,6 +8,7 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
+        "healthy_nodes",
         "nodes"
 })
 public class Service {
@@ -33,6 +34,19 @@ public class Service {
         this.name = name;
         return this;
     }
+
+    @JsonProperty("healthy_nodes")
+    public int getHealthyNodes() {
+        int healthy_nodes = 0;
+        for (Node n : nodes) {
+            if (n.isHealthy()) {
+                healthy_nodes++;
+            }
+
+        }
+        return healthy_nodes;
+    }
+
 
     @JsonProperty("nodes")
     public Set<Node> getNodes() {
