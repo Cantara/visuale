@@ -15,8 +15,8 @@ class NodeTest {
     public void testDateCalculations() {
         String latest = Instant.now().minus(3, ChronoUnit.MINUTES).toString();
         Health h1 = new Health().withNow(Instant.now().minus(5, ChronoUnit.MINUTES).toString());
-        latest = "2020-04-01T14:20:26.557Z";
-        ;
+        // latest = "2020-04-01T14:20:26.557Z";
+        
         Health h2 = new Health().withNow(latest);
         Node n = new Node().withHealth(h1).withHealth(h2);
         String lastSeen = n.getlastSeen();
