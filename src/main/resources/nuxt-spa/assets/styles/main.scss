@@ -11,3 +11,13 @@
 .danger {
   color:$color--danger;
 }
+
+.border-color--danger {
+  border-color:$color--danger!important;
+}
+.border-color--warning {
+  border-color:$color--warning!important;
+}
+.border-color--success{
+  border-color:$color--success!important;
+}

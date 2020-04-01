@@ -27,8 +27,6 @@
             return 'warning';
          if(!this.node.is_healthy)
             return 'danger';
-
-
         }
       }
     }
@@ -37,6 +35,6 @@
 <style scoped>
   div {
     display: inline;
-    font-size:1rem;
+    font-size:0.7rem;
   }
 </style>
