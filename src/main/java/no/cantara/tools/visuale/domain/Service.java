@@ -39,7 +39,7 @@ public class Service {
     public int getHealthyNodes() {
         int healthy_nodes = 0;
         for (Node n : nodes) {
-            if (n.getIsHealthy()) {
+            if (n.isHealthy()) {
                 healthy_nodes++;
             }
 
