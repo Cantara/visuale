@@ -1,5 +1,6 @@
 package no.cantara.tools.visuale.healthchecker;
 
+import no.cantara.tools.visuale.HealthResource;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.status.StatusService;
@@ -36,6 +37,8 @@ public class HealthCheckProber {
     public HealthCheckProber(StatusService statusService) {
         this.statusService = statusService;
         readConfig();
+        HealthResource.setOkPollingURLs(healthCheckURLSet);
+        HealthResource.setFailedPollingURLs(badHealthCheckURLSet);
 
     }
 
@@ -95,6 +98,8 @@ public class HealthCheckProber {
             healthCheckURLSet.addAll(badHealthCheckURLSet);
             badHealthCheckURLSet = new CopyOnWriteArraySet();
         }
+        HealthResource.setOkPollingURLs(healthCheckURLSet);
+        HealthResource.setFailedPollingURLs(badHealthCheckURLSet);
 
     }
 }
