@@ -112,7 +112,7 @@ public class Node {
             }
         }
         Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-        if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
+        if (lastSeenInstant.getEpochSecond() >= five_minutes_ago.getEpochSecond()) {
             return true;
         }
         return false;
