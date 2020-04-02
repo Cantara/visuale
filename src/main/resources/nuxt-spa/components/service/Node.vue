@@ -9,7 +9,7 @@
           <ul>
             <li><span>Healthy: </span>{{node.is_healthy}}</li>
             <li><span>Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(12)}}</li>
-            <li><span>Uptime: </span>{{daysSince}} Days <font-awesome-icon v-if="daysSince > 7" class="warning"  :icon="faGasPump"/></li>
+            <li><NodeUptime :health="node.health[0]" /></li>
           </ul>
         </div>
       </div>
@@ -19,12 +19,13 @@
 </template>
 
 <script>
-  import { faGasPump } from '@fortawesome/free-solid-svg-icons'
   import NodeTrafficLight from "./node/NodeTrafficLight";
+  import NodeUptime from "./node/NodeUptime";
   export default {
     name: "Node",
     components:{
-      NodeTrafficLight
+      NodeTrafficLight,
+      NodeUptime
     },
     props: {
       node: {
@@ -35,22 +36,13 @@
         required: false,
         type: Object
       }
-    },
-    computed:{
-      faGasPump(){
-        return faGasPump;
-      },
-      daysSince(){
-        return this.getDaysSince(this.node.health[0]['running since']);
-      }
-    },
+    }
     methods: {
       getDaysSince(date2) {
         let d1 = new Date();
         let d2 = new Date(date2);
         return Math.floor((d1 - d2) / (1000 * 3600 * 24));
       }
-
     }
   }
 </script>
