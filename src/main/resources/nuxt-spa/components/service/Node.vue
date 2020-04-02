@@ -37,13 +37,6 @@
         type: Object
       }
     }
-    methods: {
-      getDaysSince(date2) {
-        let d1 = new Date();
-        let d2 = new Date(date2);
-        return Math.floor((d1 - d2) / (1000 * 3600 * 24));
-      }
-    }
   }
 </script>
 
