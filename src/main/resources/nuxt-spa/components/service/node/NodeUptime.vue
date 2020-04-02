@@ -66,6 +66,10 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  @import '~/assets/styles/variables/_variables.scss';
+  span{
+    color: $color--description!important;
+    font-weight:400;
+  }
 </style>
