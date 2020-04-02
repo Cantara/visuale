@@ -94,6 +94,7 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
+        logger.debug("updateHealthInfo");
         request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
         response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
         response.status(204).send();
@@ -109,6 +110,7 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     @PUT
     public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
+        logger.debug("updateFullHealthInfo");
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");

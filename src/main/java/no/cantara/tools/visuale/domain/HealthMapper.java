@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-
 public class HealthMapper {
 
     private static final Logger log = LoggerFactory.getLogger(HealthMapper.class);
@@ -24,7 +22,7 @@ public class HealthMapper {
         try {
             health = mapper.readValue(json, Health.class);
         } catch (Exception e) {
-            log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
+            //log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
         }
 
         if (tryCustomDeserializer) {
@@ -36,7 +34,7 @@ public class HealthMapper {
                 Health myHealth = mycustommapper.readValue(json, Health.class);
                 return myHealth;
             } catch (Exception e) {
-                log.error("Unable to custom deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
+                // log.error("Unable to custom deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
             }
         }
 

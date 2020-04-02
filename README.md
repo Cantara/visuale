@@ -44,6 +44,10 @@ $ java -jar target/visuale.jar
 $ wget http://localhost:8088/status/
 ```
 
+## Configuration
+
+You can add the files you want to poll from Visuale to a file named add_health_resources.txt in the current direcory.
+
 ## Docker
 ```
 cd Docker

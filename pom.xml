@@ -5,7 +5,7 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>09.5-SNAPSHOT</version>
+    <version>09.6-SNAPSHOT</version>
 
     <repositories>
         <!-- Needed for parent    -->
@@ -50,6 +50,7 @@
 
     <properties>
         <mainClass>no.cantara.tools.visuale.Main</mainClass>
+        <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
     <dependencies>
@@ -57,6 +58,12 @@
             <groupId>no.cantara.config</groupId>
             <artifactId>simple-microservice-config</artifactId>
             <version>0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>no.cantara.base</groupId>
+            <artifactId>Hystrix-BaseCommands</artifactId>
+            <version>0.1.15</version>
         </dependency>
 
         <dependency>
@@ -130,6 +137,37 @@
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- Flyway 3.2, httpclient and spring use Commons logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- Jersey use jul -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- HSQLDB use log4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
 
     </dependencies>
 
