@@ -44,7 +44,7 @@
         window.addEventListener('keydown',this.handleEscape);
       },
       beforeDestroy() {
-          window.removeEventListener('keyup',this.handleEscape)
+          window.removeEventListener('keydown',this.handleEscape)
       }
     }
 </script>
