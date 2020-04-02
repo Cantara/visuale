@@ -30,7 +30,7 @@ export default {
   */
   plugins: [
     {  src: "@/plugins/filters.js"},
-    {src:"@/plugins/plugins.js"}
+    {src:"@/plugins/plugins.js", ssr: false}
   ],
 
   /*
