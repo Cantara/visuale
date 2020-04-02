@@ -15,14 +15,8 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("status")
 @RequestScoped
 public class StatusResource implements Service {
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
@@ -37,9 +31,9 @@ public class StatusResource implements Service {
     @Override
     public void update(Routing.Rules rules) {
         rules.get("/status", JsonSupport.create(), this::showEnvironment)
-                .options("/status", JsonSupport.create(), this::showEnvironmentO)
+                .options("/status", JsonSupport.create(), this::showEnvironmentOptionHeaders)
                 .get("/api/status", JsonSupport.create(), this::showEnvironment)
-                .options("/api/status", JsonSupport.create(), this::showEnvironmentO)
+                .options("/api/status", JsonSupport.create(), this::showEnvironmentOptionHeaders)
                 .put("/status", JsonSupport.create(), this::updateHealthInfo)
                 .put("/api/status", JsonSupport.create(), this::updateHealthInfo)
                 .put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo)
@@ -57,28 +51,19 @@ public class StatusResource implements Service {
 
 
     /**
-     * Return a wordly greeting message.
-     *
      * @return {@link JsonObject}
      */
     @SuppressWarnings("checkstyle:designforextension")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
         String msg = statusService.getEnvironmentAsString();
         response.status(200).send(msg);
     }
 
     /**
-     * Return a wordly greeting message.
-     *
      * @return {@link JsonObject}
      */
     @SuppressWarnings("checkstyle:designforextension")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public synchronized void showEnvironmentO(final ServerRequest request, final ServerResponse response) {
-        String msg = new String(statusService.getEnvironmentAsString());
+    public synchronized void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
         response.status(200).headers().add("Content-Type: application/json"
                 , "Access-Control-Allow-Origin: *"
                 , "Access-Control-Allow-Methods: GET, OPTIONS"
@@ -87,15 +72,12 @@ public class StatusResource implements Service {
     }
 
     /**
-     * Set the greeting to use in future messages.
-     *
      * @return {@link Response}
      */
     @SuppressWarnings("checkstyle:designforextension")
-    @PUT
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
-        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
+        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo));
         response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
         response.status(204).send();
     }
@@ -103,29 +85,26 @@ public class StatusResource implements Service {
 
 
     /**
-     * Set the greeting to use in future messages.
-     *
      * @return {@link Response}
      */
     @SuppressWarnings("checkstyle:designforextension")
-    @PUT
     public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateFullHealthInfo");
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");
 
-        Health h = (Health) request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo, response));
+        Health h = (Health) request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo));
 
         statusService.updateEnvironment(envName, serviceName, nodeName, h);
 
-        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo, response));
+        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo));
         response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
         response.status(204).send();
     }
 
 
-    private Health updateHealthInfoFromJson(JsonObject jo, ServerResponse response) {
+    private Health updateHealthInfoFromJson(JsonObject jo) {
         Health myHealth = null;
         if (jo != null || jo.toString().length() < 1) {
             myHealth = HealthMapper.fromRealWorldJson(jo.toString());
@@ -134,7 +113,7 @@ public class StatusResource implements Service {
         return myHealth;
     }
 
-    private Health getHealthInfoFromJson(JsonObject jo, ServerResponse response) {
+    private Health getHealthInfoFromJson(JsonObject jo) {
         Health myHealth = null;
         if (jo != null || jo.toString().length() < 1) {
             myHealth = HealthMapper.fromRealWorldJson(jo.toString());
