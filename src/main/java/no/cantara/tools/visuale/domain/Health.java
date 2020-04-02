@@ -139,6 +139,13 @@ public class Health {
         return this;
     }
 
+    public boolean isEmpty() {
+        if (toString().length() > 100) {
+            return false;
+        }
+        return true;
+    }
+
     @JsonAnyGetter
     public Map<String, String> getAdditionalProperties() {
         return this.additionalProperties;

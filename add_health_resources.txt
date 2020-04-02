@@ -1,0 +1,18 @@
+https://whydahdev.cantara.no/sso/health
+https://whydahdev.cantara.no/sso/health
+https://whydahdev.cantara.no/tokenservice/health
+https://whydahdev.cantara.no/useradminservice/health
+https://whydahdev.cantara.no/useradmin/health
+https://whydahdev.cantara.no/uib/health
+https://whydahdev.cantara.no/crmservice/health
+https://test.quadim.ai/health
+https://devtest.quadim.ai/health
+https://devtest.quadim.ai/api/measurement/health
+https://devtest.quadim.ai/api/skill/health
+https://devtest.quadim.ai/api/overlord/health
+https://devtest.quadim.ai/api/profile/health
+https://devtest.quadim.ai/api/filestore/health
+https://devtest.quadim.ai/api/platform/health
+https://qa.quadim.ai/health
+
+# [https://devtest.quadim.ai/api/measurement/health, https://devtest.quadim.ai/api/skill/health, https://devtest.quadim.ai/api/overlord/health, https://devtest.quadim.ai/api/profile/health, https://devtest.quadim.ai/api/filestore/health, https://devtest.quadim.ai/api/platform/health]

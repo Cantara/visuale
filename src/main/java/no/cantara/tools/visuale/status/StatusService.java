@@ -48,15 +48,21 @@ public class StatusService {
 
 
     public int updateHealthMap(Health updatedHealth) {
-        logger.debug("Received health update: {}", updatedHealth);
+        if (updatedHealth.isEmpty()) {
+            return healthResults.size();
+        }
+        logger.trace("Received health update: {}", updatedHealth);
         healthQueue.add(updatedHealth);
+        if (healthQueue.size() > 30) {
+            updateEnvironmentAsString();
+        }
         return healthResults.size();
     }
 
     private synchronized void processHealthQueue() {
         for (Health updatedHealth : healthQueue) {
             healthQueue.remove(updatedHealth);
-            logger.debug("Received health update: {}", updatedHealth);
+            //logger.trace("Received health update: {}", updatedHealth);
             try {
                 Node node = healthResults.get(updatedHealth.getLookupKey());
                 if (node == null) {
@@ -72,7 +78,7 @@ public class StatusService {
                     environment.addService(s);
                     healthResults.put(node.getLookupKey(), node);
                 } else {
-                    logger.debug("Updated service from health update: {}", updatedHealth);
+                    //logger.trace("Updated service from health update: {}", updatedHealth);
                     node.addHealth(updatedHealth);
                 }
             } catch (Exception e) {

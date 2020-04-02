@@ -9,7 +9,9 @@ import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
 import no.cantara.tools.visuale.domain.Health;
+import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
+import no.cantara.tools.visuale.status.StatusService;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.slf4j.Logger;
@@ -82,7 +84,6 @@ public final class Main {
      * @return the created {@link Server} instance
      */
     static public WebServer startServer(int port, boolean usingMockEnvironment) {
-        startHealthReportSimulator();
 
         StatusResource statusResource;
         if (usingMockEnvironment) {
@@ -91,6 +92,7 @@ public final class Main {
         } else {
             statusResource = new StatusResource();
         }
+        startHealthReportSimulator(statusResource.getStatusService());
 
 
         HealthSupport health = HealthSupport.builder()
@@ -187,7 +189,12 @@ public final class Main {
         return fullString.substring(0, fullString.indexOf(" "));
     }
 
-    private static void startHealthReportSimulator() {
+    private static void startHealthReportSimulator(StatusService statusService) {
+        HealthCheckProber prober = new HealthCheckProber(statusService);
+        prober.startScheduler();
+    }
+
+    private static void startHealth_ReportSimulator() {
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(4);
 
         Runnable task1 = () -> {
