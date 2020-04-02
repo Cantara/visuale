@@ -29,7 +29,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {  src: "@/plugins/filters.js"}
+    {  src: "@/plugins/filters.js"},
+    {src:"@/plugins/plugins.js"}
   ],
 
   /*

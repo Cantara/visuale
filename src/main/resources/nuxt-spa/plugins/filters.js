@@ -6,3 +6,6 @@ Vue.filter('truncateText', function (value, length) {
   }
   return value
 });
+
+
+
