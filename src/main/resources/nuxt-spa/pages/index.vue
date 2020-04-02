@@ -16,7 +16,6 @@ import {mapState,mapGetters} from 'vuex';
 import Service from "../components/Service";
 import PollingService from "../components/PollingService";
 import OnWindowResizeService from "../components/OnWindowResizeService";
-import Modal from "../components/Modal";
 export default {
 
   components: {

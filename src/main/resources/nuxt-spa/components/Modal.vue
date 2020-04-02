@@ -33,7 +33,18 @@
       methods:{
           close(){
             this.$emit('close');
+          },
+        handleEscape(event){
+          if (event.key === 'Escape' || event.keyCode === 27) {
+          this.close();
           }
+        }
+      },
+      mounted() {
+        window.addEventListener('keydown',this.handleEscape);
+      },
+      beforeDestroy() {
+          window.removeEventListener('keyup',this.handleEscape)
       }
     }
 </script>

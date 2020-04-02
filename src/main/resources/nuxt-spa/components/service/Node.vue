@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <Modal v-if="showModal" :title="node.ip" @close="showModal = false">
+    <Modal  v-if="showModal" :title="node.ip" @close="showModal = false">
       <JsonModal :text="node"></JsonModal>
     </Modal>
   </div>
