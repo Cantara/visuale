@@ -1,19 +1,14 @@
 package no.cantara.tools.visuale;
 
-import io.helidon.health.HealthSupport;
-import io.helidon.health.checks.HealthChecks;
 import io.helidon.media.jsonb.server.JsonBindingSupport;
 import io.helidon.microprofile.server.Server;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
-import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
 import no.cantara.tools.visuale.status.StatusService;
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +20,6 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
@@ -95,18 +86,10 @@ public final class Main {
         startHealthReportSimulator(statusResource.getStatusService());
 
 
-        HealthSupport health = HealthSupport.builder()
-                .add(HealthChecks.healthChecks())
-                .add((HealthCheck) () -> HealthCheckResponse.named("exampleHealthCheck")
-                        .up()
-                        .withData("time", System.currentTimeMillis())
-                        .withData("version", getVersion())
-                        .build())
-                .build();
-
+        HealthResource healthResource = new HealthResource();
         Routing routing = Routing.builder()
                 .register(JsonBindingSupport.create())
-                .register(health)
+                .register(healthResource)
                 .register(statusResource)
                 .register("/", StaticContentSupport.builder("/staticspa")
                         .welcomeFileName("index.html")
@@ -194,63 +177,5 @@ public final class Main {
         prober.startScheduler();
     }
 
-    private static void startHealth_ReportSimulator() {
-        ScheduledExecutorService ses = Executors.newScheduledThreadPool(4);
-
-        Runnable task1 = () -> {
-
-            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssString())
-                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
-                    .withAdditionalProperty("simulated", "true");
-            statusResource.getStatusService().updateHealthMap(health);
-        };
-
-        // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 15, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
-
-
-        ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
-
-        Runnable task2 = () -> {
-
-
-            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssString().replace("3", "4"))
-                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
-                    .withAdditionalProperty("simulated", "true");
-            statusResource.getStatusService().updateHealthMap(health);
-        };
-
-        // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 35, 5 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
-        ScheduledExecutorService ses3 = Executors.newScheduledThreadPool(1);
-        Runnable task3 = () -> {
-
-
-            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssString().replace("4", "5"))
-                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
-                    .withAdditionalProperty("simulated", "true");
-            statusResource.getStatusService().updateHealthMap(health);
-        };
-
-        // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture3 = ses3.scheduleAtFixedRate(task3, 12, 3 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
-
-        ScheduledExecutorService ses4 = Executors.newScheduledThreadPool(1);
-        Runnable task4 = () -> {
-
-
-            Health health = new Health().withName(applicationInstanceName + "-service").withVersion(getVersion()).withStatus("OK")
-                    .withIp(getMyIPAddresssString().replace("5", "6"))
-                    .withNow(Instant.now().toString()).withRunningSince(server_started.toString())
-                    .withAdditionalProperty("simulated", "true");
-            statusResource.getStatusService().updateHealthMap(health);
-        };
-
-        // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture4 = ses4.scheduleAtFixedRate(task4, 11, 2 + SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
-    }
 
 }
