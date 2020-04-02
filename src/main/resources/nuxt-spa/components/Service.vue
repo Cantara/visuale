@@ -64,8 +64,6 @@
 
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
-  .service-block{
-  }
   .service-block {
 
     margin: 0.35em;

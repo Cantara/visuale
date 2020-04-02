@@ -1,5 +1,6 @@
 <template>
   <div id="dashboard" :class="isMobile ? '' : 'desktop-dashboard'">
+
     <h1 id="heading">{{services.name}}</h1>
     <PollingService></PollingService>
     <OnWindowResizeService></OnWindowResizeService>
@@ -15,6 +16,7 @@ import {mapState,mapGetters} from 'vuex';
 import Service from "../components/Service";
 import PollingService from "../components/PollingService";
 import OnWindowResizeService from "../components/OnWindowResizeService";
+import Modal from "../components/Modal";
 export default {
 
   components: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="node-block" :style="flexStyle">
+  <div @click="showModal = true" class="node-block" :style="flexStyle">
     <div class="marker">
       <div>
         <div class="title">
@@ -8,24 +8,35 @@
         <div class="content">
           <ul>
             <li><span>Healthy: </span>{{node.is_healthy}}</li>
-            <li><span>Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(12)}}</li>
+            <li><span>Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</li>
             <li><NodeUptime :health="node.health[0]" /></li>
           </ul>
         </div>
       </div>
-
     </div>
+    <Modal v-if="showModal" :title="node.ip" @close="showModal = false">
+      <JsonModal :text="node"></JsonModal>
+    </Modal>
   </div>
 </template>
 
 <script>
   import NodeTrafficLight from "./node/NodeTrafficLight";
   import NodeUptime from "./node/NodeUptime";
+  import Modal from "../Modal";
+  import JsonModal from "../JsonModal";
   export default {
     name: "Node",
     components:{
       NodeTrafficLight,
-      NodeUptime
+      NodeUptime,
+      Modal,
+      JsonModal
+    },
+    data() {
+      return {
+        showModal: false
+      }
     },
     props: {
       node: {
