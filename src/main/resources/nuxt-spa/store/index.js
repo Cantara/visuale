@@ -2,7 +2,7 @@ import {ServicesMockData} from "../mock_data/ServicesMockData";
 
 
 export const state = () => ({
-  services: ServicesMockData(),
+  services: {},
   connectionFailedIntervals: 0
 
 });
@@ -19,6 +19,8 @@ export const mutations = {
 };
 export const getters = {
   sortedServices(state){
+    if(state.services.services === undefined)
+      return {services:[]};
     const service = _.cloneDeep(state.services);
     service.services.sort(function(a, b) {
       const serviceA = a.name.toUpperCase();
@@ -35,11 +37,10 @@ export const actions ={
   async fetchData({commit}) {
 
     return await this.$axios.$get('/api/status').then((response) => {
-      commit('resetConnectionFailed');
       commit('setData', response);
+      commit('resetConnectionFailed');
       return response;
-    })
-      .catch(function (error) {
+    }).catch(function (error) {
         if (error.response) {
           if(error.response.status === 504)
             commit('incrementConnectionFailed');

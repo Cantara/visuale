@@ -1,6 +1,5 @@
 <template>
   <div id="dashboard" :class="isMobile ? '' : 'desktop-dashboard'">
-
     <h1 id="heading">{{services.name}}</h1>
     <PollingService></PollingService>
     <OnWindowResizeService></OnWindowResizeService>
