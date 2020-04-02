@@ -3,11 +3,18 @@ import {ServicesMockData} from "../mock_data/ServicesMockData";
 
 export const state = () => ({
   services: ServicesMockData(),
+  connectionFailedIntervals: 0
 
 });
 export const mutations = {
    setData (state, payload) {
    state.services = payload;
+  },
+  incrementConnectionFailed(state){
+     state.connectionFailedIntervals++;
+  },
+  resetConnectionFailed(state){
+     state.connectionFailedIntervals = 0;
   }
 };
 export const getters = {
@@ -19,17 +26,29 @@ export const getters = {
       return (serviceA < serviceB) ? -1 : (serviceA > serviceB) ? 1 : 0;
     });
     return service;
+  },
+  connectionFailed(state){
+    return state.connectionFailedIntervals >= 5
   }
 };
 export const actions ={
   async fetchData({commit}) {
 
     return await this.$axios.$get('/api/status').then((response) => {
-      commit ('setData', response);
+      commit('resetConnectionFailed');
+      commit('setData', response);
       return response;
     })
-      .catch (error => {
-        return error.response.data;
+      .catch(function (error) {
+        if (error.response) {
+          if(error.response.status === 504)
+            commit('incrementConnectionFailed');
+          //server responded
+        } else {
+          // no response was received
+          console.log(error.request);
+          commit('incrementConnectionFailed');
+        }
       });
   }
 };

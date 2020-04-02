@@ -7,6 +7,7 @@
     <div class="container" :style="dashboardHeight">
       <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
+    <ServerExceptionHandling></ServerExceptionHandling>
   </div>
 
 </template>
@@ -16,12 +17,14 @@ import {mapState,mapGetters} from 'vuex';
 import Service from "../components/Service";
 import PollingService from "../components/PollingService";
 import OnWindowResizeService from "../components/OnWindowResizeService";
+import ServerExceptionHandling from "../components/serverExceptionHandling/ServerExceptionHandling";
 export default {
 
   components: {
     Service,
     PollingService,
-    OnWindowResizeService
+    OnWindowResizeService,
+    ServerExceptionHandling
   },
   computed:{
     ...mapState('layout', ['mobile']),

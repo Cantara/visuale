@@ -11,7 +11,7 @@
     </div>
   </div>
     <div class="overlay">
-      <div class="close">
+      <div class="close" v-if="!this.closeDisabled">
         <font-awesome-icon :icon="faTimes"/>
       </div>
     </div>
@@ -24,6 +24,7 @@
         name: "Modal",
       props:{
           title:String,
+        closeDisabled: Boolean
       },
       computed:{
           faTimes(){
@@ -32,7 +33,8 @@
       },
       methods:{
           close(){
-            this.$emit('close');
+            if(!this.closeDisabled)
+              this.$emit('close');
           },
         handleEscape(event){
           if (event.key === 'Escape' || event.keyCode === 27) {
