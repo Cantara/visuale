@@ -91,7 +91,7 @@ public final class Main {
                 .register(JsonBindingSupport.create())
                 .register(healthResource)
                 .register(statusResource)
-                .register("/", StaticContentSupport.builder("/staticspa")
+                .register("/", StaticContentSupport.builder("/nuxt-spa/dist")
                         .welcomeFileName("index.html")
                         .build())
                 .build();
