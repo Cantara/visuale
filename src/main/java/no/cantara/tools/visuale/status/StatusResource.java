@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 
@@ -21,7 +20,8 @@ import javax.ws.rs.core.Response;
 public class StatusResource implements Service {
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
     public static ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-    StatusService statusService;
+    StatusService statusService = new StatusService();
+
 
     /**
      * A service registers itself by updating the routine rules.
@@ -40,14 +40,6 @@ public class StatusResource implements Service {
                 .put("/api/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
     }
 
-    /**
-     * Using constructor injection to get a configuration property.
-     * By default this gets the value from META-INF/microprofile-config
-     */
-    @Inject
-    public StatusResource() {
-        statusService = new StatusService();
-    }
 
 
     /**
