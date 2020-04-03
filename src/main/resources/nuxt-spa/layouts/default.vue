@@ -8,6 +8,14 @@
     </footer>
   </div>
 </template>
+<script>
+  export default {
+    errorCaptured(error, vm, info) {
+      console.log(error, vm, info);
+      return false;
+    },
+  }
+</script>
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
   .background {
