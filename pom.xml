@@ -188,6 +188,21 @@
                 <version>1.5.0</version>
                 <executions>
                     <execution>
+                        <id>npm run build</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm.cmd</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                            <workingDirectory>${basedir}/src/main/resources/nuxt-spa</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <goals>
                             <goal>java</goal>
                         </goals>
