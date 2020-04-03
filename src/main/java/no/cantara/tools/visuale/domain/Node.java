@@ -79,28 +79,12 @@ public class Node {
 
     @JsonProperty("last_seen")
     public String getlastSeen() {
-        String lastSeen = "";
-        Instant lastSeenInstant = Instant.MIN;
-        for (Health h : getHealth()) {
-            try {
-                // 2020-03-24T18:34:35.987Z
-                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-                Instant reqInstant = date.toInstant();
-                if (reqInstant.isAfter(lastSeenInstant)) {
-                    lastSeenInstant = reqInstant;
-                    lastSeen = h.getNow();
-                }
-            } catch (Exception e) {
-                logger.error("Exception trying to parse now from health", e);
-            }
-
-        }
-        return lastSeen;
+        return getLastSeen().toString();
     }
 
 
-    @JsonProperty("is_healthy")
-    public boolean isHealthy() {
+    @JsonIgnore
+    private Instant getLastSeen() {
         Instant lastSeenInstant = Instant.MIN;
         for (Health h : getHealth()) {
             try {
@@ -113,12 +97,30 @@ public class Node {
             } catch (Exception e) {
                 logger.error("Exception trying to parse now from health", e);
             }
+
         }
+        return lastSeenInstant;
+    }
+
+    @JsonProperty("is_healthy")
+    public boolean isHealthy() {
+        Instant lastSeenInstant = getLastSeen();
         Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-        if (lastSeenInstant.getEpochSecond() >= five_minutes_ago.getEpochSecond()) {
-            return true;
+        if (lastSeenInstant.isBefore(five_minutes_ago)) {
+            return false;
         }
+        return true;
+    }
+
+    @JsonProperty("is_unstable")
+    public boolean isUnstable() {
         return false;
+//        Instant lastSeenInstant = getLastSeen();
+//        Instant ninety_seconds_ago = Instant.now().minus(2700, ChronoUnit.SECONDS);
+//        if (lastSeenInstant.isAfter(ninety_seconds_ago)) {
+//            return true;
+//        }
+//        return false;
     }
 
     @JsonProperty("is_secure")
@@ -145,27 +147,6 @@ public class Node {
         return isSecure;
     }
 
-    @JsonProperty("is_unstable")
-    public boolean isUnstable() {
-        Instant lastSeenInstant = Instant.MIN;
-        for (Health h : getHealth()) {
-            try {
-                // 2020-03-24T18:34:35.987Z
-                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-                Instant reqInstant = date.toInstant();
-                if (reqInstant.isAfter(lastSeenInstant)) {
-                    lastSeenInstant = reqInstant;
-                }
-            } catch (Exception e) {
-                logger.error("Exception trying to parse now from health", e);
-            }
-        }
-        Instant five_minutes_ago = Instant.now().minus(30, ChronoUnit.SECONDS);
-        if (lastSeenInstant.getEpochSecond() > five_minutes_ago.getEpochSecond()) {
-            return true;
-        }
-        return false;
-    }
 
     @JsonProperty("health")
     public Set<Health> getHealth() {

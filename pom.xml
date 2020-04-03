@@ -5,7 +5,7 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>10.13.3-SNAPSHOT</version>
+    <version>10.13.5-SNAPSHOT</version>
 
     <repositories>
         <!-- Needed for parent    -->
@@ -28,6 +28,16 @@
         <tag>HEAD</tag>
     </scm>
     <developers>
+        <developer>
+            <id>appartiff</id>
+            <name>Marius Årnes</name>
+            <email>marius.appa@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <organization>Cantara</organization>
+            <organizationUrl>https://wiki.cantara.no/</organizationUrl>
+        </developer>
         <developer>
             <id>totto</id>
             <name>Thor Henning Hetland</name>

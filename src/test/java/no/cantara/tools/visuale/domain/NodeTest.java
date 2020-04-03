@@ -37,6 +37,15 @@ class NodeTest {
     }
 
     @Test
+    public void testDateCalculations3() {
+        String latest = Instant.now().minus(1, ChronoUnit.MINUTES).toString();
+        Health h11 = new Health().withNow(Instant.now().plus(10, ChronoUnit.MINUTES).toString());
+        Health h12 = new Health().withNow(latest);
+        Node n2 = new Node().withHealth(h11).withHealth(h12);
+        assertTrue(n2.isHealthy());
+    }
+
+    @Test
     public void datetests() {
         String dateString = "2020-04-01T14:20:26.557Z";
         OffsetDateTime date = OffsetDateTime.parse(dateString);
