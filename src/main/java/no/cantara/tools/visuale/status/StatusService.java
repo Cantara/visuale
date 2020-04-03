@@ -103,6 +103,7 @@ public class StatusService {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
                             foundNode = true;
                             node.addHealth(health);
+                            updateEnvironmentAsString();
                         }
                     }
                 }
@@ -112,7 +113,8 @@ public class StatusService {
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
                 environment.addService(service);
                 updateEnvironmentAsString();
-            } else if (!foundNode) {
+            }
+            if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
                         Node node = new Node().withName(nodeName);

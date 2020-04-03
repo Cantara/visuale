@@ -86,11 +86,8 @@ public class StatusResource implements Service {
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");
 
-        Health h = (Health) request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo));
-
-        statusService.updateEnvironment(envName, serviceName, nodeName, h);
-
-        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo)).thenAccept(jo -> response.status(204).send());
+        request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
+                .thenAccept(jo -> response.status(204).send());
     }
 
 
@@ -104,12 +101,13 @@ public class StatusResource implements Service {
         return myHealth;
     }
 
-    private Health getHealthInfoFromJson(JsonObject jo) {
+    private Health getHealthInfoFromJson(JsonObject jo, String envName, String serviceName, String nodeName) {
         String healthJson = jo.toString();
         Health myHealth = null;
         if (jo != null || jo.toString().length() < 1) {
             myHealth = HealthMapper.fromRealWorldJson(healthJson);
         }
+        statusService.updateEnvironment(envName, serviceName, nodeName, myHealth);
         return myHealth;
     }
 
