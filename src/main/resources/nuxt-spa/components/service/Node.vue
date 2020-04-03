@@ -3,7 +3,7 @@
     <div class="marker">
       <div>
         <div class="title">
-        <NodeTrafficLight :node="node"/> <span>{{node.ip | truncateText(15)}}</span>
+        <NodeTrafficLight :node="node"/> <span>{{title | truncateText(15)}}</span>
         </div>
         <div class="content">
           <ul>
@@ -37,6 +37,16 @@
       return {
         showModal: false
       }
+    },
+    computed:{
+      title(){
+        if(this.node.hasOwnProperty('ip'))
+          return this.node.ip;
+        if(this.node.hasOwnProperty('name'))
+          return this.node.name;
+        return 'Missing'
+
+        }
     },
     props: {
       node: {
