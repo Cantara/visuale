@@ -115,8 +115,8 @@ public class Node {
     @JsonProperty("is_unstable")
     public boolean isUnstable() {
         Instant lastSeenInstant = getLastSeen();
-        Instant thirty_minutes_ago = Instant.now().minus(30, ChronoUnit.SECONDS);
-        if (lastSeenInstant.isAfter(thirty_minutes_ago)) {
+        Instant ninety_seconds_ago = Instant.now().minus(90, ChronoUnit.SECONDS);
+        if (lastSeenInstant.isAfter(ninety_seconds_ago)) {
             return true;
         }
         return false;
