@@ -61,6 +61,9 @@ public class Node {
 
     @JsonProperty("ip")
     public String getIp() {
+        if (ip == null || ip.length() < 1) {
+            return "1.1.1.1";
+        }
         return ip;
     }
 
