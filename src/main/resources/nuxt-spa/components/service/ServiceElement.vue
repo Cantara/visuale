@@ -1,21 +1,21 @@
 <template>
-  <div class="service-block">
-    <div class="marker" :class="borderStatus">
+  <div class="service-block" :class="borderStatus">
+    <div class="marker">
       <div>
         <div class="title">
           <slot name="title">
+          </slot>
+        </div>
+      </div>
+        <div class="content" :style="gridStyle">
+          <slot name="content">
 
           </slot>
         </div>
-        <div>
-          <div class="content" :style="gridStyle">
-            <slot name="content">
-
-            </slot>
-          </div>
-        </div>
-      </div>
     </div>
+    <slot name="modal">
+
+    </slot>
   </div>
 </template>
 
@@ -52,40 +52,35 @@
   @import '~/assets/styles/variables/_variables.scss';
 
   .service-block {
-
     margin: 0.35em;
+    border: 1px solid white;
   }
 
   .marker {
-    border: 1px solid white;
-    display: inline-block;
-  }
-
-  .marker > div {
-    display: block;
     padding: 0;
-    margin-top: -0.7em;
+    margin-top: -0.55em;
     text-align: center;
+    display: flex;
+    flex-direction: column;
   }
 
   .title {
     background: $color--background none repeat scroll 0 0;
     display: flex;
     padding: 0 0.6em;
+    margin: 0 0.6em;
     float: left;
-    margin: 0 0.3em;
     color: white;
     line-height: 1rem;
   }
 
   .title > span {
-    padding: 0 0.7em;
+    padding: 0 0 0 0.35em;
   }
 
   .content {
     padding: 0.55em;
     display: inline-grid;
     grid-gap: 0.6em;
-
   }
 </style>

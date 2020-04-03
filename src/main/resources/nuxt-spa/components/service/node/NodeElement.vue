@@ -2,18 +2,15 @@
   <div @click="$emit('click')" class="node-block">
     <div class="marker">
       <div>
-        <div>
-          <div class="title">
-            <slot name="title">
-
-            </slot>
-          </div>
-        </div>
-        <div class="content">
-          <slot name="content">
-
+        <div class="title">
+          <slot name="title">
           </slot>
         </div>
+      </div>
+      <div class="content">
+        <slot name="content">
+
+        </slot>
       </div>
     </div>
     <slot name="modal">
@@ -23,14 +20,13 @@
 </template>
 
 <script>
-    export default {
-        name: "NodeElement"
-    }
+  export default {
+    name: "NodeElement"
+  }
 </script>
 
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
-
 
 
   .node-block {
@@ -38,11 +34,11 @@
     border-radius: 10px;
   }
 
-  .marker > div {
+  .marker {
     padding: 0;
     margin-top: -0.55em;
     text-align: center;
-    display:flex;
+    display: flex;
     flex-direction: column;
   }
 
@@ -56,7 +52,8 @@
     float: left;
     font-size: 0.9rem;
   }
-  .title >span {
+
+  .title > span {
     padding: 0 0 0 0.35em;
   }
 
@@ -64,20 +61,24 @@
     padding: 0;
     color: white;
   }
-  ul{
+
+  ul {
     padding: 0 0.2em 0.3em 0.3em;
-    list-style:none;
-    text-align:left;
-    font-size:0.9rem;
+    list-style: none;
+    text-align: left;
+    font-size: 0.9rem;
   }
+
   li {
-    color:white;
+    color: white;
     font-weight: 700;
   }
-  span{
-    color: $color--description!important;
-    font-weight:400;
+
+  span {
+    color: $color--description !important;
+    font-weight: 400;
   }
+
   td {
     color: $color--description;
     text-align: right;
