@@ -58,6 +58,7 @@ public class HealthResource implements Service {
         return "{\n" +
                 "  \"Status\": \"" + ok + "\",\n" +
                 "  \"name\": \"" + applicationInstanceName + "\",\n" +
+                "  \"ip\": \"" + getMyIPAddresssString() + "\",\n" +
                 "  \"version\": \"" + getVersion() + "\",\n" +
                 "  \"okPollingURLs\": \"" + Arrays.asList(okPollingURLs) + "\",\n" +
                 "  \"failedPollingURLs\": \"" + Arrays.asList(failedPollingURLs) + "\",\n" +
