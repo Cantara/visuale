@@ -58,8 +58,17 @@ sudo docker build -t visuale .
 # Run
 sudo docker run --rm -p 8080:8080 visuale:latest
 
-# Test
+# Test - view applocation
 wget //http://localhost:8080/
+
+# Let us add some dummy services by using the visuale health itself...
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n1
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n2
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n3
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n4
+
+# Observe the UI gets updated with a new visuale cluster...
+
 ```
 * Dashboard: http://localhost:8080/
 * DockerHub: https://hub.docker.com/r/cantara/visuale
