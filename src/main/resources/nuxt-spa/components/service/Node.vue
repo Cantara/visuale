@@ -75,8 +75,6 @@
     padding: 0;
     margin-top: -0.55em;
     text-align: center;
-    display: flex;
-    flex-direction: column;
   }
 
   .title {
