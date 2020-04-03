@@ -106,10 +106,10 @@ public class Node {
     public boolean isHealthy() {
         Instant lastSeenInstant = getLastSeen();
         Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-        if (lastSeenInstant.isAfter(five_minutes_ago)) {
-            return true;
+        if (lastSeenInstant.isBefore(five_minutes_ago)) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     @JsonProperty("is_secure")
