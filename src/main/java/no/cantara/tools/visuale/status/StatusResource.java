@@ -77,9 +77,9 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
-        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo));
-        response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
-        response.status(204).send();
+        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo))
+                .thenAccept(jo -> response.status(204).send());
+
     }
 
 
@@ -98,25 +98,25 @@ public class StatusResource implements Service {
 
         statusService.updateEnvironment(envName, serviceName, nodeName, h);
 
-        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo));
-        response.headers().add("Access-Control-Allow-Origin: *", "Access-Control-Allow-Methods: PUT, OPTIONS");
-        response.status(204).send();
+        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo)).thenAccept(jo -> response.status(204).send());
     }
 
 
     private Health updateHealthInfoFromJson(JsonObject jo) {
+        String healthJson = jo.toString();
         Health myHealth = null;
         if (jo != null || jo.toString().length() < 1) {
-            myHealth = HealthMapper.fromRealWorldJson(jo.toString());
+            myHealth = HealthMapper.fromRealWorldJson(healthJson);
             statusService.updateHealthMap(myHealth);
         }
         return myHealth;
     }
 
     private Health getHealthInfoFromJson(JsonObject jo) {
+        String healthJson = jo.toString();
         Health myHealth = null;
         if (jo != null || jo.toString().length() < 1) {
-            myHealth = HealthMapper.fromRealWorldJson(jo.toString());
+            myHealth = HealthMapper.fromRealWorldJson(healthJson);
         }
         return myHealth;
     }
