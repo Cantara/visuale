@@ -79,28 +79,12 @@ public class Node {
 
     @JsonProperty("last_seen")
     public String getlastSeen() {
-        String lastSeen = "";
-        Instant lastSeenInstant = Instant.MIN;
-        for (Health h : getHealth()) {
-            try {
-                // 2020-03-24T18:34:35.987Z
-                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-                Instant reqInstant = date.toInstant();
-                if (reqInstant.isAfter(lastSeenInstant)) {
-                    lastSeenInstant = reqInstant;
-                    lastSeen = h.getNow();
-                }
-            } catch (Exception e) {
-                logger.error("Exception trying to parse now from health", e);
-            }
-
-        }
-        return lastSeen;
+        return getLastSeen().toString();
     }
 
 
-    @JsonProperty("is_healthy")
-    public boolean isHealthy() {
+    @JsonIgnore
+    private Instant getLastSeen() {
         Instant lastSeenInstant = Instant.MIN;
         for (Health h : getHealth()) {
             try {
@@ -113,9 +97,16 @@ public class Node {
             } catch (Exception e) {
                 logger.error("Exception trying to parse now from health", e);
             }
+
         }
+        return lastSeenInstant;
+    }
+
+    @JsonProperty("is_healthy")
+    public boolean isHealthy() {
+        Instant lastSeenInstant = getLastSeen();
         Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-        if (lastSeenInstant.getEpochSecond() >= five_minutes_ago.getEpochSecond()) {
+        if (lastSeenInstant.isAfter(five_minutes_ago)) {
             return true;
         }
         return false;
