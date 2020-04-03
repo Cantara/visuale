@@ -109,7 +109,7 @@ public class StatusService {
                 }
             }
             if (!foundService) {
-                Node node = new Node().withName(nodeName);
+                Node node = new Node().withName(nodeName).withHealth(health);
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
                 environment.addService(service);
                 updateEnvironmentAsString();
@@ -117,8 +117,7 @@ public class StatusService {
             if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
-                        Node node = new Node().withName(nodeName);
-                        node.addHealth(health);
+                        Node node = new Node().withName(nodeName).withHealth(health);
                         service.withNode(node);
                         updateEnvironmentAsString();
                     }
