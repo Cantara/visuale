@@ -38,7 +38,7 @@ public class HealthResource implements Service {
     @Override
     public void update(Routing.Rules rules) {
         rules.get("/health", JsonSupport.create(), this::showEnvironment)
-                .get("/api/status", JsonSupport.create(), this::showEnvironment);
+                .get("/api/health", JsonSupport.create(), this::showEnvironment);
     }
 
 
