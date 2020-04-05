@@ -17,7 +17,7 @@ You may have a look and push data at the latest version which is reset frequentl
 * https://visuale.cantara.no/
 
 
-# Some key targets for the project
+# Some initial key targets for the project
 
 - :heavy_check_mark: the UI should mainly be a static UI meant for big-surveilance screens on the walls...  
 - :heavy_check_mark: the UI should be continuously updating...   
