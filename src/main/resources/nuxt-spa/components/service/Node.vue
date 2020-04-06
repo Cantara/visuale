@@ -12,7 +12,7 @@
     </template>
     <template v-slot:modal>
       <Modal  v-if="showModal" :title="node.ip" @close="showModal = false">
-        <JsonModal :text="node"></JsonModal>
+        <NodeDetailedInfo :text="node"></NodeDetailedInfo>
       </Modal>
     </template>
   </NodeElement>
@@ -23,14 +23,14 @@
   import NodeTrafficLight from "./node/NodeTrafficLight";
   import NodeUptime from "./node/NodeUptime";
   import Modal from "../Modal";
-  import JsonModal from "../JsonModal";
+  import NodeDetailedInfo from "./node/NodeDetailedInfo";
   export default {
     name: "Node",
     components:{
       NodeTrafficLight,
       NodeUptime,
       Modal,
-      JsonModal,
+      NodeDetailedInfo,
       NodeElement
     },
     data() {
