@@ -53,7 +53,7 @@ public class StatusService {
         }
         logger.trace("Received health update: {}", updatedHealth);
         healthQueue.add(updatedHealth);
-        if (healthQueue.size() > 30) {
+        if (healthQueue.size() > 5) {
             updateEnvironmentAsString();
         }
         return healthResults.size();
