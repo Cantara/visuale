@@ -17,24 +17,23 @@ You may have a look and push data at the latest version which is reset frequentl
 * https://visuale.cantara.no/
 
 
-# Some key targets for the project
+# Some initial key targets for the project
 
 - :heavy_check_mark: the UI should mainly be a static UI meant for big-surveilance screens on the walls...  
 - :heavy_check_mark: the UI should be continuously updating...   
 - :heavy_check_mark: semantic version, running since and some instance info like internal IP are the most important values....    
 - :heavy_check_mark: service indicator of the service live resillience/availabillity 
 - :heavy_check_mark: a dashboard which display each service (and each service node) with cached/real info ie like what the /health and/or /info endpoint for each service produce.....   
-- :heavy_check_mark: the "cluster" instances should be grouped as a service...   
-dashboard service... 
-- :heavy_check_mark: initial version will be open, i.e. not need any auth... 
+- :heavy_check_mark: the "cluster" instances should be grouped as a service...    
+- :heavy_check_mark: dashboard service...initial version will be open, i.e. not need any auth... 
 - :heavy_check_mark: old/long running services (>7 days) should be marked as insecure/vulnerable due to lack of patching
 - :heavy_check_mark: mobile friendly - so you can check your environments on the bus on the way to work 
 - :heavy_check_mark: nodes which have not reported for 10 intervals should be marked with a yellow "not working properly" colour...
 - :heavy_check_mark: nodes which are not reachable or have missed 50 updates should be marked red/dead...  
 - :heavy_check_mark: we will support both pull-based info... and pod/instance CRON jobs which push the health json to the 
 - :heavy_check_mark: normal update interval from the service should be 5 or 10 second
+- :heavy_check_mark: it might support clicking into a service or a node to see all the details...    
 - :white_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
-- it might support clicking into a service or a node to see all the details...    
 
 # Build and test
 
@@ -46,8 +45,29 @@ $ wget http://localhost:8088/status/
 
 ## Configuration
 
-You can add the files you want to poll from Visuale to a file named add_health_resources.txt in the current direcory.
+You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
 
+```
+more ./environment_config.json
+
+{
+  "environment_name": "Visuale DEVTEST",
+  "nodes": [
+    {
+      "service_name": "visuele-service",
+      "node_name": "node1",
+      "health_url": "https://visuale.cantara.no/health"
+    },
+    {
+      "service_name": "visuele-service",
+      "node_name": "node2",
+      "health_url": "https://visuale2.cantara.no/health"
+    },
+....
+}
+```
+
+    
 ## Docker
 ```
 cd Docker

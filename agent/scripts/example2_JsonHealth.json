@@ -1,7 +1,7 @@
 {
   "Status": "true",
-  "Version": "2.5.38-SNAPSHOT [Whydah-SSOLoginWebApp-1 - 172.31.48.218  fe80:0:0:0:1064:c3ff:fe70:b12e%eth0  172.31.48.218  0:0:0:0:0:0:0:1%lo  127.0.0.1]",
-  "DEFCON": "DEFCON5",
+  "Version": "2.5.38",
+  "name": "DEFCON5",
   "hasApplicationToken": "true",
   "hasValidApplicationToken": "true",
   "hasApplicationsMetadata": "false",

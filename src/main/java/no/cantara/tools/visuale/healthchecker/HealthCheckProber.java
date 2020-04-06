@@ -4,6 +4,7 @@ import no.cantara.tools.visuale.HealthResource;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.status.StatusService;
+import no.cantara.tools.visuale.utils.EnvironmentConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,17 +57,24 @@ public class HealthCheckProber {
     }
 
     private void readConfig() {
-        Path fileName = new File("./add_health_resources.txt").toPath();
-        try (Scanner scanner = new Scanner(fileName)) {
-            while (scanner.hasNextLine()) {
-                String healthURL = scanner.nextLine();
-                if (healthURL != null && healthURL.length() > 10 && !healthURL.startsWith("#")) {
-                    URI url = new URI(healthURL);
-                    healthCheckURLSet.add(url);
+        EnvironmentConfig environmentConfig = new EnvironmentConfig();
+        for (URI pollingURI : environmentConfig.getPollingHealthURISet()) {
+            healthCheckURLSet.add(pollingURI);
+        }
+        if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironment().length() < 40) {
+
+            Path fileName = new File("./add_health_resources.txt").toPath();
+            try (Scanner scanner = new Scanner(fileName)) {
+                while (scanner.hasNextLine()) {
+                    String healthURL = scanner.nextLine();
+                    if (healthURL != null && healthURL.length() > 10 && !healthURL.startsWith("#")) {
+                        URI url = new URI(healthURL);
+                        healthCheckURLSet.add(url);
+                    }
                 }
+            } catch (Exception e) {
+                logger.error("Unable to parse data from add_health_resources.txt", e);
             }
-        } catch (Exception e) {
-            logger.error("Unable to parse data from add_health_resources.txt", e);
         }
     }
 
@@ -75,23 +83,25 @@ public class HealthCheckProber {
         for (URI u : healthCheckURLSet) {
             try {
                 String json = new CommandGetHealthJson(u).execute();
-                if (json != null && json.toLowerCase().contains("status")) {
+                if (json != null && !json.toLowerCase().contains("html")) {
                     Health health = HealthMapper.fromRealWorldJson(json);
                     statusService.updateHealthMap(health);
                 } else {
-                    logger.error("   ==> Unable to parse json from {} ", u);
+                    logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now
                     healthCheckURLSet.remove(u);
                     badHealthCheckURLSet.add(u);
                 }
             } catch (Exception e) {
-                logger.error("==> Unable to parse json from {} ", u);
+                logger.error("==> Unable to parse json from {} - exception ", u, e);
                 // We reduce noise on wrong urls by removing them right now
                 healthCheckURLSet.remove(u);
                 badHealthCheckURLSet.add(u);
             }
         }
-        logger.warn("===> bad health URL list:{}", Arrays.asList(badHealthCheckURLSet.toArray()));
+        if (badHealthCheckURLSet.size() > 1) {
+            logger.warn("===> bad health URL list:{}", Arrays.asList(badHealthCheckURLSet.toArray()));
+        }
         int random = ThreadLocalRandom.current().nextInt(100);
         if (random > 90) {
             logger.info("==> Decided to re-add the bad URLs for a retry.  Added {} urls", badHealthCheckURLSet.size());

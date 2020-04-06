@@ -85,7 +85,7 @@ public class Node {
 
     @JsonIgnore
     private Instant getLastSeen() {
-        Instant lastSeenInstant = Instant.MIN;
+        Instant lastSeenInstant = Instant.now().minus(30, ChronoUnit.DAYS);
         for (Health h : getHealth()) {
             try {
                 // 2020-03-24T18:34:35.987Z

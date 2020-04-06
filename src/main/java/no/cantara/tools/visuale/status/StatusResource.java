@@ -41,7 +41,6 @@ public class StatusResource implements Service {
     }
 
 
-
     /**
      * @return {@link JsonObject}
      */
@@ -69,11 +68,10 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
-        request.content().as(JsonObject.class).thenAccept(jo -> updateHealthInfoFromJson(jo))
+        request.content().as(String.class).thenAccept(jo -> updateHealthInfoFromJson(jo))
                 .thenAccept(jo -> response.status(204).send());
 
     }
-
 
 
     /**
@@ -86,29 +84,39 @@ public class StatusResource implements Service {
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");
 
-        request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
+        request.content().as(String.class).thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
                 .thenAccept(jo -> response.status(204).send());
+//        request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
+//                .thenAccept(jo -> response.status(204).send());
     }
 
 
-    private Health updateHealthInfoFromJson(JsonObject jo) {
-        String healthJson = jo.toString();
-        Health myHealth = null;
-        if (jo != null || jo.toString().length() < 1) {
-            myHealth = HealthMapper.fromRealWorldJson(healthJson);
-            statusService.updateHealthMap(myHealth);
+    private Health updateHealthInfoFromJson(String healthJsonString) {
+        try {
+            Health myHealth = null;
+            if (healthJsonString != null || healthJsonString.toString().length() < 1) {
+                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
+                statusService.updateHealthMap(myHealth);
+            }
+            return myHealth;
+        } catch (Exception e) {
+            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
         }
-        return myHealth;
+        return null;
     }
 
-    private Health getHealthInfoFromJson(JsonObject jo, String envName, String serviceName, String nodeName) {
-        String healthJson = jo.toString();
-        Health myHealth = null;
-        if (jo != null || jo.toString().length() < 1) {
-            myHealth = HealthMapper.fromRealWorldJson(healthJson);
+    private Health getHealthInfoFromJson(String healthJsonString, String envName, String serviceName, String nodeName) {
+        try {
+            Health myHealth = null;
+            if (healthJsonString != null || healthJsonString.toString().length() < 1) {
+                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
+            }
+            statusService.updateEnvironment(envName, serviceName, nodeName, myHealth);
+            return myHealth;
+        } catch (Exception e) {
+            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
         }
-        statusService.updateEnvironment(envName, serviceName, nodeName, myHealth);
-        return myHealth;
+        return null;
     }
 
     public StatusService getStatusService() {
