@@ -31,7 +31,7 @@
     computed: {
       gridStyle() {
         return {
-          gridTemplateColumns: `repeat(2,minmax(143px,1fr))`
+          gridTemplateColumns: `repeat(2,10.2rem)`
         }
       },
       borderStatus() {
@@ -80,8 +80,8 @@
   }
 
   .content {
-    padding: 0.55em;
+    padding: 0.50rem;
     display: inline-grid;
-    grid-gap: 0.6em;
+    grid-gap: 0.6rem;
   }
 </style>

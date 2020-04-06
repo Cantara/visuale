@@ -61,6 +61,7 @@
   .content {
     padding: 0;
     color: white;
+    text-align: left;
   }
 
   ul {
@@ -68,6 +69,7 @@
     list-style: none;
     text-align: left;
     font-size: 0.9rem;
+    display: inline-block;
   }
 
   li {
@@ -76,7 +78,6 @@
   }
 
   span {
-    color: $color--description !important;
     font-weight: 400;
   }
 
