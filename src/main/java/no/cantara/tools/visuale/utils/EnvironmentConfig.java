@@ -14,6 +14,8 @@ import java.net.URI;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
+
 public class EnvironmentConfig {
 
     public static final Logger logger = LoggerFactory.getLogger(EnvironmentConfig.class);
@@ -52,6 +54,9 @@ public class EnvironmentConfig {
                 Health h = getInitialHealthJson(URI.create(confNode.getHealthUrl()));
                 if (h != null) {
                     node.addHealth(h);
+                    if (hasValue(h.getIp())) {
+                        node.setIp(h.getIp());
+                    }
                 }
             } catch (Exception e) {
                 logger.debug("Found illegal URL, skipping {}", confNode.getHealthUrl());
