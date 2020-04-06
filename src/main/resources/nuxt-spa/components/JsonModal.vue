@@ -21,5 +21,6 @@
 <style scoped>
 pre{
   text-align: left;
+  overflow-x:scroll;
 }
 </style>
