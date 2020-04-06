@@ -3,19 +3,64 @@
 ![Visuale logo](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale.png)
 # Visuale
 
-An real-time dashboard visualisation for real-world micro-service continous deployment environments 
+- A real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
 
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
-#### Legend
-- battery symbol: SLA/HA quality. Calculated based on the number of healthy nodes weigthed against distributed system norms
-- fuel gauge symbol: the node seems to have been running long, meaning that its infrastructure and dependencies may need security patching
-- traffic light symbol: the observed heartbeat state of the node, signalling which nodes which are not healthy
+##### Legend
+* Battery Symbol 
+  * The service level (SLA/HA) quality of the service. It is calculated based on the number of healthy nodes weigthed against distributed system norms
+* Fuel Gauge Symbol
+  * If the node seems to have been running for long, meaning that its infrastructure and dependencies may be due for security patching chores
+* Traffic Light Symbol
+  * the observed heartbeat state of the node, signalling which nodes which are not considered healthy
 
 ## Test yourself
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
 
+
+
+# Build and test from source code
+
+```
+$ mvn clean package
+$ java -jar target/visuale.jar
+$ wget http://localhost:8088/status
+```
+* Dashboard UI here:  http://localhost:8088/
+
+## Configuration
+
+You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
+
+A simple example of a Visuale Dashboard environment configuration:
+```
+more ./environment_config.json
+{
+  "environment_name": "Visuale DEVTEST",
+  "nodes": [
+    {
+      "service_name": "visuele-service",
+      "node_name": "node1",
+      "health_url": "https://visuale.cantara.no/health"
+    },
+    {
+      "service_name": "visuele-service",
+      "node_name": "node2",
+      "health_url": "https://visuale2.cantara.no/health"
+    },
+....
+}
+```
+
+And then you can add some push health agents:
+```
+# Let us add some dummy services by using the visuale health resurce...
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n1
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n2
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
+```
 
 # Some initial key targets for the project
 
@@ -35,37 +80,6 @@ You may have a look and push data at the latest version which is reset frequentl
 - :heavy_check_mark: it might support clicking into a service or a node to see all the details...    
 - :white_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
 
-# Build and test
-
-```
-$ mvn clean package
-$ java -jar target/visuale.jar
-$ wget http://localhost:8088/status/
-```
-
-## Configuration
-
-You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
-
-```
-more ./environment_config.json
-
-{
-  "environment_name": "Visuale DEVTEST",
-  "nodes": [
-    {
-      "service_name": "visuele-service",
-      "node_name": "node1",
-      "health_url": "https://visuale.cantara.no/health"
-    },
-    {
-      "service_name": "visuele-service",
-      "node_name": "node2",
-      "health_url": "https://visuale2.cantara.no/health"
-    },
-....
-}
-```
 
     
 ## Docker
@@ -94,15 +108,15 @@ JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="
 * DockerHub: https://hub.docker.com/r/cantara/visuale
 
 
-# Some simple agent scripts to push health to visuale
+##### Some simple agent scripts to push health to visuale
 
 * Look here:  https://github.com/Cantara/visuale/tree/master/agent/scripts
 
 
-### Visuale on mobile phones
+#### Visuale on mobile phones
 
-And if you thought this was only for dashboards, we know that time is urgent, so you can check tha status off all your environments conviniently on your phone on your way to work
+And if you thought Visuale was only for wall-mounted dashboards, you are wrong:). We know that time is urgent, so you can check the status off all your environments conveniently on your phone on your way to work.
 
-![A shapshot of an early ersion of the visuale dashboard from a mobile phone](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale%20on%20mobile.jpg)
+<img src="https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale%20on%20mobile.jpg" width="400" alt="A shapshot of an early version of the visuale dashboard from a mobile phone">
 
 
