@@ -62,6 +62,10 @@ JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="
 JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
 ```
 
+###### Created by:
+* Marius Årnes - https://github.com/appartiff
+* Totto - https://github.com/totto
+      
 # Some initial key targets for the project
 
 - :heavy_check_mark: the UI should mainly be a static UI meant for big-surveilance screens on the walls...  
