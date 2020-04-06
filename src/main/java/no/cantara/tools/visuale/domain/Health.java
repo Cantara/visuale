@@ -51,6 +51,9 @@ public class Health {
 
     @JsonProperty("Status")
     public String getStatus() {
+        if (status == null || status.length() < 1) {
+            return "N/A";
+        }
         return status;
     }
 

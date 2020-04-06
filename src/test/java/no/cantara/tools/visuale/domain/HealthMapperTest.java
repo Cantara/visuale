@@ -22,6 +22,11 @@ class HealthMapperTest {
         health = HealthMapper.fromRealWorldJson(whydahTest2);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(demoHealthString);
+        assertTrue("N/A".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
     }
 
 
@@ -82,4 +87,13 @@ class HealthMapperTest {
             "  \"statisticsservice_health\": \"https://whydahdev.cantara.no/reporter/health\" ,\n" +
             "  \"crmservice_health\": \"https://whydahdev.cantara.no/crmservice/health\" \n" +
             "}";
+
+    String demoHealthString = "{\n" +
+            " \"version\":\"0.0.2-SNAPSHOT\",\n" +
+            " \"name\":\"quadim-measurement-service\",\n" +
+            " \"now\":\"2020-04-06T07:36:55.165575Z\",\n" +
+            " \"ip\":\"172.31.41.32  fe80:0:0:0:4b6:58ff:fec9:c378%eth0  172.31.41.32  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            " \"running since\":\"2020-04-06T06:27:04.667815Z\",\n" +
+            " \"Database Backend\":\"jdbc:h2:mem:testdb\",\n" +
+            " \"Measurement count\":\"4\"}";
 }

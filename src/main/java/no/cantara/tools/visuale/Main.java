@@ -9,6 +9,7 @@ import io.helidon.webserver.WebServer;
 import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
 import no.cantara.tools.visuale.status.StatusService;
+import no.cantara.tools.visuale.utils.EnvironmentConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,7 @@ public final class Main {
         // load logging configuration
         setupLogging();
 
-        WebServer ws = startServer(8080, true);
+        WebServer ws = startServer(8080, false);
     }
 
 
@@ -76,12 +77,11 @@ public final class Main {
      */
     static public WebServer startServer(int port, boolean usingMockEnvironment) {
 
-        StatusResource statusResource;
         if (usingMockEnvironment) {
-            statusResource = new StatusResource();
             statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
         } else {
-            statusResource = new StatusResource();
+            EnvironmentConfig environmentConfig = new EnvironmentConfig();
+            statusResource.getStatusService().initializeEnvironment(environmentConfig.getEnvironment(), environmentConfig.getEnvironmentName());
         }
         startHealthReportSimulator(statusResource.getStatusService());
 

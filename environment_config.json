@@ -1,0 +1,40 @@
+{
+  "environment_name": "Quadim DEVTEST",
+  "nodes": [
+    {
+      "service_name": "quadim-platform-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/health"
+    },
+    {
+      "service_name": "quadim-overlord-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/api/overlord/health"
+    },
+    {
+      "service_name": "quadim-overlordprofile-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/api/profile/health"
+    },
+    {
+      "service_name": "quadim-process-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/api/acquisitionprocess/health"
+    },
+    {
+      "service_name": "quadim-skill-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/api/skill/health"
+    },
+    {
+      "service_name": "quadim-measurement-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/api/measurement/health"
+    },
+    {
+      "service_name": "quadim-filestore-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/api/measurement/health"
+    }
+  ]
+}

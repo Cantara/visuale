@@ -45,8 +45,29 @@ $ wget http://localhost:8088/status/
 
 ## Configuration
 
-You can add the files you want to poll from Visuale to a file named add_health_resources.txt in the current direcory.
+You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
 
+```
+more ./environment_config.json
+
+{
+  "environment_name": "Visuale DEVTEST",
+  "nodes": [
+    {
+      "service_name": "visuele-service",
+      "node_name": "node1",
+      "health_url": "https://visuale.cantara.no/health"
+    },
+    {
+      "service_name": "visuele-service",
+      "node_name": "node2",
+      "health_url": "https://visuale2.cantara.no/health"
+    },
+....
+}
+```
+
+    
 ## Docker
 ```
 cd Docker

@@ -25,6 +25,7 @@ public class HealthMapper {
             //log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
         }
 
+
         if (tryCustomDeserializer) {
             try {
                 ObjectMapper mycustommapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
