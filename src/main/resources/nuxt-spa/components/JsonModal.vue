@@ -21,6 +21,8 @@
 <style scoped>
 pre{
   text-align: left;
-  overflow-x:scroll;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  max-height: 70vh;
 }
 </style>
