@@ -61,6 +61,7 @@
     <properties>
         <mainClass>no.cantara.tools.visuale.Main</mainClass>
         <slf4j.version>1.7.30</slf4j.version>
+        <npm.executable>npm</npm.executable>
     </properties>
 
     <dependencies>
@@ -204,7 +205,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>npm</executable>
+                            <executable>${npm.executable}</executable>
                             <arguments>
                                 <argument>run</argument>
                                 <argument>build</argument>
@@ -309,6 +310,17 @@
             <url>https://mvnrepo.cantara.no/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-
-
+    <profiles>
+        <profile>
+            <id>platform-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <npm.executable>npm.cmd</npm.executable>
+            </properties>
+        </profile>
+    </profiles>
 </project>
