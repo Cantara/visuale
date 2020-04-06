@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
+import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
 public class StatusService {
 
@@ -80,6 +81,9 @@ public class StatusService {
                 } else {
                     //logger.trace("Updated service from health update: {}", updatedHealth);
                     node.addHealth(updatedHealth);
+                    if (hasValue(updatedHealth.getIp())) {
+                        node.setIp(updatedHealth.getIp());
+                    }
                 }
             } catch (Exception e) {
                 logger.error("Received unmappable health", e);
