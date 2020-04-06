@@ -55,6 +55,7 @@
 
   .title > span {
     padding: 0 0 0 0.35em;
+    color:$color--node-title;
   }
 
   .content {
