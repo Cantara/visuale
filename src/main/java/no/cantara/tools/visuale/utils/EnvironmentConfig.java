@@ -51,6 +51,7 @@ public class EnvironmentConfig {
                     node.addHealth(h);
                 }
             } catch (Exception e) {
+                logger.debug("Found illegal URL, skipping {}", confNode.getHealthUrl());
                 // Ignore
             }
 

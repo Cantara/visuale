@@ -61,7 +61,7 @@ public class HealthCheckProber {
         for (URI pollingURI : environmentConfig.getPollingHealthURISet()) {
             healthCheckURLSet.add(pollingURI);
         }
-        if (environmentConfig.getEnvironment().length() < 40) {
+        if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironment().length() < 40) {
 
             Path fileName = new File("./add_health_resources.txt").toPath();
             try (Scanner scanner = new Scanner(fileName)) {
