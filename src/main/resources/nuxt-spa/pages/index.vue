@@ -47,6 +47,7 @@
   @media only screen and (min-width: 991px) {
     #dashboard {
       min-height: 100vh;
+      overflow-x: auto;
     }
   }
 
