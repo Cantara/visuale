@@ -6,10 +6,13 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
+import no.cantara.config.ServiceConfig;
 import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
 import no.cantara.tools.visuale.status.StatusService;
 import no.cantara.tools.visuale.utils.EnvironmentConfig;
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +55,16 @@ public final class Main {
     public static void main(final String[] args) throws IOException {
         // load logging configuration
         setupLogging();
+        Config config = ConfigProvider.getConfig();
+        String port = ServiceConfig.getProperty("server.port");
+        int portNo = 8080;
+        try {
+            portNo = Integer.parseInt(port);
+        } catch (Exception e) {
+            log.error("Unable to find config property for server.port, found:{} - using fallbackvalue ", port, portNo);
+        }
 
-        WebServer ws = startServer(8080, false);
+        WebServer ws = startServer(portNo, false);
     }
 
 
