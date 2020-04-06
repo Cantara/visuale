@@ -26,13 +26,16 @@ public class EnvironmentConfig {
 
     public EnvironmentConfig() {
 
-        ConfEnv readEnvironment = readConfig();
-        if (readEnvironment != null) {
-            try {
-                setUpEnvironment(readEnvironment);
-            } catch (Exception e) {
-                exists = false;
-                logger.error("Unable to parse environment", e);
+        if (!exists) {
+            ConfEnv readEnvironment = readConfig();
+            if (readEnvironment != null) {
+                try {
+                    setUpEnvironment(readEnvironment);
+                    exists = true;
+                } catch (Exception e) {
+                    exists = false;
+                    logger.error("Unable to parse environment", e);
+                }
             }
         }
     }
@@ -56,11 +59,7 @@ public class EnvironmentConfig {
             }
 
         }
-
-
         environmentAsString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
-        exists = true;
-
     }
 
     private Health getInitialHealthJson(URI u) {
