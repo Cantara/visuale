@@ -9,7 +9,7 @@
   </ServiceElement>
 </template>
 <script>
-  import Node from "./service/Node";
+  import Node from "./service/Node/NodeBoxElement";
   import ServiceBattery from "./service/ServiceBattery";
   import ServiceElement from "./service/ServiceElement";
   export default {
