@@ -26,9 +26,9 @@ You may have a look and push data at the latest version which is reset frequentl
 ```
 $ mvn clean package
 $ java -jar target/visuale.jar
-$ wget http://localhost:8088/status
+$ wget http://localhost:8080/status
 ```
-* Dashboard UI here:  http://localhost:8088/
+* Dashboard UI here:  http://localhost:8080/
 
 ## Configuration
 
@@ -67,6 +67,7 @@ If you want to override the server port, you may add a local_config.properties f
 more ./local_config.properties
 ```
 server.port=9292
+#  default server.port=8080
 ```
 
 
