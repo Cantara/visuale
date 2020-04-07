@@ -10,6 +10,7 @@ ENV HOME=/home/$APP
 RUN adduser  -D visuale
 # RUN apk -Uu add  cron wget logrotate bash
 RUN apk -Uu add bash
+RUN apk upgrade
 
 COPY scripts/* $HOME/scripts/
 RUN chmod 755 $HOME/scripts/*
