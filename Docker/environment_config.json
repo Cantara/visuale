@@ -1,0 +1,15 @@
+{
+  "environment_name": "Visuale DEVTEST",
+  "nodes": [
+    {
+      "service_name": "visuale",
+      "node_name": "devtest",
+      "health_url": "https://visuale.cantara.no/health"
+    },
+    {
+      "service_name": "quadim-platform-service",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/health"
+    }
+  ]
+}
