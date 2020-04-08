@@ -1,8 +1,7 @@
 package no.cantara.tools.visuale.status;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.helidon.media.jsonp.server.JsonSupport;
+import io.helidon.media.jsonb.server.JsonBindingSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
@@ -12,14 +11,12 @@ import no.cantara.tools.visuale.domain.HealthMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.RequestScoped;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
 
-@RequestScoped
 public class StatusResource implements Service {
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
-    public static ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+    public static ObjectMapper mapper = new ObjectMapper().configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
     StatusService statusService = new StatusService();
 
 
@@ -30,14 +27,14 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", JsonSupport.create(), this::showEnvironment)
-                .options("/status", JsonSupport.create(), this::showEnvironmentOptionHeaders)
-                .get("/api/status", JsonSupport.create(), this::showEnvironment)
-                .options("/api/status", JsonSupport.create(), this::showEnvironmentOptionHeaders)
-                .put("/status", JsonSupport.create(), this::updateHealthInfo)
-                .put("/api/status", JsonSupport.create(), this::updateHealthInfo)
-                .put("/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo)
-                .put("/api/status/{env}/{service}/{node}", JsonSupport.create(), this::updateFullHealthInfo);
+        rules.get("/status", JsonBindingSupport.create(), this::showEnvironment)
+                .options("/status", JsonBindingSupport.create(), this::showEnvironmentOptionHeaders)
+                .get("/api/status", JsonBindingSupport.create(), this::showEnvironment)
+                .options("/api/status", JsonBindingSupport.create(), this::showEnvironmentOptionHeaders)
+                .put("/status", JsonBindingSupport.create(), this::updateHealthInfo)
+                .put("/api/status", JsonBindingSupport.create(), this::updateHealthInfo)
+                .put("/status/{env}/{service}/{node}", JsonBindingSupport.create(), this::updateFullHealthInfo)
+                .put("/api/status/{env}/{service}/{node}", JsonBindingSupport.create(), this::updateFullHealthInfo);
     }
 
 
