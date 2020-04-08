@@ -17,13 +17,6 @@
             <td>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</td>
             <td><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
           </tr>
-          <tr>
-            <td> <NodeTrafficLight :node="node"/></td>
-            <td>{{title | truncateText(15)}}</td>
-            <td>{{node.is_healthy}}</td>
-            <td>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</td>
-            <td><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
-          </tr>
           </tbody>
         </table>
       </template>
