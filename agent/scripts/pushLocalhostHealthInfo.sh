@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JSON="`wget -qO- http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"  http://localhost:8080/status
-JSON="`wget -qO- http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"  http://localhost:8080/environment/visuale/myinstance
+JSON="`wget -qO- http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"  http://localhost:8080/status/environment/visuale/myinstance
 
 # Other examples
 #

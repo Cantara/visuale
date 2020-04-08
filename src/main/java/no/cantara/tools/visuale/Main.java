@@ -1,7 +1,6 @@
 package no.cantara.tools.visuale;
 
 import io.helidon.media.jsonb.server.JsonBindingSupport;
-import io.helidon.microprofile.server.Server;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
@@ -11,8 +10,6 @@ import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
 import no.cantara.tools.visuale.status.StatusService;
 import no.cantara.tools.visuale.utils.EnvironmentConfig;
-import org.eclipse.microprofile.config.Config;
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +52,7 @@ public final class Main {
     public static void main(final String[] args) throws IOException {
         // load logging configuration
         setupLogging();
-        Config config = ConfigProvider.getConfig();
+//        Config config = ConfigProvider.getConfig();
         String port = ServiceConfig.getProperty("server.port");
         int portNo = 8080;
         try {
@@ -71,20 +68,7 @@ public final class Main {
     /**
      * Start the server.
      *
-     * @return the created {@link Server} instance
-     */
-    static public Server startMPServer() {
-        // Server will automatically pick up configuration from
-        // microprofile-config.properties
-        // and Application classes annotated as @ApplicationScoped
-        return Server.create().start();
-    }
-
-
-    /**
-     * Start the server.
-     *
-     * @return the created {@link Server} instance
+     * @return the created {@link WebServer} instance
      */
     static public WebServer startServer(int port, boolean usingMockEnvironment) {
 
