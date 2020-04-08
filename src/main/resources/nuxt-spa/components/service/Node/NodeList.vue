@@ -1,24 +1,13 @@
 <template>
     <NodeListElement>
       <template v-slot:content>
-        <table id="customers">
-          <tbody>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Health</th>
-            <th>Version</th>
-            <th>Uptime</th>
-          </tr>
-          <tr>
+          <tr v-for="(node,index) in nodes" :key="index">
             <td> <NodeTrafficLight :node="node"/></td>
-            <td>{{title | truncateText(15)}}</td>
+            <td>{{title(node) | truncateText(15)}}</td>
             <td>{{node.is_healthy}}</td>
             <td>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</td>
             <td><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
           </tr>
-          </tbody>
-        </table>
       </template>
       <template v-slot:modal>
         <Modal  v-if="showModal" :title="node.ip" @close="showModal = false">
@@ -43,19 +32,19 @@
         NodeTrafficLight,
         NodeUptime
       },
-      computed:{
-        title(){
-          if(this.node.hasOwnProperty('ip'))
-            return this.node.ip;
-          if(this.node.hasOwnProperty('name'))
-            return this.node.name;
+      methods:{
+        title(node){
+          if(node.hasOwnProperty('ip'))
+            return node.ip;
+          if(node.hasOwnProperty('name'))
+            return node.name;
           return 'Missing'
         }
       },
       props: {
-        node: {
+        nodes: {
           required: true,
-          type: Object
+          type: Array
         }
       }
     }

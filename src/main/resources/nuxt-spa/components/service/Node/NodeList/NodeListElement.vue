@@ -1,10 +1,21 @@
 <template>
-  <div @click="$emit('click')" class="node-block">
+  <div>
     <div class="marker">
       <div class="content">
+        <table>
+          <tbody>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Health</th>
+            <th>Version</th>
+            <th>Uptime</th>
+          </tr>
         <slot name="content">
 
         </slot>
+          </tbody>
+        </table>
       </div>
     </div>
     <slot name="modal">
@@ -24,6 +35,7 @@
 
   .node-block{
     width: 22rem;
+    padding-top: 0.5rem;
   }
   .marker {
     padding: 0;
