@@ -31,8 +31,7 @@
       gridStyle() {
         if(this.service.nodes.length >= 6)
           return {
-            display: 'inline-flex',
-            flexDirection: 'column'
+            paddingTop:'0.5rem',
           };
         else
         return {
