@@ -69,7 +69,12 @@ public class StatusResource implements Service {
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
         request.content().as(String.class).thenAccept(jo -> updateHealthInfoFromJson(jo))
-                .thenAccept(jo -> response.status(204).send());
+                .thenAccept(jo -> response.status(204).headers().add("Content-Type: application/json"
+                        , "Access-Control-Allow-Origin: *"
+                        , "Access-Control-Allow-Methods: GET, OPTIONS"
+                        , "Access-Control-Allow-Headers: *"
+                        , "Access-Control-Allow-Credentials: true"))
+                .thenAccept(jo -> response.send());
 
     }
 
