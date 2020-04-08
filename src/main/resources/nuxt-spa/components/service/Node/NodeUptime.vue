@@ -1,5 +1,5 @@
 <template>
-  <div><span>Uptime: </span>{{getRunningSince}} <font-awesome-icon v-if="isGasPumpActive" class="warning"  :icon="faGasPump"/></div>
+  <div>{{getRunningSince}} <font-awesome-icon v-if="isGasPumpActive" class="warning"  :icon="faGasPump"/></div>
 </template>
 
 <script>
@@ -11,6 +11,11 @@
         required: true,
         type: Object
       },
+      shorten: {
+        required:false,
+        type:Boolean,
+        default:false
+      }
     },
     data() {
       return {
@@ -25,10 +30,11 @@
       },
       getRunningSince() {
         if(this.minutesSince < 60)
-          return this.minutesSince + ' Minutes';
+          //small m since  it means minutes, Uppercase M means Months
+          return this.minutesSince +  (this.shorten ? 'm' :' Minutes');
         if(this.minutesSince < 1440)
-          return Math.floor(this.minutesSince / 60) + ' Hours';
-        return Math.floor(this.minutesSince / 60 / 24) + ' Days';
+          return Math.floor(this.minutesSince / 60) + (this.shorten ? 'H' : ' Hours');
+        return Math.floor(this.minutesSince / 60 / 24) + (this.shorten ? 'D' : ' Days');
       },
       isGasPumpActive(){
         return (this.minutesSince > 10080)
@@ -65,11 +71,8 @@
 
   }
 </script>
-
-<style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
-  span{
-    color: $color--description!important;
-    font-weight:400;
+<style scoped>
+  div{
+    display: inline;
   }
 </style>

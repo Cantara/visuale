@@ -55,7 +55,7 @@ public class StatusResource implements Service {
      */
     @SuppressWarnings("checkstyle:designforextension")
     public synchronized void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
-        response.status(200).headers().add("Content-Type: application/json"
+     response.status(200).headers().add("Content-Type: application/json"
                 , "Access-Control-Allow-Origin: *"
                 , "Access-Control-Allow-Methods: GET, OPTIONS"
                 , "Access-Control-Allow-Headers: *"

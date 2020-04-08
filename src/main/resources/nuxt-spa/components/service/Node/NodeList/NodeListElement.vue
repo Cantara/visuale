@@ -1,0 +1,61 @@
+<template>
+  <div @click="$emit('click')" class="node-block">
+    <div class="marker">
+      <div class="content">
+        <slot name="content">
+
+        </slot>
+      </div>
+    </div>
+    <slot name="modal">
+
+    </slot>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "NodeListElement"
+    }
+</script>
+
+<style lang="scss" scoped>
+  @import '~/assets/styles/variables/_variables.scss';
+
+  .node-block{
+    width: 22rem;
+  }
+  .marker {
+    padding: 0;
+    margin-top: -0.55em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    padding: 0;
+    color: white;
+    text-align: left;
+  }
+table{
+  border-collapse: collapse;
+  width:100%;
+}
+td,th {
+  padding: 0.2em;
+  font-size: 0.9rem;
+  text-align: center;
+}
+  td {
+
+    border: 1px solid #ddd;
+    font-weight:400;
+    color:white!important;
+  }
+  th {
+    font-weight:700;
+    color: $color--description!important;
+
+  }
+</style>

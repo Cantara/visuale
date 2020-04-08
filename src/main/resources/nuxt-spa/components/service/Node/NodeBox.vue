@@ -1,5 +1,5 @@
 <template>
-  <NodeElement @click="showModal = true">
+  <NodeBoxElement @click="showModal = true">
     <template v-slot:title>
       <NodeTrafficLight :node="node"/> <span>{{title | truncateText(15)}}</span>
     </template>
@@ -7,7 +7,7 @@
       <ul>
         <li><span>Healthy: </span>{{node.is_healthy}}</li>
         <li><span>Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</li>
-        <li><NodeUptime :health="node.health[0]" /></li>
+        <li><span>Uptime: </span><NodeUptime :health="node.health[0]" /></li>
       </ul>
     </template>
     <template v-slot:modal>
@@ -15,13 +15,13 @@
         <NodeDetailedInfo :text="node"></NodeDetailedInfo>
       </Modal>
     </template>
-  </NodeElement>
+  </NodeBoxElement>
 </template>
 
 <script>
-  import NodeElement from "./NodeBoxElement/NodeBoxElement";
+  import NodeBoxElement from "./NodeBox/NodeBoxElement";
   import NodeTrafficLight from "./NodeTrafficLight";
-  import NodeUptime from "./NodeBoxElement/NodeBoxUptime";
+  import NodeUptime from "./NodeUptime";
   import Modal from "../../Modal";
   import NodeDetailedInfo from "./NodeDetailedInfo";
   export default {
@@ -31,7 +31,7 @@
       NodeUptime,
       Modal,
       NodeDetailedInfo,
-      NodeElement
+      NodeBoxElement: NodeBoxElement
     },
     data() {
       return {
@@ -55,3 +55,11 @@
     }
   }
 </script>
+<style lang="scss" scoped>
+  @import '~/assets/styles/variables/_variables.scss';
+  span{
+    color: $color--description!important;
+    font-weight:400;
+  }
+</style>
+

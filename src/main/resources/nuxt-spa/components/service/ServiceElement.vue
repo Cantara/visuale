@@ -9,7 +9,6 @@
       </div>
         <div class="content" :style="gridStyle">
           <slot name="content">
-
           </slot>
         </div>
     </div>
@@ -30,9 +29,17 @@
     },
     computed: {
       gridStyle() {
+        if(this.service.nodes.length >= 6)
+          return {
+            paddingTop:'0.5rem',
+          };
+        else
         return {
-          gridTemplateColumns: `repeat(2,10.2rem)`
-        }
+          gridTemplateColumns: `repeat(2,10.2rem)`,
+          padding:'0.5rem',
+          display:'inline-grid',
+          gridGap:'0.6rem'
+        };
       },
       borderStatus() {
         /*   if(this.service.healthy_nodes >= 3)
@@ -77,11 +84,5 @@
   .title > span {
     padding: 0 0 0 0.35em;
     color:$color--service-title;
-  }
-
-  .content {
-    padding: 0.50rem;
-    display: inline-grid;
-    grid-gap: 0.6rem;
   }
 </style>

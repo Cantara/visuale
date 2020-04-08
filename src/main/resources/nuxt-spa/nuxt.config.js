@@ -52,8 +52,7 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL:"https://visuale.cantara.no",
-
+    baseURL:"http://localhost:8080",
     proxy:true,
   },
   proxy: {
