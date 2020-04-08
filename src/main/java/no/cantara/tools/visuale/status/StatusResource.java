@@ -68,12 +68,8 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
-        request.content().as(String.class).thenAccept(jo -> updateHealthInfoFromJson(jo))
-                .thenAccept(jo -> response.status(204).headers().add("Content-Type: application/json"
-                        , "Access-Control-Allow-Origin: *"
-                        , "Access-Control-Allow-Methods: GET, OPTIONS"
-                        , "Access-Control-Allow-Headers: *"
-                        , "Access-Control-Allow-Credentials: true"))
+        request.content().as(String.class)
+                .thenAccept(jo -> updateHealthInfoFromJson(jo))
                 .thenAccept(jo -> response.send());
 
     }
@@ -89,10 +85,9 @@ public class StatusResource implements Service {
         String serviceName = request.path().param("service");
         String nodeName = request.path().param("node");
 
-        request.content().as(String.class).thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
+        request.content().as(String.class)
+                .thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
                 .thenAccept(jo -> response.status(204).send());
-//        request.content().as(JsonObject.class).thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
-//                .thenAccept(jo -> response.status(204).send());
     }
 
 
