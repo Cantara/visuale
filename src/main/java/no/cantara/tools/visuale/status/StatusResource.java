@@ -70,7 +70,7 @@ public class StatusResource implements Service {
         logger.debug("updateHealthInfo");
         request.content().as(String.class)
                 .thenAccept(jo -> updateHealthInfoFromJson(jo))
-                .thenAccept(jo -> response.send());
+                .thenAccept(jo -> response.status(204).send());
 
     }
 
