@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import static no.cantara.tools.visuale.domain.HealthMapper.extractIpv4Address;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
@@ -69,11 +71,11 @@ public class Node {
 
     @JsonProperty("ip")
     public void setIp(String ip) {
-        this.ip = ip;
+        this.ip = extractIpv4Address(ip);
     }
 
     public Node withIp(String ip) {
-        this.ip = ip;
+        this.ip = extractIpv4Address(ip);
         return this;
     }
 

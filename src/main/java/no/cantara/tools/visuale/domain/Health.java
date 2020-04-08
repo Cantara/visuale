@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static no.cantara.tools.visuale.domain.HealthMapper.extractIpv4Address;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "Status",
@@ -89,11 +91,13 @@ public class Health {
 
     @JsonProperty("ip")
     public void setIp(String ip) {
-        this.ip = ip;
+        this.ip = extractIpv4Address(ip);
+        ;
     }
 
     public Health withIp(String ip) {
-        this.ip = ip;
+        this.ip = extractIpv4Address(ip);
+        ;
         return this;
     }
 
