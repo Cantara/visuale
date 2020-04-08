@@ -34,7 +34,6 @@
 
 <style scoped>
   div {
-    display: inline;
     font-size:0.7rem;
   }
 </style>
