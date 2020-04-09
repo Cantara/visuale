@@ -65,9 +65,14 @@ td,th {
     font-weight:400;
     color:white!important;
   }
+  td:last-child {
+    border-right:none;
+  }
+  td:first-child{
+    border-left:none;
+  }
   th {
     font-weight:700;
     color: $color--description!important;
-
   }
 </style>
