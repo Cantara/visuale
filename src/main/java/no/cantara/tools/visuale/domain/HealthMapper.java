@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class HealthMapper {
 
     private static final Logger log = LoggerFactory.getLogger(HealthMapper.class);
@@ -42,4 +45,14 @@ public class HealthMapper {
         return health;
     }
 
+    public static String extractIpv4Address(String source) {
+        String IPADDRESS_PATTERN = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
+        Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
+        Matcher matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            return matcher.group();
+        } else {
+            return "0.0.0.0";
+        }
+    }
 }
