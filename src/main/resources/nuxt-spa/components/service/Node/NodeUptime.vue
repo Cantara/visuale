@@ -36,11 +36,12 @@
           return this.minutesSince +  (this.shorten ? 'm' :' Minutes');
         if(this.minutesSince < 1440)
           return Math.floor(this.minutesSince / 60) + (this.shorten ? 'H' : ' Hours');
-        if(this.minutesSince < 43200)
+        if(this.minutesSince < 144000)
           return Math.floor(this.minutesSince / 60 / 24) + (this.shorten ? 'D' : ' Days');
-        if(this.minutesSince >= 43200)
+        if(this.minutesSince >= 144000)
           return Math.floor(this.minutesSince / 60 / 24 / 7) + (this.shorten ? 'W' : ' Weeks');
-        
+
+
       },
       isGasPumpActive(){
         return (this.minutesSince > 10080)
