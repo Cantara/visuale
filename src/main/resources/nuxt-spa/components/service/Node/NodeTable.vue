@@ -4,7 +4,7 @@
           <tr v-for="(node,index) in nodes" :key="index">
             <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>
             <td @click="nodeClicked(node)">{{title(node) | truncateText(15)}}</td>
-            <td @click="nodeClicked(node)">{{node.is_healthy}}</td>
+            <td @click="nodeClicked(node)"><NodeHealthStatus v-bind:healthy="node.is_healthy"/></td>
             <td @click="nodeClicked(node)">{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</td>
             <td @click="nodeClicked(node)"><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
           </tr>
@@ -23,6 +23,7 @@
   import NodeTrafficLight from "./NodeTrafficLight";
   import NodeUptime from "./NodeUptime";
   import Modal from "../../Modal";
+  import NodeHealthStatus from "./NodeHealthStatus";
     export default {
         name: "NodeList",
       components:{
@@ -30,7 +31,8 @@
         Modal,
         NodeDetailedInfo,
         NodeTrafficLight,
-        NodeUptime
+        NodeUptime,
+        NodeHealthStatus
       },
       data() {
         return {

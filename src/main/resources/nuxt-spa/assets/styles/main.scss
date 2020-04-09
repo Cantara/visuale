@@ -11,7 +11,12 @@
 .danger {
   color:$color--danger;
 }
-
+.healthy {
+  color:$color--healthy;
+}
+.unhealthy {
+  color:$color--unhealthy;
+}
 .border--color-danger {
   border-color:$color--danger!important;
 }
