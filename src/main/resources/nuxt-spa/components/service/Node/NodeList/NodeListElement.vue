@@ -71,6 +71,9 @@ td,th {
   td:first-child{
     border-left:none;
   }
+  tr:last-child > td {
+    border-bottom:none;
+  }
   th {
     font-weight:700;
     color: $color--description!important;
