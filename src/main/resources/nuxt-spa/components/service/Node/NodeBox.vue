@@ -5,9 +5,9 @@
     </template>
     <template v-slot:content>
       <ul>
-        <li><span>Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/></li>
-        <li><span>Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</li>
-        <li><span>Uptime: </span><NodeUptime :health="node.health[0]" /></li>
+        <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/></li>
+        <li><span class="description">Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</li>
+        <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
       </ul>
     </template>
     <template v-slot:modal>
@@ -57,11 +57,3 @@
     }
   }
 </script>
-<style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
-  span{
-    color: $color--description!important;
-    font-weight:400;
-  }
-</style>
-

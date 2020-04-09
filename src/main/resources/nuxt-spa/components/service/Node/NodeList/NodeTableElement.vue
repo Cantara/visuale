@@ -55,12 +55,12 @@ table{
   width:100%;
 }
 td,th {
-  padding: 0.2em;
+
   font-size: 0.9rem;
   text-align: center;
 }
   td {
-
+    padding: 0.2em;
     border: 1px solid #ddd;
     font-weight:400;
     color:white!important;
@@ -76,6 +76,7 @@ td,th {
   }
   th {
     font-weight:700;
+    padding: 0.2em 0;
     color: $color--description!important;
   }
 </style>

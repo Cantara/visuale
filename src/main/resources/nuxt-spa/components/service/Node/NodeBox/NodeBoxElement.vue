@@ -74,7 +74,6 @@
 
   li {
     color: white;
-    font-weight: 700;
   }
 
   span {

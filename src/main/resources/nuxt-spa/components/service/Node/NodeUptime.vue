@@ -1,5 +1,5 @@
 <template>
-  <div>{{getRunningSince}} <font-awesome-icon v-if="isGasPumpActive" class="warning"  :icon="faGasPump"/></div>
+  <span>{{getRunningSince}} <font-awesome-icon v-if="isGasPumpActive" class="warning"  :icon="faGasPump"/></span>
 </template>
 
 <script>
@@ -77,7 +77,7 @@
   }
 </script>
 <style scoped>
-  div{
-    display: inline;
+  span {
+    color:white;
   }
 </style>
