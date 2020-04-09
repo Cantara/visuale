@@ -21,6 +21,14 @@
   .background {
     background-color: $color--background;
   }
+  @media only screen and (max-width: 990px) {
+    .background {
+      padding-bottom: 2rem;
+    }
+  }
+
+
+
 </style>
 <style>
 html {
