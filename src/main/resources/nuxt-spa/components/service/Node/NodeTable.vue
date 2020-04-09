@@ -1,5 +1,5 @@
 <template>
-    <NodeListElement>
+    <NodeTableElement>
       <template v-slot:content>
           <tr v-for="(node,index) in nodes" :key="index">
             <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>
@@ -14,11 +14,11 @@
           <NodeDetailedInfo :text="selectedNode"></NodeDetailedInfo>
         </Modal>
       </template>
-    </NodeListElement>
+    </NodeTableElement>
 </template>
 
 <script>
-  import NodeListElement from "./NodeList/NodeListElement";
+  import NodeTableElement from "./NodeList/NodeTableElement";
   import NodeDetailedInfo from "./NodeDetailedInfo";
   import NodeTrafficLight from "./NodeTrafficLight";
   import NodeUptime from "./NodeUptime";
@@ -26,7 +26,7 @@
     export default {
         name: "NodeList",
       components:{
-          NodeListElement,
+        NodeTableElement,
         Modal,
         NodeDetailedInfo,
         NodeTrafficLight,

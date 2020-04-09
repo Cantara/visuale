@@ -4,7 +4,7 @@
       <ServiceBattery :service="service"/><span>{{service.name |truncateText(34)}} </span>
     </template>
     <template v-slot:content>
-      <NodeList v-if="service.nodes.length >= 6" :nodes="service.nodes"></NodeList>
+      <NodeTable v-if="service.nodes.length >= 6" :nodes="service.nodes"></NodeTable>
       <NodeBox v-else v-for="(node,index) in service.nodes" :key="index" :node="node"></NodeBox>
     </template>
   </ServiceElement>
@@ -13,14 +13,14 @@
   import NodeBox from "./service/Node/NodeBox";
   import ServiceBattery from "./service/ServiceBattery";
   import ServiceElement from "./service/ServiceElement";
-  import NodeList from "./service/Node/NodeList";
+  import NodeTable from "./service/Node/NodeTable";
   export default {
     name: "Service",
     components:{
-      NodeBox: NodeBox,
+      NodeBox,
       ServiceBattery,
       ServiceElement,
-      NodeList: NodeList
+      NodeTable
     },
     props:{
       service: {
