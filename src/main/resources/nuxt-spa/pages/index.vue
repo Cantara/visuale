@@ -74,5 +74,6 @@
     padding: 0.35em 0.7em;
     height: 2em;
     color: $color--description;
+    display: inline;
   }
 </style>
