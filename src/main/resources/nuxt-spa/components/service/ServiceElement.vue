@@ -29,7 +29,7 @@
     },
     computed: {
       gridStyle() {
-        if(this.service.nodes.length >= 6)
+        if(this.service.nodes.length >= 5)
           return {
             paddingTop:'0.5rem',
           };
