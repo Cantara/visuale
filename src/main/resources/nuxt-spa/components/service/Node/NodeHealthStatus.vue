@@ -1,5 +1,9 @@
 <template>
-  <font-awesome-icon :class="healthy ? 'healthy' : 'unhealthy'" :icon="healthy ? faSeedling : faHeartBroken"/>
+  <span>
+    <font-awesome-icon v-if="healthy" class="healthy" :icon="faSeedling"/>
+    <font-awesome-icon v-else class="unhealthy" :icon="faHeartBroken"/>
+  </span>
+
 </template>
 
 <script>
