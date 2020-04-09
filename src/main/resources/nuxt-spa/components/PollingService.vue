@@ -26,7 +26,7 @@
         clearInterval(this.polling)
       },
       created () {
-        this.startAutoPoller()
+        this.startAutoPoller();
       }
     }
 </script>

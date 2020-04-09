@@ -29,6 +29,8 @@
         return faGasPump;
       },
       getRunningSince() {
+        if(!this.health.hasOwnProperty('running since'))
+          return 'missing';
         if(this.minutesSince < 60)
           //small m since  it means minutes, Uppercase M means Months
           return this.minutesSince +  (this.shorten ? 'm' :' Minutes');
@@ -42,7 +44,7 @@
     },
     methods: {
       startTimer () {
-        this.minutesSince = this.calculateMinuteSince(this.runningSince)
+        this.minutesSince = this.calculateMinuteSince(this.runningSince);
         this.timer = setInterval(() => {
          this.minutesSince = this.calculateMinuteSince(this.runningSince)
         }, 60000)
