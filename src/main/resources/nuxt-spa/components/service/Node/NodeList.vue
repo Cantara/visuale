@@ -2,16 +2,16 @@
     <NodeListElement>
       <template v-slot:content>
           <tr v-for="(node,index) in nodes" :key="index">
-            <td> <NodeTrafficLight :node="node"/></td>
-            <td>{{title(node) | truncateText(15)}}</td>
-            <td>{{node.is_healthy}}</td>
-            <td>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</td>
-            <td><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
+            <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>
+            <td @click="nodeClicked(node)">{{title(node) | truncateText(15)}}</td>
+            <td @click="nodeClicked(node)">{{node.is_healthy}}</td>
+            <td @click="nodeClicked(node)">{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</td>
+            <td @click="nodeClicked(node)"><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
           </tr>
       </template>
       <template v-slot:modal>
-        <Modal  v-if="showModal" :title="node.ip" @close="showModal = false">
-          <NodeDetailedInfo :text="node"></NodeDetailedInfo>
+        <Modal  v-if="showModal" :title="selectedNode.ip" @close="clearModal()">
+          <NodeDetailedInfo :text="selectedNode"></NodeDetailedInfo>
         </Modal>
       </template>
     </NodeListElement>
@@ -32,6 +32,12 @@
         NodeTrafficLight,
         NodeUptime
       },
+      data() {
+        return {
+          showModal: false,
+          selectedNode: null
+        }
+      },
       methods:{
         title(node){
           if(node.hasOwnProperty('ip'))
@@ -39,6 +45,14 @@
           if(node.hasOwnProperty('name'))
             return node.name;
           return 'Missing'
+        },
+        nodeClicked(node){
+          this.selectedNode = node;
+          this.showModal = true;
+        },
+        clearModal(){
+          this.selectedNode = null;
+          this.showModal = false;
         }
       },
       props: {
