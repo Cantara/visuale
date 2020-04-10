@@ -19,6 +19,8 @@
 </template>
 
 <script>
+  import {displayNodeTableCondition} from "../../preferences";
+
   export default {
     name: "ServiceElement",
     props: {
@@ -29,7 +31,7 @@
     },
     computed: {
       gridStyle() {
-        if(this.service.nodes.length >= 5)
+        if(this.isNodeTableConditionMet)
           return {
             paddingTop:'0.5rem',
           };
@@ -40,6 +42,9 @@
           display:'inline-grid',
           gridGap:'0.6rem'
         };
+      },
+      isNodeTableConditionMet(){
+       return displayNodeTableCondition(this.service.nodes.length);
       },
       borderStatus() {
         /*   if(this.service.healthy_nodes >= 3)

@@ -4,7 +4,7 @@
       <ServiceBattery :service="service"/><span>{{service.name |truncateText(34)}} </span>
     </template>
     <template v-slot:content>
-      <NodeTable v-if="service.nodes.length >= 5" :nodes="service.nodes"></NodeTable>
+      <NodeTable v-if="isNodeTableConditionMet" :nodes="service.nodes"></NodeTable>
       <NodeBox v-else v-for="(node,index) in service.nodes" :key="index" :node="node"></NodeBox>
     </template>
   </ServiceElement>
@@ -14,6 +14,7 @@
   import ServiceBattery from "./service/ServiceBattery";
   import ServiceElement from "./service/ServiceElement";
   import NodeTable from "./service/Node/NodeTable";
+  import {displayNodeTableCondition} from "../preferences";
   export default {
     name: "Service",
     components:{
@@ -21,6 +22,11 @@
       ServiceBattery,
       ServiceElement,
       NodeTable
+    },
+    computed:{
+      isNodeTableConditionMet(){
+        return displayNodeTableCondition(this.service.nodes.length);
+      }
     },
     props:{
       service: {

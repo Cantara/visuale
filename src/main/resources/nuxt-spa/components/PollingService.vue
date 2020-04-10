@@ -3,12 +3,14 @@
 </template>
 <script>
   import { mapActions } from 'vuex'
-    export default {
+  import {pollingIntervalInMilliseconds} from "../preferences";
+
+  export default {
         name: "PollingService",
       data() {
         return {
           polling: null,
-          interval: 5000,
+          interval: pollingIntervalInMilliseconds(),
         }
       },
       methods: {
