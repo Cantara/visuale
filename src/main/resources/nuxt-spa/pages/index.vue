@@ -53,6 +53,8 @@
   @media only screen and (max-width: 990px) {
     #dashboard {
       text-align: center;
+      overflow-y:auto;
+      height:100vh;
     }
   }
 
