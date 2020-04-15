@@ -111,10 +111,9 @@ public class Node {
         if (lastSeenInstant.isBefore(five_minutes_ago)) {
             return false;
         }
-        for (Health h : getHealth()) {
-            if (h.getStatus() != null && !h.getStatus().equalsIgnoreCase("false")) {
-                return true;
-            }
+        Health h = getLatestHealth();
+        if (h != null && h.getStatus() != null && !h.getStatus().equalsIgnoreCase("false")) {
+            return true;
         }
         return false;
     }
@@ -158,6 +157,20 @@ public class Node {
     @JsonProperty("health")
     public Set<Health> getHealth() {
         return health;
+    }
+
+    private Health getLatestHealth() {
+        Health returnHealth = null;
+        Instant oldInstant = Instant.now().minus(8, ChronoUnit.DAYS);
+        for (Health h : getHealth()) {
+            OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+            Instant reqInstant = date.toInstant();
+            if (reqInstant.isAfter(oldInstant)) {
+                oldInstant = reqInstant;
+                returnHealth = h;
+            }
+        }
+        return returnHealth;
     }
 
     @JsonProperty("health")
