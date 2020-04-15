@@ -37,6 +37,15 @@ class NodeTest {
     }
 
     @Test
+    public void testIsHealthyCalculations() {
+        String latest = Instant.now().minus(7, ChronoUnit.MINUTES).toString();
+        Health h11 = new Health().withStatus("false").withNow(Instant.now().minus(2, ChronoUnit.MINUTES).toString());
+        Health h12 = new Health().withStatus("false").withNow(latest);
+        Node n2 = new Node().withHealth(h11).withHealth(h12);
+        assertFalse(n2.isHealthy());
+    }
+
+    @Test
     public void testDateCalculations3() {
         String latest = Instant.now().minus(1, ChronoUnit.MINUTES).toString();
         Health h11 = new Health().withNow(Instant.now().plus(10, ChronoUnit.MINUTES).toString());

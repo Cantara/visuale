@@ -111,7 +111,12 @@ public class Node {
         if (lastSeenInstant.isBefore(five_minutes_ago)) {
             return false;
         }
-        return true;
+        for (Health h : getHealth()) {
+            if (h.getStatus() != null && !h.getStatus().equalsIgnoreCase("false")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @JsonProperty("is_unstable")
