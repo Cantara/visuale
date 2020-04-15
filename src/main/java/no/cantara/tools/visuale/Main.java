@@ -15,12 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.URL;
 import java.time.Instant;
-import java.util.Enumeration;
-import java.util.Properties;
 import java.util.logging.LogManager;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
@@ -122,49 +117,6 @@ public final class Main {
         try (InputStream is = Main.class.getResourceAsStream("/logging.properties")) {
             LogManager.getLogManager().readConfiguration(is);
         }
-    }
-
-
-    private static String getVersion() {
-        Properties mavenProperties = new Properties();
-        String resourcePath = "/META-INF/maven/no.cantara.tools/visuale/pom.properties";
-        URL mavenVersionResource = Main.class.getResource(resourcePath);
-        if (mavenVersionResource != null) {
-            try {
-                mavenProperties.load(mavenVersionResource.openStream());
-                return mavenProperties.getProperty("version", "missing version info in " + resourcePath);
-            } catch (IOException e) {
-                log.warn("Problem reading version resource from classpath: ", e);
-            }
-        }
-        return "(DEV VERSION)" + " [" + applicationInstanceName + " - " + getMyIPAddresssesString() + "]";
-    }
-
-    public static String getMyIPAddresssesString() {
-        String ipAdresses = "";
-
-        try {
-            ipAdresses = InetAddress.getLocalHost().getHostAddress();
-            Enumeration n = NetworkInterface.getNetworkInterfaces();
-
-            while (n.hasMoreElements()) {
-                NetworkInterface e = (NetworkInterface) n.nextElement();
-
-                InetAddress addr;
-                for (Enumeration a = e.getInetAddresses(); a.hasMoreElements(); ipAdresses = ipAdresses + "  " + addr.getHostAddress()) {
-                    addr = (InetAddress) a.nextElement();
-                }
-            }
-        } catch (Exception var5) {
-            ipAdresses = "Not resolved";
-        }
-
-        return ipAdresses;
-    }
-
-    public static String getMyIPAddresssString() {
-        String fullString = getMyIPAddresssesString();
-        return fullString.substring(0, fullString.indexOf(" "));
     }
 
     private static void startHealthReportSimulator(StatusService statusService) {
