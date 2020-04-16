@@ -20,6 +20,7 @@ import static no.cantara.tools.visuale.domain.HealthMapper.extractIpv4Address;
 @JsonPropertyOrder({
         "name",
         "ip",
+        "version",
         "last_seen",
         "is_healthy",
         "is_unstable",
@@ -33,6 +34,8 @@ public class Node {
     private String name;
     @JsonProperty("ip")
     private String ip;
+    @JsonProperty("version")
+    private String version;
     @JsonProperty("health")
     private Set<Health> health = new CopyOnWriteArraySet<>();
     @JsonIgnore
@@ -41,7 +44,7 @@ public class Node {
 
     @JsonIgnore
     public String getLookupKey() {
-        String key = getName().trim() + ":" + getIp().trim();
+        String key = getName().trim() + "+" + getVersion() + ":" + getIp().trim();
         return key;
     }
 
@@ -76,6 +79,21 @@ public class Node {
 
     public Node withIp(String ip) {
         this.ip = extractIpv4Address(ip);
+        return this;
+    }
+
+    @JsonProperty("version")
+    public String getVersion() {
+        return version;
+    }
+
+    @JsonProperty("version")
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public Node withVersion(String version) {
+        this.version = version;
         return this;
     }
 
@@ -240,6 +258,7 @@ public class Node {
         return "Node{" +
                 "name='" + name + '\'' +
                 ", ip='" + ip + '\'' +
+                ", version='" + version + '\'' +
                 ", health=" + health +
                 '}';
     }

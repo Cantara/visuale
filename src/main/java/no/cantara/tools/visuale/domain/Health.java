@@ -41,13 +41,17 @@ public class Health {
     public String getLookupKey() {
         String name = getName();
         String ip = getIp();
+        String version = getVersion();
         if (name == null) {
             name = "";
         }
         if (ip == null) {
             ip = "";
         }
-        String key = name.trim() + ":" + ip.trim();
+        if (version == null) {
+            version = "";
+        }
+        String key = name.trim() + "+" + version + ":" + ip.trim();
         return key;
     }
 

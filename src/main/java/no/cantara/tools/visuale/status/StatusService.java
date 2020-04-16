@@ -72,7 +72,7 @@ public class StatusService {
                     if (name == null || name.length() < 2) {
                         name = "Unknown - " + UUID.randomUUID().toString();
                     }
-                    node = new Node().withName(name).withIp(updatedHealth.getIp()).withHealth(updatedHealth);
+                    node = new Node().withName(name).withIp(updatedHealth.getIp()).withVersion(updatedHealth.getVersion()).withHealth(updatedHealth);
 
                     no.cantara.tools.visuale.domain.Service s =
                             new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
@@ -110,13 +110,16 @@ public class StatusService {
                             if (hasValue(health.getIp())) {
                                 node.setIp(health.getIp());
                             }
+                            if (hasValue(health.getVersion())) {
+                                node.setVersion(health.getVersion());
+                            }
                             updateEnvironmentAsString();
                         }
                     }
                 }
             }
             if (!foundService) {
-                Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp());
+                Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
                 environment.addService(service);
                 updateEnvironmentAsString();
@@ -124,7 +127,7 @@ public class StatusService {
             if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
-                        Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp());
+                        Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                         service.withNode(node);
                         updateEnvironmentAsString();
                     }
