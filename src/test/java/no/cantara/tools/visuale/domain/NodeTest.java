@@ -14,10 +14,10 @@ class NodeTest {
     @Test
     public void testDateCalculations() {
         String latest = Instant.now().minus(3, ChronoUnit.MINUTES).toString();
-        Health h1 = new Health().withNow(Instant.now().minus(5, ChronoUnit.MINUTES).toString());
+        Health h1 = new Health().withNow(Instant.now().minus(5, ChronoUnit.MINUTES).toString()).withStatus("OK");
         // latest = "2020-04-01T14:20:26.557Z";
 
-        Health h2 = new Health().withNow(latest);
+        Health h2 = new Health().withNow(latest).withStatus("OK");
         Node n = new Node().withHealth(h1).withHealth(h2);
         String lastSeen = n.getlastSeen();
         assertTrue(lastSeen.equalsIgnoreCase(latest));
@@ -48,8 +48,8 @@ class NodeTest {
     @Test
     public void testDateCalculations3() {
         String latest = Instant.now().minus(1, ChronoUnit.MINUTES).toString();
-        Health h11 = new Health().withNow(Instant.now().plus(10, ChronoUnit.MINUTES).toString());
-        Health h12 = new Health().withNow(latest);
+        Health h11 = new Health().withNow(Instant.now().plus(10, ChronoUnit.MINUTES).toString()).withStatus("OK");
+        Health h12 = new Health().withNow(latest).withStatus("OK");
         Node n2 = new Node().withHealth(h11).withHealth(h12);
         assertTrue(n2.isHealthy());
     }

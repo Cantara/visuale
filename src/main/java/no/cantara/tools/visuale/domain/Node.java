@@ -106,32 +106,31 @@ public class Node {
     @JsonIgnore
     private Instant getLastSeen() {
         Instant lastSeenInstant = Instant.now().minus(30, ChronoUnit.DAYS);
-        for (Health h : getHealth()) {
-            try {
-                // 2020-03-24T18:34:35.987Z
-                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-                Instant reqInstant = date.toInstant();
-                if (reqInstant.isAfter(lastSeenInstant)) {
-                    lastSeenInstant = reqInstant;
-                }
-            } catch (Exception e) {
-                logger.error("Exception trying to parse now from health", e);
-            }
-
+        try {
+            Health h = getLatestHealth();
+            OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+            return date.toInstant();
+        } catch (Exception e) {
+            logger.error("Exception trying to parse now from health", e);
         }
         return lastSeenInstant;
     }
 
     @JsonProperty("is_healthy")
     public boolean isHealthy() {
-        Instant lastSeenInstant = getLastSeen();
-        Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-        if (lastSeenInstant.isBefore(five_minutes_ago)) {
-            return false;
-        }
-        Health h = getLatestHealth();
-        if (h != null && h.getStatus() != null && !h.getStatus().equalsIgnoreCase("false")) {
-            return true;
+        try {
+            Health h = getLatestHealth();
+            OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+            Instant lastSeenInstant = date.toInstant();
+            Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
+            if (lastSeenInstant.isBefore(five_minutes_ago)) {
+                return false;
+            }
+            if (h != null && h.getStatus() != null && h.getStatus().equalsIgnoreCase("OK")) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.warn("Unable to parse/calculate lastSeen:", e);
         }
         return false;
     }
