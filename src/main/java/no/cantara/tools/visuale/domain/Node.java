@@ -44,7 +44,7 @@ public class Node {
 
     @JsonIgnore
     public String getLookupKey() {
-        String key = getName().trim() + "+" + getVersion() + ":" + getIp().trim();
+        String key = getName().replace(" ", "") + "+" + getVersion() + ":" + getIp();
         return key;
     }
 
@@ -56,11 +56,11 @@ public class Node {
 
     @JsonProperty("name")
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public Node withName(String name) {
-        this.name = name;
+        this.name = name.trim();
         return this;
     }
 
@@ -206,8 +206,10 @@ public class Node {
         if (healthValue.getIp() == null || healthValue.getIp().length() < 5) {
             healthValue.setIp(getIp());
         }
-        if (getName() == null || getName().length() < 2 && healthValue.getName() != null && healthValue.getName().length() > 2) {
-            setName(healthValue.getName());
+        if (getName() == null || getName().length() < 2) {
+            if (healthValue.getName() != null && healthValue.getName().length() > 2) {
+                setName(healthValue.getName());
+            }
         }
 
         this.health.add(healthValue);

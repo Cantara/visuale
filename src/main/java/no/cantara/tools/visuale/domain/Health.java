@@ -45,6 +45,7 @@ public class Health {
         if (name == null) {
             name = "";
         }
+        name = name.replace(" ", "");
         if (ip == null) {
             ip = "";
         }
@@ -80,11 +81,11 @@ public class Health {
 
     @JsonProperty("name")
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public Health withName(String name) {
-        this.name = name;
+        this.name = name.trim();
         return this;
     }
 
