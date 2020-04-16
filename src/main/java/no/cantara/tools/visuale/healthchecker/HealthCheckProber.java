@@ -22,10 +22,10 @@ public class HealthCheckProber {
     private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 2;
     private static boolean scheduler_running = false;
 
-    private Set<URI> healthCheckURLSet = new CopyOnWriteArraySet<>();
-    private Set<URI> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
-    StatusService statusService;
-    ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+    private static Set<URI> healthCheckURLSet = new CopyOnWriteArraySet<>();
+    private static Set<URI> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
+    private static StatusService statusService;
+    private static ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
 
     public int getOkHealthCheckMapSize() {
         return healthCheckURLSet.size();
@@ -61,6 +61,7 @@ public class HealthCheckProber {
         for (URI pollingURI : environmentConfig.getPollingHealthURISet()) {
             healthCheckURLSet.add(pollingURI);
         }
+
         if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironment().length() < 40) {
 
             Path fileName = new File("./add_health_resources.txt").toPath();

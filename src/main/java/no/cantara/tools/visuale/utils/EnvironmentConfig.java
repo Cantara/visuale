@@ -20,11 +20,11 @@ public class EnvironmentConfig {
 
     public static final Logger logger = LoggerFactory.getLogger(EnvironmentConfig.class);
     private static ObjectMapper mapper = new ObjectMapper();
-    private static boolean exists = false;
+    private boolean exists = false;
     private String environmentName = "";
     private Environment environment;
     private String environmentAsString;
-    private Set<URI> pollingHealthURISet = new CopyOnWriteArraySet();
+    private static Set<URI> pollingHealthURISet = new CopyOnWriteArraySet();
 
     public EnvironmentConfig() {
 
