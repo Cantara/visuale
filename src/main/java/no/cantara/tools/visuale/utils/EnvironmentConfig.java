@@ -85,6 +85,10 @@ public class EnvironmentConfig {
         return environmentAsString;
     }
 
+    public Set<Service> getServices() {
+        return environment.getServices();
+    }
+
     public String getEnvironmentName() {
         return environmentName;
     }

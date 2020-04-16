@@ -5,15 +5,15 @@ import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.status.StatusService;
 import no.cantara.tools.visuale.utils.EnvironmentConfig;
+import no.cantara.tools.visuale.utils.config.ConfEnv;
+import no.cantara.tools.visuale.utils.config.ConfNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class HealthCheckProber {
@@ -23,6 +23,7 @@ public class HealthCheckProber {
     private static boolean scheduler_running = false;
 
     private static Set<URI> healthCheckURLSet = new CopyOnWriteArraySet<>();
+    Map<URI, ConfNode> environmentPathMap = new HashMap<>();
     private static Set<URI> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
     private static StatusService statusService;
     private static ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
@@ -57,10 +58,17 @@ public class HealthCheckProber {
     }
 
     private void readConfig() {
-        EnvironmentConfig environmentConfig = new EnvironmentConfig();
-        for (URI pollingURI : environmentConfig.getPollingHealthURISet()) {
-            healthCheckURLSet.add(pollingURI);
+        ConfEnv confEnv = new ConfEnv();
+        for (ConfNode s : confEnv.getNodes()) {
+            try {
+                URI pollingURI = URI.create(s.getHealthUrl());
+                environmentPathMap.put(pollingURI, s);
+                healthCheckURLSet.add(pollingURI);
+            } catch (Exception e) {
+                logger.warn("Found illegal URL in config: ", e);
+            }
         }
+        EnvironmentConfig environmentConfig = new EnvironmentConfig();
 
         if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironment().length() < 40) {
 
@@ -86,7 +94,9 @@ public class HealthCheckProber {
                 String json = new CommandGetHealthJson(u).execute();
                 if (json != null && !json.toLowerCase().contains("html")) {
                     Health health = HealthMapper.fromRealWorldJson(json);
-                    statusService.updateHealthMap(health);
+                    String service = environmentPathMap.get(u).getServiceName();
+                    String node = environmentPathMap.get(u).getNodeName();
+                    statusService.updateEnvironment("env", service, node, health);
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now
