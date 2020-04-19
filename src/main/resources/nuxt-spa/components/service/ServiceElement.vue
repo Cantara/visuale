@@ -66,6 +66,7 @@
   .service-block {
     margin: 0.35em;
     border: 1px solid white;
+    width:22.1rem;
   }
 
   .marker {
