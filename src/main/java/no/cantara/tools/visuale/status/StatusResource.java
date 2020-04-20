@@ -50,10 +50,10 @@ public class StatusResource implements Service {
             // if code is not in the request, this is a problem
             try {
                 if (!Main.accessToken.equalsIgnoreCase(AccessTokenParam.get())) {
-                    response.status(404).send();
+                    response.status(404).send("{\"reason\":\"unauthorized\"}");
                 }
             } catch (Exception e) {
-                response.status(404).send();
+                response.status(404).send("{\"reason\":\"unauthorized\"}");
             }
         }
         String msg = statusService.getEnvironmentAsString();
