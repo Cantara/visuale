@@ -6,6 +6,7 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
+import no.cantara.tools.visuale.Main;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import org.slf4j.Logger;
@@ -13,12 +14,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 public class StatusResource implements Service {
     public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
     public static ObjectMapper mapper = new ObjectMapper().configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
     StatusService statusService = new StatusService();
-
+    private static final String ACCESS_TOKEN_PARAM_NAME = "accessToken";
 
     /**
      * A service registers itself by updating the routine rules.
@@ -43,6 +45,17 @@ public class StatusResource implements Service {
      */
     @SuppressWarnings("checkstyle:designforextension")
     public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
+        if (Main.accessToken != null && Main.accessToken.length() > 0) {
+            Optional<String> AccessTokenParam = request.queryParams().first(ACCESS_TOKEN_PARAM_NAME);
+            // if code is not in the request, this is a problem
+            try {
+                if (!Main.accessToken.equalsIgnoreCase(AccessTokenParam.get())) {
+                    response.status(404).send();
+                }
+            } catch (Exception e) {
+                response.status(404).send();
+            }
+        }
         String msg = statusService.getEnvironmentAsString();
         response.status(200).send(msg);
     }

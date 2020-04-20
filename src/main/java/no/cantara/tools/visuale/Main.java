@@ -29,6 +29,7 @@ public final class Main {
     private static String applicationInstanceName = "visuale";
     private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 2;
     private static final Instant server_started = Instant.now();
+    public static String accessToken = null;
 
     private static final StatusResource statusResource = new StatusResource();
 
@@ -55,6 +56,8 @@ public final class Main {
         } catch (Exception e) {
             log.error("Unable to find config property for server.port, found:{} - using fallbackvalue ", port, portNo);
         }
+
+        accessToken = ServiceConfig.getProperty("server.accessToken");
 
         WebServer ws = startServer(portNo, false);
     }
@@ -101,12 +104,21 @@ public final class Main {
         //Server server = startServer();
         ws.start()
                 .thenApply(webServer -> {
-                    String endpoint = "http://localhost:" + webServer.port();
-                    System.out.println("Visit Dashboard at: " + endpoint + "/");
-                    System.out.println("Health checks available on: " + endpoint + "/health");
-                    System.out.println("Environment status available on:  " + endpoint + "/status/");
-                    return null;
-                });
+                            if (accessToken == null || accessToken.length() < 1) {
+                                String endpoint = "http://localhost:" + webServer.port();
+                                System.out.println("- Visit Dashboard at: " + endpoint + "/");
+                                System.out.println(" - Health checks available on: " + endpoint + "/health");
+                                System.out.println(" - Environment status available on:  " + endpoint + "/status/");
+                            } else {
+                                String endpoint = "http://localhost:" + webServer.port();
+                                System.out.println(" Visit Dashboard at: " + endpoint + "/?accessToken=" + accessToken);
+                                System.out.println(" - Health checks available on: " + endpoint + "/health");
+                                System.out.println(" - Environment status available on:  " + endpoint + "/status/?accessToken=" + accessToken);
+
+                            }
+                            return null;
+                        }
+                );
         return ws;
     }
 
