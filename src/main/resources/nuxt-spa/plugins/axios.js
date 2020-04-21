@@ -1,8 +1,10 @@
 
-  export default function ({ $axios, redirect }) {
+  export default function ({store, $axios}) {
   $axios.onRequest(config => {
     config.params = config.params || {};
-    config.params['accessToken'] = process.env.accessToken;
+    let authToken = store.state.auth.authToken;
+    if (authToken !== null && authToken.length > 0)
+      config.params['accessToken'] = authToken;
     return config;
   })
 }

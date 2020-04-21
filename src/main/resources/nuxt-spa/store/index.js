@@ -3,8 +3,7 @@ import {sortServices,addUniqueKeyToNodes} from "../utils/serviceUtils";
 
 export const state = () => ({
   services: {},
-  connectionFailedIntervals: 0
-
+  connectionFailedIntervals: 0,
 });
 export const mutations = {
    setData (state, payload) {

@@ -15,11 +15,6 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-
-  env: {
-    accessToken: process.env.ACCESS_TOKEN || 'kjdskjsd'
-  },
-
   /*
   ** Customize the progress-bar color
   */
@@ -53,6 +48,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],
+
+
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

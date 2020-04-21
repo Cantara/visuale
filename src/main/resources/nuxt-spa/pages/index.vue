@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import {mapState, mapGetters} from 'vuex';
+  import {mapState, mapGetters,mapMutations} from 'vuex';
   import Service from "../components/Service";
   import PollingService from "../components/PollingService";
   import OnWindowResizeService from "../components/OnWindowResizeService";
@@ -37,6 +37,16 @@
             'height': this.dashboardContainerHeight + 'px',
           };
       }
+    },
+    methods:{
+      ...mapMutations({
+        setToken: 'auth/setToken'
+      })
+    },
+    created(){
+      let token = this.$route.query.accesstoken;
+      if(token !== null && token.length >= 0)
+        this.setToken(token);
     }
   }
 </script>
