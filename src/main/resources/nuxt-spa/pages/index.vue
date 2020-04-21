@@ -44,7 +44,9 @@
       })
     },
     created(){
-      let token = this.$route.query.accesstoken;
+      let token = this.$route.query.accessToken;
+      if(token === undefined)
+        token = this.$route.query.accesstoken;
       if(token !== null && token.length >= 0)
         this.setToken(token);
     }
