@@ -4,7 +4,6 @@ $color--unhealthy:#ff4530;
 $color--warning: #ffac30;
 $color--normal: #FFD524;
 $color--danger: #ff4530;
-$color--blue: #40F5E6;
 $color--background: #232A3D;
 $color--background-lighter: lighten( $color--background, 10% );
 $color--background-darker: darken( $color--background, 10% );
@@ -12,3 +11,6 @@ $color--description:#D0D0D0;
 $color--description-lighter: lighten($color--description, 10%);
 $color--node-title:white;
 $color--service-title:white;
+
+$color--json-string: #ff9a72;
+$color--json-boolean: #ff9a72;

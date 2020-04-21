@@ -46,10 +46,10 @@ pre{
   padding:10px;
   color: $color--description;
   .boolean {
-    color: $color--warning;
+    color: $color--json-boolean;
   }
   .string {
-    color: $color--blue;
+    color: $color--json-string;
   }
   .number {
     color: $color--danger;
