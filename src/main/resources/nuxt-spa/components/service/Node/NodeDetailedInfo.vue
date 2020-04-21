@@ -52,7 +52,7 @@ pre{
     color: $color--json-string;
   }
   .number {
-    color: $color--danger;
+    color: $color--json-number;
   }
   .key {
     color:$color--description-lighter;
