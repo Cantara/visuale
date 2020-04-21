@@ -91,7 +91,7 @@
   }
   .header {
 padding:10px;
-    background:  $color--background-darker;
+    background:  rgba($color--background-darker,0.75);
   }
 
   .modal-content {
@@ -101,7 +101,7 @@ padding:10px;
   }
 
   #modal .body {
-    background: $color--background;
+    background: rgba($color--background,0.75);
   }
 
   .overlay {
