@@ -44,11 +44,15 @@
       })
     },
     created(){
-      let token = this.$route.query.accessToken;
-      if(token === undefined)
-        token = this.$route.query.accesstoken;
-      if(token !== null && token.length >= 0)
-        this.setToken(token);
+      let params = this.$route.query;
+      for (const key of Object.keys(params)) {
+        const keyValue = params[key];
+        if(key.toLowerCase() === 'accesstoken')
+          if(keyValue !== null && keyValue.length > 0) {
+            this.setToken(keyValue);
+            break;
+          }
+      }
     }
   }
 </script>
