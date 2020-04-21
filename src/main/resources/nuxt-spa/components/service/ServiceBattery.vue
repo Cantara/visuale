@@ -17,14 +17,14 @@
     export default {
         name: "ServiceBattery",
       props:{
-        service: {
+        healthy_nodes: {
           required: true,
-          type: Object
+          type: Number
         },
       },
       computed:{
           nodesLength(){
-            return this.service.healthy_nodes;
+            return this.healthy_nodes;
           },
         faBatteryFull(){
           return faBatteryFull;

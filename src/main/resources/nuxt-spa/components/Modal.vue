@@ -81,22 +81,27 @@
 
   #modal h2 {
     margin: 0;
-    color: black;
+    color: $color--description;
   }
   #modal .body, #modal .header, #modal {
-    padding: 10px;
-    color: black;
+
+  }
+  .body {
+
+  }
+  .header {
+padding:10px;
+    background:  $color--background-darker;
   }
 
   .modal-content {
-    background:  $color--description;
     position: relative;
     z-index: 20;
     border-radius: 5px;
   }
 
   #modal .body {
-    background: white;
+    background: $color--background;
   }
 
   .overlay {
