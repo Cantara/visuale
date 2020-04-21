@@ -5,7 +5,7 @@
     </template>
     <template v-slot:content>
       <NodeTable v-if="isNodeTableConditionMet" :nodes="service.nodes"></NodeTable>
-      <NodeBox v-else v-for="(node,index) in service.nodes" :key="index" :node="node"></NodeBox>
+      <NodeBox v-else v-for="(node,index) in service.nodes" :key="node.key" :node="node"></NodeBox>
     </template>
   </ServiceElement>
 </template>

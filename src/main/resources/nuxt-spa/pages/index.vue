@@ -29,7 +29,7 @@
       ...mapState('layout', ['mobile']),
       ...mapGetters({
         dashboardContainerHeight: 'layout/dashboardContainerHeight',
-        services: 'sortedServices',
+        services: 'getServices',
       }),
       dashboardHeight() {
         if (!this.mobile)
