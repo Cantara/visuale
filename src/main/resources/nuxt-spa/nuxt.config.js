@@ -15,6 +15,11 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+
+  env: {
+    accessToken: process.env.ACCESS_TOKEN || 'kjdskjsd'
+  },
+
   /*
   ** Customize the progress-bar color
   */
@@ -30,7 +35,8 @@ export default {
   */
   plugins: [
     {  src: "@/plugins/filters.js"},
-    {src:"@/plugins/plugins.js", ssr: false}
+    {src:"@/plugins/plugins.js", ssr: false},
+    {src:"@/plugins/axios.js"}
   ],
 
   /*

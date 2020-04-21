@@ -33,7 +33,7 @@ export const getters = {
 export const actions ={
   async fetchData({commit}) {
 
-    return await this.$axios.$get('/api/status/?accessToken=kjdskjsd').then((response) => {
+    return await this.$axios.$get('/api/status/').then((response) => {
       commit('setData', response);
       commit('resetConnectionFailed');
       return response;
