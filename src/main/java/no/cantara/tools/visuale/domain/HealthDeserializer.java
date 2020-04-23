@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.Map;
 public class HealthDeserializer extends StdDeserializer<Health> {
 
     private static final long serialVersionUID = 1883547683050039861L;
+    private static final Logger log = LoggerFactory.getLogger(HealthDeserializer.class);
 
     public HealthDeserializer() {
         this(null);
@@ -89,26 +92,31 @@ public class HealthDeserializer extends StdDeserializer<Health> {
 
     private Map<String, String> getFlattenedJsonMap(JsonNode jsonnode, Iterator<String> fieldNames) {
         Map<String, String> jsonFlattenedMap = new HashMap<>();
-        while (fieldNames.hasNext()) {
-            String fieldName = fieldNames.next();
-            JsonNode fieldvalueNode = jsonnode.get(fieldName);
-            Iterator<String> subFieldNames = fieldvalueNode.fieldNames();
-            while (subFieldNames.hasNext()) {
-                String subfieldName = fieldNames.next();
-                JsonNode subfieldvalueNode = fieldvalueNode.get(fieldName);
-                if (fieldvalueNode.isTextual()) {
-                    String subfieldValue = subfieldvalueNode.textValue();
-                    String combinedkey = fieldName + ":" + subfieldName;
-                    jsonFlattenedMap.put(combinedkey.toLowerCase(), subfieldValue);
+        try {
+            while (fieldNames.hasNext()) {
+                String fieldName = fieldNames.next();
+                JsonNode fieldvalueNode = jsonnode.get(fieldName);
+                Iterator<String> subFieldNames = fieldvalueNode.fieldNames();
+                while (subFieldNames.hasNext()) {
+                    String subfieldName = subFieldNames.next();
+                    JsonNode subfieldvalueNode = fieldvalueNode.get(fieldName);
+                    if (fieldvalueNode.isTextual()) {
+                        String subfieldValue = subfieldvalueNode.textValue();
+                        String combinedkey = fieldName + ":" + subfieldName;
+                        jsonFlattenedMap.put(combinedkey.toLowerCase(), subfieldValue);
+
+                    }
 
                 }
-
+                if (fieldvalueNode.isTextual()) {
+                    String fieldValue = fieldvalueNode.textValue();
+                    jsonFlattenedMap.put(fieldName.toLowerCase(), fieldValue);
+                }
             }
-            if (fieldvalueNode.isTextual()) {
-                String fieldValue = fieldvalueNode.textValue();
-                jsonFlattenedMap.put(fieldName.toLowerCase(), fieldValue);
-            }
+        } catch (Exception e) {
+            log.warn("Unable to handle data as JSON", e);
         }
+
         return jsonFlattenedMap;
     }
 }
