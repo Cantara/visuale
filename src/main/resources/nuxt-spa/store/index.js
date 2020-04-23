@@ -1,4 +1,5 @@
 import {ServicesMockData} from "../mock_data/ServicesMockData";
+import {isEqual} from "lodash"
 import {sortServices,addUniqueKeyToNodes} from "../utils/serviceUtils";
 
 export const state = () => ({
@@ -7,7 +8,8 @@ export const state = () => ({
 });
 export const mutations = {
    setData (state, payload) {
-   state.services = payload;
+     // if(isEqual(state.services,payload) === false)
+       state.services = payload;
   },
   incrementConnectionFailed(state){
      state.connectionFailedIntervals++;

@@ -6,14 +6,24 @@
      return (serviceA < serviceB) ? -1 : (serviceA > serviceB) ? 1 : 0;
    });
   }
+  function validateRunningSinces(arrayResults){
+    for (var i = 0, l = arrayResults.length; i < l; i++) {
+
+      if (typeof(arrayResults[i])==='undefined' || arrayResults[i].length ===0){
+       return false;
+      }
+    }
+    return true;
+  }
   export function addUniqueKeyToNodes(services){
     let i = 0, len = services.length;
     for (; i < len; i++) {
       let service = services[i];
       let runningSinces = service.nodes.map(function(item){ return item.health[0]["running since"]});
+
       let indexKey = true;
       //all nodes have running since and is unique
-      if(runningSinces.length === service.nodes.length && hasDuplicates(runningSinces) === false)
+      if(runningSinces.length === service.nodes.length && hasDuplicates(runningSinces) === false && validateRunningSinces(runningSinces))
         indexKey = false;
       service.nodes.map(function(node,index) {
         if(indexKey)

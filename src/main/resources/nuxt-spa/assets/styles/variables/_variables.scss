@@ -1,14 +1,18 @@
 $color--success: #45DEA6;
+$color--normal: #FFD524;
+$color--warning: #ffac30;
+$color--danger: #ff4530;
+
 $color--healthy: #45DEA6;
 $color--unhealthy:#ff4530;
-$color--warning: #ffac30;
-$color--normal: #FFD524;
-$color--danger: #ff4530;
+
 $color--background: #232A3D;
-$color--background-lighter: lighten( $color--background, 10% );
-$color--background-darker: darken( $color--background, 10% );
+$color--background-lighter: lighten($color--background, 10% );
+$color--background-darker: darken($color--background, 10% );
+
 $color--description:#D0D0D0;
 $color--description-lighter: lighten($color--description, 10%);
+
 $color--node-title:white;
 $color--service-title:white;
 
