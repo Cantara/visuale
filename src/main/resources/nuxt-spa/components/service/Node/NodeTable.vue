@@ -5,7 +5,7 @@
             <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>
             <td @click="nodeClicked(node)">{{title(node) | truncateText(15)}}</td>
             <td @click="nodeClicked(node)"><NodeHealthStatus v-bind:healthy="node.is_healthy"/></td>
-            <td @click="nodeClicked(node)">{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(15)}}</td>
+            <td @click="nodeClicked(node)"><NodeVersion :health="node.health[0]"/></td>
             <td @click="nodeClicked(node)"><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
           </tr>
       </template>
@@ -24,6 +24,7 @@
   import NodeUptime from "./NodeUptime";
   import Modal from "../../Modal";
   import NodeHealthStatus from "./NodeHealthStatus";
+  import NodeVersion from "./NodeVersion";
     export default {
         name: "NodeList",
       components:{
@@ -32,7 +33,8 @@
         NodeDetailedInfo,
         NodeTrafficLight,
         NodeUptime,
-        NodeHealthStatus
+        NodeHealthStatus,
+        NodeVersion
       },
       data() {
         return {

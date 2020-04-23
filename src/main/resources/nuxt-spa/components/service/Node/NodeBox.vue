@@ -6,7 +6,7 @@
     <template v-slot:content>
       <ul>
         <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/></li>
-        <li><span class="description">Ver: </span>{{(node.health[0].hasOwnProperty('version') ? node.health[0].version : 'missing')| truncateText(13)}}</li>
+        <li><span class="description">Ver: </span><NodeVersion :health="node.health[0]"/></li>
         <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
       </ul>
     </template>
@@ -25,6 +25,7 @@
   import Modal from "../../Modal";
   import NodeDetailedInfo from "./NodeDetailedInfo";
   import NodeHealthStatus from "./NodeHealthStatus";
+  import NodeVersion from "./NodeVersion";
   export default {
     name: "Node",
     components:{
@@ -33,7 +34,8 @@
       Modal,
       NodeDetailedInfo,
       NodeBoxElement: NodeBoxElement,
-      NodeHealthStatus
+      NodeHealthStatus,
+      NodeVersion
     },
     data() {
       return {
