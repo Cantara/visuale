@@ -4,12 +4,14 @@
 
 <script>
   import { faGasPump } from '@fortawesome/free-solid-svg-icons'
+  import {isNullOrUndefined} from "../../../utils/typeUtils";
+
   export default {
     name: "NodeUptime",
     props: {
       health: {
         required: true,
-        type: Object
+        type: Object | undefined
       },
       shorten: {
         required:false,
@@ -29,6 +31,8 @@
         return faGasPump;
       },
       getRunningSince() {
+        if(isNullOrUndefined(this.health))
+          return 'missing';
         if(!this.health.hasOwnProperty('running since'))
           return 'missing';
         if(this.minutesSince < 60)

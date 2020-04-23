@@ -3,12 +3,14 @@
 </template>
 
 <script>
-    export default {
+ import {isNullOrUndefined} from "../../../utils/typeUtils";
+
+ export default {
         name: "NodeVersion",
       props: {
           health: {
             required:true,
-            type: Object
+            type: Object | undefined
           },
         textLength: {
             required:true,
@@ -17,6 +19,8 @@
       },
       computed: {
           getVersion(){
+            if(isNullOrUndefined(this.health))
+              return 'missing';
             return this.health.hasOwnProperty('version') ? this.health.version : 'missing';
           }
       }
