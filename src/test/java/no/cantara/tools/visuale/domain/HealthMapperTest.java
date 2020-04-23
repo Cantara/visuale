@@ -13,13 +13,25 @@ class HealthMapperTest {
     public void testHealthMapper() throws Exception {
         Health health = HealthMapper.fromRealWorldJson(quadimhealth);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
         health = HealthMapper.fromRealWorldJson(whydahHealth);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
-        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
         health = HealthMapper.fromRealWorldJson(whydahTest2);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(uawa);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(crm);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(whydahSTS3);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
@@ -96,4 +108,334 @@ class HealthMapperTest {
             " \"running since\":\"2020-04-06T06:27:04.667815Z\",\n" +
             " \"Database Backend\":\"jdbc:h2:mem:testdb\",\n" +
             " \"Measurement count\":\"4\"}";
+
+    String whydahSTS3 = "{\n" +
+            "  \"Status\": \"OK\",\n" +
+            "  \"Version\": \"2.5.38-SNAPSHOT [Whydah-SecurityTokenService ]\",\n" +
+            "  \"DEFCON\": \"DEFCON5\",\n" +
+            "  \"max application session time (s)\": \"120\",\n" +
+            "  \"max user session extension time (s)\": \"15552000\",\n" +
+            "  \"ClusterSize\": \"1\",\n" +
+            "  \"UserLastSeenMapSize\": \"0\",\n" +
+            "  \"UserPinMapSize\": \"0\",\n" +
+            "  \"AuthenticatedUserTokenMapSize\": \"0\",\n" +
+            "  \"AuthenticatedApplicationRepositoryMapSize\": \"7\",\n" +
+            "  \"AuthenticatedApplicationKeyMapSize\": \"7\",\n" +
+            "  \"ConfiguredApplications\":  \"15\",\n" +
+            "  \"ActiveApplications\": {\n" +
+            "  \"Whydah-CRMService-1[2311]\" : 2,\n" +
+            "  \"Whydah-UserIdentityBackend[2210]\" : 1,\n" +
+            "  \"Whydah-SecurityTokenService[2211]\" : 1,\n" +
+            "  \"Whydah-SSOLoginWebApp-1[2215]\" : 1,\n" +
+            "  \"Whydah-UserAdminService-1[2212]\" : 1,\n" +
+            "  \"Whydah-UserAdminWebApp-1[2219]\" : 1\n" +
+            "},\n" +
+            "  \"ThreatSignalMapSize\": \"20\",\n" +
+            "  \"now\": \"2020-04-23T05:21:25.248Z\",\n" +
+            "  \"running since\": \"2020-04-23T01:02:08.668Z\",  \n" +
+            "\n" +
+            "\"threat_signals\" :   {\n" +
+            "    \"2020-04-23T04:52:37.371Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:52:37.324Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"38*6*1*04d02dffd0937*795ee91936d\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:52:37.394Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:52:37.324Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"38*6*1*04d02dffd0937*795ee91936d\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:53:33.837Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:53:33.819Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"66959e*e2923*f5f1*0952299396*4d3\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:53:33.860Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:53:33.836Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"66959e*e2923*f5f1*0952299396*4d3\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:55:02.440Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:55:02.426Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"6e9d24**4*69d4*889230e5*7e20**45\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:55:02.470Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:55:02.459Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"6e9d24**4*69d4*889230e5*7e20**45\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:58:09.540Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:58:09.521Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"*e259d53d*69257d3641690**89*47*f\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T04:58:09.557Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T04:58:09.534Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"*e259d53d*69257d3641690**89*47*f\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:00:07.157Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:00:07.143Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"299e4***59*90f9f8906871649f4095*\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:00:07.176Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:00:07.153Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"299e4***59*90f9f8906871649f4095*\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:06:55.961Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:06:55.948Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"748e6e2ed9515*8481*07e**33223941\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:06:55.992Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:06:55.974Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"748e6e2ed9515*8481*07e**33223941\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:14:14.290Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:14:14.277Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"*f*404*1e58*0*f31d7*680998808374\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:14:14.315Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:14:14.298Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"*f*404*1e58*0*f31d7*680998808374\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:14:25.057Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:14:25.051Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"f9*f1*95633686dd480e336*8ed*124*\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:14:25.078Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:14:25.065Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"f9*f1*95633686dd480e336*8ed*124*\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:17:04.595Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:17:04.584Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"dd08f39ff282780*08*50*23dd2ef829\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:17:04.620Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:17:04.592Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"dd08f39ff282780*08*50*23dd2ef829\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:20:12.037Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:20:12.008Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"799d778*1d*d4e76*e134814334288f7\"\n" +
+            "    },\n" +
+            "    \"2020-04-23T05:20:12.056Z\" : {\n" +
+            "      \"source\" : \"\",\n" +
+            "      \"signal-emitter\" : \"**6df*4e62fe*88e2191d0*0e96*0**1 - 2212:Whyd*h-UserAdminServi*e-1\",\n" +
+            "      \"instant\" : \"2020-04-23T05:20:12.020Z\",\n" +
+            "      \"signal-severity\" : \"LOW\",\n" +
+            "      \"text\" : \"Application authentication failure\",\n" +
+            "      \"usertokenid\" : \"N/A\",\n" +
+            "      \"EMITTER IP\" : \"172.31.44.117  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.117  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "      \"IMMEDIATE THREAT\" : true,\n" +
+            "      \"appName\" : \"NULL\",\n" +
+            "      \"appId\" : \"2311\",\n" +
+            "      \"DEFCON\" : \"DEFCON5\",\n" +
+            "      \"apptokenid\" : \"799d778*1d*d4e76*e134814334288f7\"\n" +
+            "    }\n" +
+            "  }}\n";
+
+    private String uawa = "{\n" +
+            "  \"Status\": \"OK\",\n" +
+            "  \"Version\": \"2.5.38-SNAPSHOT [Whydah-UserAdminWebApp-1 - 172.31.44.17  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.17  0:0:0:0:0:0:0:1%lo  127.0.0.1]\",\n" +
+            "  \"DEFCON\": \"DEFCON5\",\n" +
+            "  \"STS\": \"https://entrasso-devtest.entraos.io/tokenservice/\",\n" +
+            "  \"UAS\": \"https://entrasso-devtest.entraos.io/useradminservice/\",\n" +
+            "  \"hasApplicationToken\": \"true\",\n" +
+            "  \"hasValidApplicationToken\": \"true\",\n" +
+            "  \"hasApplicationsMetadata\": \"true\",\n" +
+            "  \"now\": \"2020-04-22T21:21:23.735Z\",\n" +
+            "  \"running since\": \"2020-04-22T21:12:04.131Z\"}\n";
+
+    private String crm = "{\n" +
+            "  \"Status\": \"OK\",\n" +
+            "  \"Version\": \"2.5.38-SNAPSHOT [reporterClient started - 172.31.44.11  fe80:0:0:0:426:baff:fe61:cea4%eth0  172.31.44.11  0:0:0:0:0:0:0:1%lo  127.0.0.1]\",\n" +
+            "  \"DEFCON\": \"DEFCON5\",\n" +
+            "  \"hasApplicationToken\": \"true\",\n" +
+            "  \"hasValidApplicationToken\": \"true\",\n" +
+            "  \"hasApplicationsMetadata\": \"false\",\n" +
+            "  \"now\": \"2020-04-23T05:07:40.973Z\",\n" +
+            "  \"running since\": \"2020-04-23T05:06:53.319Z\"}\n";
 }

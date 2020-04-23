@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +26,7 @@ public class HealthMapper {
         try {
             health = mapper.readValue(json, Health.class);
         } catch (Exception e) {
-            //log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
+            log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
         }
 
 
@@ -38,7 +39,7 @@ public class HealthMapper {
                 Health myHealth = mycustommapper.readValue(json, Health.class);
                 return myHealth;
             } catch (Exception e) {
-                // log.error("Unable to custom deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
+                log.error("Unable to custom deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
             }
         }
 
