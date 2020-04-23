@@ -6,7 +6,7 @@
     <template v-slot:content>
       <ul>
         <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/></li>
-        <li><span class="description">Ver: </span><NodeVersion :health="node.health[0]"/></li>
+        <li><span class="description">Ver: </span><NodeVersion v-bind:text-length="13" :health="node.health[0]"/></li>
         <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
       </ul>
     </template>

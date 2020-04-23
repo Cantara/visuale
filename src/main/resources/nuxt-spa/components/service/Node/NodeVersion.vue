@@ -1,5 +1,5 @@
 <template>
-<span>{{getVersion| truncateText(15)}}</span>
+<span>{{getVersion| truncateText(textLength)}}</span>
 </template>
 
 <script>
@@ -9,7 +9,11 @@
           health: {
             required:true,
             type: Object
-          }
+          },
+        textLength: {
+            required:true,
+            type: Number
+        }
       },
       computed: {
           getVersion(){
