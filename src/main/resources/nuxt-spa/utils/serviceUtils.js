@@ -6,16 +6,21 @@
      return (serviceA < serviceB) ? -1 : (serviceA > serviceB) ? 1 : 0;
    });
   }
-  function validateRunningSinces(arrayResults){
-    for (var i = 0, l = arrayResults.length; i < l; i++) {
 
-      if (typeof(arrayResults[i])==='undefined' || arrayResults[i].length ===0){
-       return false;
-      }
-    }
-    return true;
-  }
   export function addUniqueKeyToNodes(services){
+    function hasDuplicates(array) {
+      return (new Set(array)).size !== array.length;
+    }
+    function validateRunningSinces(arrayResults){
+      for (var i = 0, l = arrayResults.length; i < l; i++) {
+
+        if (typeof(arrayResults[i])==='undefined' || arrayResults[i].length ===0){
+          return false;
+        }
+      }
+      return true;
+    }
+
     let i = 0, len = services.length;
     for (; i < len; i++) {
       let service = services[i];
@@ -35,6 +40,3 @@
     }
 
   }
- function hasDuplicates(array) {
-   return (new Set(array)).size !== array.length;
- }

@@ -24,7 +24,7 @@ export const getters = {
       return {services:[]};
     const service = _.cloneDeep(state.services);
     sortServices(service.services);
-    addUniqueKeyToNodes(service.services);
+    //addUniqueKeyToNodes(service.services);
     return service;
   },
   connectionFailed(state){
