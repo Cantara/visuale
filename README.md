@@ -15,11 +15,6 @@
 
 
 
-
-
-7:59
-d) er vel visuell synliggjøring av HA status
-
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
 ##### Legend
