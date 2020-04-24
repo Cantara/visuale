@@ -61,7 +61,7 @@ td,th {
 }
   td {
     padding: 0.2em;
-    border: 1px solid #ddd;
+    border: 1px solid $color--border;
     font-weight:400;
     color:white!important;
   }

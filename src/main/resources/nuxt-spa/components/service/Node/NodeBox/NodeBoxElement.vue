@@ -30,9 +30,10 @@
 
 
   .node-block {
-    border: 1px solid white;
+    border: 1px solid $color--border;
     border-radius: 10px;
   }
+
 
   .marker {
     padding: 0;

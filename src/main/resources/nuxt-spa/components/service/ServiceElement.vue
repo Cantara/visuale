@@ -65,7 +65,7 @@
 
   .service-block {
     margin: 0.35em;
-    border: 1px solid white;
+    border: 1px solid $color--border;
     width:22.1rem;
   }
 
