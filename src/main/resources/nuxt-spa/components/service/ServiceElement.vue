@@ -80,8 +80,8 @@
   .title {
     background: $color--background none repeat scroll 0 0;
     display: flex;
-    padding: 0 0.6em;
-    margin: 0 0.6em;
+    padding: 0 0.35em;
+    margin: 0 0.75em;
     float: left;
     color: white;
     line-height: 1rem;
@@ -90,5 +90,6 @@
   .title > span {
     padding: 0 0 0 0.35em;
     color:$color--service-title;
+    line-height: 0.9rem;
   }
 </style>

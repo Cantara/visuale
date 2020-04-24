@@ -45,8 +45,8 @@
   .title {
     background: $color--background none repeat scroll 0 0;
     display: flex;
-    padding: 0 0.6em;
-    margin: 0 0.6em;
+    padding: 0 0.35em;
+    margin: 0 0.75em;
     color: white;
     line-height: 1rem;
     float: left;
