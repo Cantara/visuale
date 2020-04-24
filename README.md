@@ -6,6 +6,20 @@
 
 - A real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
 
+### Key unique selling points
+
+* live and transparent reporting of the version of the service for each node for continous deployment solutions
+* live insight into what services and nodes which are running in an environment
+* live proactive visualisation of services and nodes which are due for security patching
+* live visualization of the high availability(HA)/resilience status of the services
+
+
+
+
+
+7:59
+d) er vel visuell synliggjøring av HA status
+
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
 ##### Legend
