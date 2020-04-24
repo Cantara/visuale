@@ -69,6 +69,10 @@ more ./local_config.properties
 ```
 server.port=9292
 #  default server.port=8080
+server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003  
+#  if you add this property, you have to add 
+#     ?accessToken=8fce7434-8654-11ea-bc55-0242ac130003 to the URL to se the dashboard 
+# Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
 
