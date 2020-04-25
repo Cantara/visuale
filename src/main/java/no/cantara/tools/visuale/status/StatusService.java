@@ -91,7 +91,7 @@ public class StatusService {
         }
     }
 
-    public boolean updateEnvironment(String envName, String serviceName, String nodeName, Health health) {
+    public boolean updateEnvironment(String envName, String serviceName, String serviceTag, String serviveType, String nodeName, Health health) {
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
@@ -120,7 +120,9 @@ public class StatusService {
             }
             if (!foundService) {
                 Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
+                no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
+                        .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviveType)
+                        .withNode(node);
                 environment.addService(service);
                 updateEnvironmentAsString();
             }

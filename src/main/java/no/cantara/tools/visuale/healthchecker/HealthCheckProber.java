@@ -96,7 +96,7 @@ public class HealthCheckProber {
                     Health health = HealthMapper.fromRealWorldJson(json);
                     String service = environmentPathMap.get(u).getServiceName();
                     String node = environmentPathMap.get(u).getNodeName();
-                    statusService.updateEnvironment("env", service, node, health);
+                    statusService.updateEnvironment("env", service, "", "", node, health);
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now

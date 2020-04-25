@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.util.*;
 
+import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
-        "tag",
+        "service_tag",
         "service_type",
         "healthy_nodes",
         "need_codebase_chores",
@@ -18,8 +20,8 @@ public class Service {
 
     @JsonProperty("name")
     private String name;
-    @JsonProperty("tag")
-    private String tag = "";
+    @JsonProperty("service_tag")
+    private String serviceTag = "";
     @JsonProperty("service_type")
     private String serviceType = "";
     @JsonProperty("nodes")
@@ -108,18 +110,22 @@ public class Service {
         return this;
     }
 
-    public String getTag() {
-        return tag;
+    @JsonProperty("service_tag")
+    public String getServiceTag() {
+        return serviceTag;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    @JsonProperty("service_tag")
+    public void setServiceTag(String serviceTag) {
+        this.serviceTag = serviceTag;
     }
 
+    @JsonProperty("service_type")
     public String getServiceType() {
         return serviceType;
     }
 
+    @JsonProperty("service_type")
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
@@ -141,11 +147,25 @@ public class Service {
     public String toString() {
         return "Service{" +
                 "name='" + name + '\'' +
-                "tag='" + tag + '\'' +
+                "serviceTag='" + serviceTag + '\'' +
                 "serviceType='" + serviceType + '\'' +
                 ", nodes=" + getNodes() +
                 ", additionalProperties=" + additionalProperties +
                 '}';
+    }
+
+    public Service withServiceTag(String serviceTag) {
+        if (hasValue(serviceTag)) {
+            this.serviceTag = serviceTag;
+        }
+        return this;
+    }
+
+    public Service withServiceType(String serviceType) {
+        if (hasValue(serviceType)) {
+            this.serviceType = serviceType;
+        }
+        return this;
     }
 
     public class MyNodeNameComp implements Comparator<Node> {

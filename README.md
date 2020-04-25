@@ -83,6 +83,11 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 # Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
+### Additional grouping and organisatio of services
+
+We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file
+or by adding query parameters to the /api/status call like ?service_type=CS&service_tag=QoS_Group_A
+ 
 
 ###### Created by:
 * Marius Årnes - https://github.com/appartiff

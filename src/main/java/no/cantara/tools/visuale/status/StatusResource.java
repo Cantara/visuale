@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class StatusResource implements Service {
@@ -93,10 +95,23 @@ public class StatusResource implements Service {
         logger.debug("updateFullHealthInfo");
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
+        Map<String, List<String>> queryMap = request.queryParams().toMap();
+        String serviceTag = "";
+        if (queryMap.get("service_tag") != null) {
+            serviceTag = queryMap.get("service_tag").get(0);
+        }
+        String sTa = serviceTag;
+        String serviceType = "";
+        if (queryMap.get("service_type") != null) {
+            serviceType = queryMap.get("service_type").get(0);
+        }
+        String sTy = serviceType;
+        // Optional<String> serviceTagO = request.queryParams().first("service_teg");
+        //Optional<String> serviceTypeO =request.queryParams().first("service_type");
         String nodeName = request.path().param("node");
 
         request.content().as(String.class)
-                .thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, nodeName))
+                .thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, sTa, sTy, nodeName))
                 .thenAccept(jo -> response.status(204).send());
     }
 
@@ -115,13 +130,13 @@ public class StatusResource implements Service {
         return null;
     }
 
-    private Health getHealthInfoFromJson(String healthJsonString, String envName, String serviceName, String nodeName) {
+    private Health getHealthInfoFromJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
         try {
             Health myHealth = null;
             if (healthJsonString != null || healthJsonString.toString().length() < 1) {
                 myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
             }
-            statusService.updateEnvironment(envName, serviceName, nodeName, myHealth);
+            statusService.updateEnvironment(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
             return myHealth;
         } catch (Exception e) {
             logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
