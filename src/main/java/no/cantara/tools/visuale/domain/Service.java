@@ -8,6 +8,8 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
+        "tag",
+        "service_type",
         "healthy_nodes",
         "need_codebase_chores",
         "nodes"
@@ -16,6 +18,10 @@ public class Service {
 
     @JsonProperty("name")
     private String name;
+    @JsonProperty("tag")
+    private String tag = "";
+    @JsonProperty("service_type")
+    private String serviceType = "";
     @JsonProperty("nodes")
     private Set<Node> nodes = null;
     @JsonIgnore
@@ -102,6 +108,22 @@ public class Service {
         return this;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,6 +141,8 @@ public class Service {
     public String toString() {
         return "Service{" +
                 "name='" + name + '\'' +
+                "tag='" + tag + '\'' +
+                "serviceType='" + serviceType + '\'' +
                 ", nodes=" + getNodes() +
                 ", additionalProperties=" + additionalProperties +
                 '}';
