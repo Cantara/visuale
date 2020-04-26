@@ -6,7 +6,9 @@
 
 - A real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
 
-### Key unique selling points
+Visuale is not meant to be a replacement for traditional system monitooring tools like Grafana, but an addition/extention for the important needs for Cintinous Deployment/Continours production of micro-service solutions including: 
+
+### Some key unique selling points (USP)
 
 * live and transparent reporting of the version of the service for each node for continous deployment solutions
 * live insight into what services and nodes which are running in an environment
