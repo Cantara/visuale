@@ -92,8 +92,8 @@ or by adding query parameters to the /api/status call like ?service_type=CS&serv
  
 
 ###### Created by:
-* Marius Årnes - https://github.com/appartiff
-* Totto - https://github.com/totto
+* Marius Årnes - https://github.com/appartiff - Lead Frontend Developer
+* Totto - https://github.com/totto - Grunt
       
 # Some initial key targets for the project
 
