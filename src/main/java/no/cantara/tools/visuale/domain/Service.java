@@ -23,7 +23,7 @@ public class Service {
     @JsonProperty("service_tag")
     private String serviceTag = "";
     @JsonProperty("service_type")
-    private String serviceType = "";
+    private ServiceType serviceType = new ServiceType().withServiceCategory(ServiceType.ServiceCategorization.CS);
     @JsonProperty("nodes")
     private Set<Node> nodes = null;
     @JsonIgnore
@@ -122,12 +122,12 @@ public class Service {
 
     @JsonProperty("service_type")
     public String getServiceType() {
-        return serviceType;
+        return serviceType.getServiceType();
     }
 
     @JsonProperty("service_type")
     public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
+        this.serviceType.setServiceType(serviceType);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class Service {
 
     public Service withServiceType(String serviceType) {
         if (hasValue(serviceType)) {
-            this.serviceType = serviceType;
+            this.serviceType.setServiceType(serviceType);
         }
         return this;
     }
