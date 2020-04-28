@@ -23,6 +23,10 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
 //        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+        health = HealthMapper.fromRealWorldJson(mapi);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
         health = HealthMapper.fromRealWorldJson(uawa);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
 //        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -438,4 +442,6 @@ class HealthMapperTest {
             "  \"hasApplicationsMetadata\": \"false\",\n" +
             "  \"now\": \"2020-04-23T05:07:40.973Z\",\n" +
             "  \"running since\": \"2020-04-23T05:06:53.319Z\"}\n";
+
+    private String mapi = "{\"Status\":\"true\",\"name\":\"menu-api\",\"ip\":\"172.31.42.94\",\"version\":\"1.0-SNAPSHOT\",\"now\":\"2020-04-28T08:45:19.568010Z\",\"running since\":\"2020-04-28T08:40:04.069113Z\",\"integrations\":[{\"name\":\"preorder-menu\",\"provider\":\"Retail Solution\",\"isMocked\":true}]}";
 }

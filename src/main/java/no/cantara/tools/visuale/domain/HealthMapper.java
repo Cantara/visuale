@@ -25,6 +25,8 @@ public class HealthMapper {
         Health health = new Health();
         try {
             health = mapper.readValue(json, Health.class);
+            health.setOriginalHealth(json);
+
         } catch (Exception e) {
             log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
         }
@@ -37,6 +39,7 @@ public class HealthMapper {
                 module.addDeserializer(Health.class, new HealthDeserializer());
                 mycustommapper.registerModule(module);
                 Health myHealth = mycustommapper.readValue(json, Health.class);
+                myHealth.setOriginalHealth(json);
                 return myHealth;
             } catch (Exception e) {
                 log.error("Unable to custom deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
