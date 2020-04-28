@@ -105,13 +105,20 @@ public class StatusService {
                     foundService = true;
                     for (Node node : nodeSet) {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
-                            foundNode = true;
-                            node.addHealth(health);
-                            if (hasValue(health.getIp())) {
-                                node.setIp(health.getIp());
-                            }
-                            if (hasValue(health.getVersion())) {
-                                node.setVersion(health.getVersion());
+                            if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
+                                Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                service.addNode(addnode);
+                                updateEnvironmentAsString();
+
+                            } else {
+                                foundNode = true;
+                                node.addHealth(health);
+                                if (hasValue(health.getIp())) {
+                                    node.setIp(health.getIp());
+                                }
+                                if (hasValue(health.getVersion())) {
+                                    node.setVersion(health.getVersion());
+                                }
                             }
                             updateEnvironmentAsString();
                         }

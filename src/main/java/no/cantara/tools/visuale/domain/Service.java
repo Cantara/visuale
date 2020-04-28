@@ -88,10 +88,7 @@ public class Service {
     }
 
     public Service withNode(Node node) {
-        if (this.nodes == null) {
-            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
-        }
-        this.nodes.add(node);
+       addNode(node);
         return this;
     }
 
@@ -168,14 +165,27 @@ public class Service {
         return this;
     }
 
+    public void addNode(Node addnode) {
+        if (this.nodes == null) {
+            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+        }
+        this.nodes.add(addnode);
+    }
+
     public class MyNodeNameComp implements Comparator<Node> {
 
         @Override
         public int compare(Node e1, Node e2) {
             if (e1.getName() != null && e2.getName() != null) {
+                if (e1.getIp() != null && e2.getIp() != null) {
+                    return e1.getIp().compareTo(e2.getIp());
+                }
                 return e1.getName().compareTo(e2.getName());
             }
             if (e1.getIp() != null && e2.getIp() != null) {
+                if (e1.getName() != null && e2.getName() != null) {
+                    return e1.getName().compareTo(e2.getName());
+                }
                 return e1.getIp().compareTo(e2.getIp());
             }
             return 1;
