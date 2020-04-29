@@ -107,33 +107,37 @@ public class StatusService {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
                             Health latest = node.getLatestHealth();
                             if (latest == null) {
-                                if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
-                                    node.addHealth(health);
-                                    updateEnvironmentAsString();
-                                    return true;
-                                } else {
-                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                                    service.addNode(addnode);
-                                    updateEnvironmentAsString();
-                                    return true;
+                                Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                if (hasValue(health.getIp())) {
+                                    addnode.setIp(health.getIp());
                                 }
+                                if (hasValue(health.getVersion())) {
+                                    addnode.setVersion(health.getVersion());
+                                }
+                                service.addNode(addnode);
+                                updateEnvironmentAsString();
+                                return true;
+                            } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
+                                node.addHealth(health);
+                                updateEnvironmentAsString();
+                                return true;
+                            }
 //                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 //                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 
-                            } else {
-                                foundNode = true;
-                                node.addHealth(health);
-                                if (hasValue(health.getIp())) {
-                                    node.setIp(health.getIp());
-                                }
-                                if (hasValue(health.getVersion())) {
-                                    node.setVersion(health.getVersion());
-                                }
+                            foundNode = true;
+                            node.addHealth(health);
+                            if (hasValue(health.getIp())) {
+                                node.setIp(health.getIp());
+                            }
+                            if (hasValue(health.getVersion())) {
+                                node.setVersion(health.getVersion());
                             }
                             updateEnvironmentAsString();
                             return true;
                         }
                     }
+
                 }
             }
             if (!foundService) {
@@ -149,7 +153,7 @@ public class StatusService {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
                         Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                        service.withNode(node);
+                        service.addNode(node);
                         updateEnvironmentAsString();
                     }
                 }
