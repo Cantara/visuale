@@ -63,7 +63,6 @@
       }
     },
     mounted: function () {
-      this.runningSince = this.health['running since'];
       this.startTimer();
     },
     watch: {
@@ -71,7 +70,8 @@
         handler() {
           this.runningSince = this.health['running since'];
         },
-        deep: true
+        deep: true,
+        immediate:true
       }
     },
     beforeDestroy () {
