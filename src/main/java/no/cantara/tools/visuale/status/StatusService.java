@@ -143,6 +143,7 @@ public class StatusService {
                         .withNode(node);
                 environment.addService(service);
                 updateEnvironmentAsString();
+                return true;
             }
             if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {

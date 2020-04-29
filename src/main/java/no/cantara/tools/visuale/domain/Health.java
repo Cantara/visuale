@@ -55,7 +55,7 @@ public class Health {
         if (version == null) {
             version = "";
         }
-        String key = name.trim() + "+" + version + ":" + ip.trim();
+        String key = name.trim() + "+" + version + ":" + ip.trim() + "-" + runningSince;
         return key;
     }
 
