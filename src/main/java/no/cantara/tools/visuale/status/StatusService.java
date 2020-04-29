@@ -106,12 +106,19 @@ public class StatusService {
                     for (Node node : nodeSet) {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
                             Health latest = node.getLatestHealth();
-                            if (latest == null || !latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
-//                            if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
+                            if (latest == null) {
+                                if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
+                                    node.addHealth(health);
+                                    updateEnvironmentAsString();
+                                    return true;
+                                } else {
+                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                    service.addNode(addnode);
+                                    updateEnvironmentAsString();
+                                    return true;
+                                }
+//                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 //                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
-                                Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                                service.addNode(addnode);
-                                updateEnvironmentAsString();
 
                             } else {
                                 foundNode = true;
@@ -124,6 +131,7 @@ public class StatusService {
                                 }
                             }
                             updateEnvironmentAsString();
+                            return true;
                         }
                     }
                 }

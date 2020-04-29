@@ -29,6 +29,7 @@ public class HealthResource implements Service {
     private boolean ok = true;
     private static Set<URI> okPollingURLs = new CopyOnWriteArraySet<>();
     private static Set<URI> failedPollingURLs = new CopyOnWriteArraySet<>();
+    private static String runningSince;
 
     /**
      * A service registers itself by updating the routine rules.
@@ -39,6 +40,7 @@ public class HealthResource implements Service {
     public void update(Routing.Rules rules) {
         rules.get("/health", JsonBindingSupport.create(), this::showEnvironment)
                 .get("/api/health", JsonBindingSupport.create(), this::showEnvironment);
+        runningSince = getRunningSince();
     }
 
 
@@ -63,7 +65,7 @@ public class HealthResource implements Service {
                 "  \"okPollingURLs\": \"" + Arrays.asList(okPollingURLs) + "\",\n" +
                 "  \"failedPollingURLs\": \"" + Arrays.asList(failedPollingURLs) + "\",\n" +
                 "  \"now\": \"" + Instant.now() + "\",\n" +
-                "  \"running since\": \"" + getRunningSince() + "\"\n\n" +
+                "  \"running since\": \"" + runningSince + "\"\n\n" +
 
                 "}\n";
     }
