@@ -1,5 +1,5 @@
 <template>
-  <NodeBoxElement @click="showModal = true">
+  <NodeBoxElement @click="showModal = true" :healthy_nodes="healthy_nodes">
     <template v-slot:title>
       <NodeTrafficLight :node="node"/> <span>{{title | truncateText(15)}}</span>
     </template>
@@ -55,6 +55,10 @@
       node: {
         required: true,
         type: Object
+      },
+      healthy_nodes: {
+        required:true,
+        type: Number | undefined
       }
     }
   }

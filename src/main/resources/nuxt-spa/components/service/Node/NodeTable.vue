@@ -1,5 +1,5 @@
 <template>
-    <NodeTableElement :service="service">
+    <NodeTableElement  :healthy_nodes="service.healthy_nodes">
       <template v-slot:content>
           <tr v-for="(node,index) in service.nodes" :key="index">
             <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>

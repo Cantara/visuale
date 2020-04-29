@@ -1,5 +1,5 @@
 <template>
-  <div @click="$emit('click')" class="node-block">
+  <div @click="$emit('click')" class="node-block" :class="healthy_nodes">
     <div class="marker">
       <div>
         <div class="title">
@@ -21,7 +21,18 @@
 
 <script>
   export default {
-    name: "NodeElement"
+    name: "NodeElement",
+    props:{
+      healthy_nodes: {
+        required:true,
+        type: Number | undefined
+      }
+    },
+    computed:{
+      borderStatus() {
+        return this.healthy_nodes && this.healthy_nodes === 0 ? 'border--color-danger' :''
+      }
+    }
   }
 </script>
 

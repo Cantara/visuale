@@ -27,15 +27,15 @@
 <script>
     export default {
         name: "NodeListElement",
-      props: {
-        service: {
-          type: Object,
-          required: true
+      props:{
+        healthy_nodes: {
+          required:true,
+          type: Number | undefined
         }
       },
       computed:{
         borderStatus() {
-          return this.service.healthy_nodes === 0 ? 'border--color-danger' :''
+          return this.healthy_nodes && this.healthy_nodes === 0 ? 'border--color-danger' :''
         }
       }
     }
