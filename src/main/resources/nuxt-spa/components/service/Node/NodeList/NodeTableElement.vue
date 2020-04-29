@@ -3,7 +3,7 @@
     <div class="marker">
       <div class="content">
         <table>
-          <tbody>
+          <tbody :class="borderStatus">
           <tr>
             <th></th>
             <th>Name</th>
@@ -26,7 +26,18 @@
 
 <script>
     export default {
-        name: "NodeListElement"
+        name: "NodeListElement",
+      props: {
+        service: {
+          type: Object,
+          required: true
+        }
+      },
+      computed:{
+        borderStatus() {
+          return this.service.healthy_nodes === 0 ? 'border--color-danger' :''
+        }
+      }
     }
 </script>
 
@@ -43,6 +54,10 @@
     text-align: center;
     display: flex;
     flex-direction: column;
+  }
+
+  .border--color-danger  td,.border--color-danger  th {
+    border-color: $color--danger!important;
   }
 
   .content {

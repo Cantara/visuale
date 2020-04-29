@@ -1,7 +1,7 @@
 <template>
-    <NodeTableElement>
+    <NodeTableElement :service="service">
       <template v-slot:content>
-          <tr v-for="(node,index) in nodes" :key="index">
+          <tr v-for="(node,index) in service.nodes" :key="index">
             <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>
             <td @click="nodeClicked(node)">{{title(node) | truncateText(15)}}</td>
             <td @click="nodeClicked(node)"><NodeHealthStatus v-bind:healthy="node.is_healthy"/></td>
@@ -14,7 +14,7 @@
           <NodeDetailedInfo :text="selectedNode"></NodeDetailedInfo>
         </Modal>
       </template>
-    </NodeTableElement>
+    </NodeTableElement >
 </template>
 
 <script>
@@ -60,9 +60,9 @@
         }
       },
       props: {
-        nodes: {
+        service: {
           required: true,
-          type: Array
+          type: Object
         }
       }
     }
