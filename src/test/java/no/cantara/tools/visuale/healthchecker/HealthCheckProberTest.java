@@ -13,7 +13,7 @@ class HealthCheckProberTest {
     @Test
     public void testHealthCheckProber() {
         StatusService s = new StatusService();
-        HealthCheckProber p = new HealthCheckProber(s);
+        HealthCheckProber p = new HealthCheckProber(s, null);
         p.checkHealth();
         System.out.println("OK healthchecks:" + p.getOkHealthCheckMapSize());
         System.out.println("Error healthchecks:" + p.getErroredHealthCheckMapSize());

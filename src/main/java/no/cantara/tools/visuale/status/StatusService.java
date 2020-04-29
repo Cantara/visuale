@@ -9,9 +9,10 @@ import no.cantara.tools.visuale.domain.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.json.Json;
-import javax.json.JsonBuilderFactory;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
@@ -19,7 +20,6 @@ import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
 public class StatusService {
 
-    private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
     public static ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
 
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
