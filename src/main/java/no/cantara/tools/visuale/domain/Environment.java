@@ -15,7 +15,7 @@ public class Environment {
     @JsonProperty("name")
     private String name;
     @JsonProperty("services")
-    private Set<Service> services = new TreeSet<Service>(new MyServiceNameComp());
+    private Set<Service> services = new HashSet<>(); //new TreeSet<Service>(new MyServiceNameComp());
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -47,7 +47,15 @@ public class Environment {
 
     public void addService(Service service) {
         if (this.services == null) {
-            this.services = new TreeSet<Service>(new MyServiceNameComp());
+            this.services = new HashSet<>();
+//            this.services = new TreeSet<Service>(new MyServiceNameComp());
+        }
+        for (Service existingservice : services) {
+            if (existingservice.getName().equalsIgnoreCase(service.getName())) {
+                for (Node node : service.getNodes()) {
+                    existingservice.addNode(node);
+                }
+            }
         }
         this.services.add(service);
     }

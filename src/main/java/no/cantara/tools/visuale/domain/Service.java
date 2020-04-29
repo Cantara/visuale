@@ -167,7 +167,8 @@ public class Service {
 
     public void addNode(Node addnode) {
         if (this.nodes == null) {
-            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+            this.nodes = new HashSet<>();
+//            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
         }
         this.nodes.add(addnode);
     }
