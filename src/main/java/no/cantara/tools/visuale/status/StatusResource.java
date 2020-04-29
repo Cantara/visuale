@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.json.JsonObject;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class StatusResource implements Service {
@@ -93,20 +95,20 @@ public class StatusResource implements Service {
         logger.debug("updateFullHealthInfo");
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
-//        Map<String, List<String>> queryMap = request.queryParams().toMap();
-//        String serviceTag = "";
-//        if (queryMap.get("service_tag") != null) {
-//            serviceTag = queryMap.get("service_tag").get(0);
-//        }
-//        String sTa = serviceTag;
-//        String serviceType = "";
-//        if (queryMap.get("service_type") != null) {
-//            serviceType = queryMap.get("service_type").get(0);
-//        }
-//        String sTy = serviceType;
+        Map<String, List<String>> queryMap = request.queryParams().toMap();
+        String serviceTag = "";
+        if (queryMap.get("service_tag") != null) {
+            serviceTag = queryMap.get("service_tag").get(0);
+        }
+        String sTa = serviceTag;
+        String serviceType = "";
+        if (queryMap.get("service_type") != null) {
+            serviceType = queryMap.get("service_type").get(0);
+        }
+        String sTy = serviceType;
         String nodeName = request.path().param("node");
-        String sTa = "";
-        String sTy = "";
+//        String sTa = "";
+//        String sTy = "";
 
         request.content().as(String.class)
                 .thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, sTa, sTy, nodeName))
