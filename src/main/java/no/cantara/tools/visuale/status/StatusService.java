@@ -106,7 +106,7 @@ public class StatusService {
                     for (Node node : nodeSet) {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
                             Health latest = node.getLatestHealth();
-                            if (latest != null && !latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
+                            if (latest == null || !latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
 //                            if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 //                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
                                 Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
