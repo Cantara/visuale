@@ -71,11 +71,13 @@ public final class Main {
 
         if (usingMockEnvironment) {
             statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
+            startHealthReportSimulator(statusResource.getStatusService(), null);
+
         } else {
             EnvironmentConfig environmentConfig = new EnvironmentConfig();
             statusResource.getStatusService().initializeEnvironment(environmentConfig.getEnvironment());
+            startHealthReportSimulator(statusResource.getStatusService(), environmentConfig);
         }
-        startHealthReportSimulator(statusResource.getStatusService());
 
 
         HealthResource healthResource = new HealthResource();
@@ -130,8 +132,8 @@ public final class Main {
         }
     }
 
-    private static void startHealthReportSimulator(StatusService statusService) {
-        HealthCheckProber prober = new HealthCheckProber(statusService);
+    private static void startHealthReportSimulator(StatusService statusService, EnvironmentConfig environmentConfig) {
+        HealthCheckProber prober = new HealthCheckProber(statusService, environmentConfig);
         prober.startScheduler();
     }
 

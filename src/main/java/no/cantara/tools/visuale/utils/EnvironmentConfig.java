@@ -21,6 +21,7 @@ public class EnvironmentConfig {
     public static final Logger logger = LoggerFactory.getLogger(EnvironmentConfig.class);
     private static ObjectMapper mapper = new ObjectMapper();
     private boolean exists = false;
+    private ConfEnv confEnv;
     private String environmentName = "";
     private Environment environment;
     private String environmentAsString;
@@ -33,6 +34,7 @@ public class EnvironmentConfig {
             if (readEnvironment != null) {
                 try {
                     setUpEnvironment(readEnvironment);
+                    confEnv = readEnvironment;
                     exists = true;
                 } catch (Exception e) {
                     exists = false;
@@ -87,6 +89,10 @@ public class EnvironmentConfig {
 
     public Environment getEnvironment() {
         return environment;
+    }
+
+    public ConfEnv getConfEnv() {
+        return confEnv;
     }
 
     public Set<Service> getServices() {

@@ -246,12 +246,13 @@ public class Node {
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
         return Objects.equals(name, node.name) &&
-                Objects.equals(ip, node.ip);
+                Objects.equals(ip, node.ip) &&
+                Objects.equals(version, node.version);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, ip);
+        return Objects.hash(name, ip, version);
     }
 
     @Override

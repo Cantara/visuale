@@ -167,7 +167,7 @@ public class Service {
 
     public void addNode(Node addnode) {
         if (this.nodes == null) {
-//            this.nodes = new HashSet<>();
+//            this.nodes = new TreeSet<>();
             this.nodes = new TreeSet<Node>(new MyNodeNameComp());
         }
         this.nodes.add(addnode);
@@ -179,7 +179,7 @@ public class Service {
         public int compare(Node e1, Node e2) {
             if (e1.getName() != null && e2.getName() != null) {
                 if (e1.getIp() != null && e2.getIp() != null) {
-                    return e1.getIp().compareTo(e2.getIp());
+                    return e1.getIp().compareTo(e2.getIp()) + e1.getName().compareTo(e2.getName());
                 }
                 return e1.getName().compareTo(e2.getName());
             }

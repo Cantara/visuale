@@ -36,9 +36,9 @@ public class HealthCheckProber {
         return badHealthCheckURLSet.size();
     }
 
-    public HealthCheckProber(StatusService statusService) {
+    public HealthCheckProber(StatusService statusService, EnvironmentConfig environmentConfig) {
         this.statusService = statusService;
-        readConfig();
+        readConfig(environmentConfig);
         HealthResource.setOkPollingURLs(healthCheckURLSet);
         HealthResource.setFailedPollingURLs(badHealthCheckURLSet);
 
@@ -57,18 +57,21 @@ public class HealthCheckProber {
 
     }
 
-    private void readConfig() {
-        ConfEnv confEnv = new ConfEnv();
-        for (ConfNode s : confEnv.getNodes()) {
-            try {
-                URI pollingURI = URI.create(s.getHealthUrl());
-                environmentPathMap.put(pollingURI, s);
-                healthCheckURLSet.add(pollingURI);
-            } catch (Exception e) {
-                logger.warn("Found illegal URL in config: ", e);
+    private void readConfig(EnvironmentConfig environmentConfig) {
+        if (environmentConfig != null) {
+            ConfEnv confEnv = environmentConfig.getConfEnv();
+            for (ConfNode s : confEnv.getNodes()) {
+                try {
+                    URI pollingURI = URI.create(s.getHealthUrl());
+                    environmentPathMap.put(pollingURI, s);
+                    healthCheckURLSet.add(pollingURI);
+                } catch (Exception e) {
+                    logger.warn("Found illegal URL in config: ", e);
+                }
             }
+        } else {
+            environmentConfig = new EnvironmentConfig();
         }
-        EnvironmentConfig environmentConfig = new EnvironmentConfig();
 
         if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironmentAsString().length() < 40) {
 
