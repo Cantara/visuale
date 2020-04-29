@@ -51,7 +51,7 @@ public class HealthCheckProber {
                 checkHealth();
             };
             // init Delay = 5, repeat the task every 60 second
-            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 15, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
 
         }
 
@@ -100,14 +100,14 @@ public class HealthCheckProber {
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now
-                    healthCheckURLSet.remove(u);
-                    badHealthCheckURLSet.add(u);
+//                    healthCheckURLSet.remove(u);
+//                    badHealthCheckURLSet.add(u);
                 }
             } catch (Exception e) {
                 logger.error("==> Unable to parse json from {} - exception ", u, e);
                 // We reduce noise on wrong urls by removing them right now
-                healthCheckURLSet.remove(u);
-                badHealthCheckURLSet.add(u);
+//                healthCheckURLSet.remove(u);
+//                badHealthCheckURLSet.add(u);
             }
         }
         if (badHealthCheckURLSet.size() > 1) {
