@@ -44,7 +44,7 @@ public class StatusResourceIntegrationTest {
 
             Health h = new Health().withStatus("OK").withName("test-health").withVersion("0.2.1").withIp("10.3.2.30").withNow(Instant.now().toString());
             Response r = client
-                    .target(getConnectionString("/status"))
+                    .target(getConnectionString("/status/myenv/myservice/mynode?servive_tag=mytag&service_type=ACS"))
                     .request()
                     .put(Entity.json(h));
             Assertions.assertEquals(204, r.getStatus(), "POST status code");

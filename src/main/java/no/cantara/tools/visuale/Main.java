@@ -27,7 +27,6 @@ public final class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static String applicationInstanceName = "visuale";
-    private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 2;
     private static final Instant server_started = Instant.now();
     public static String accessToken = null;
 
@@ -74,7 +73,7 @@ public final class Main {
             statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
         } else {
             EnvironmentConfig environmentConfig = new EnvironmentConfig();
-            statusResource.getStatusService().initializeEnvironment(environmentConfig.getEnvironment(), environmentConfig.getEnvironmentName());
+            statusResource.getStatusService().initializeEnvironment(environmentConfig.getEnvironment());
         }
         startHealthReportSimulator(statusResource.getStatusService());
 

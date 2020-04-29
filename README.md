@@ -6,6 +6,16 @@
 
 - A real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
 
+Visuale is not meant to be a replacement for traditional system monitooring tools like Grafana, but an addition/extention for the important needs for Cintinous Deployment/Continours production of micro-service solutions including: 
+
+### Some key unique selling points (USP)
+
+* live and transparent reporting of the version of the service for each node for continous deployment solutions
+* live insight into what services and nodes which are running in an environment
+* live proactive visualisation of services and nodes which are due for security patching
+* live visualization of the high availability(HA)/resilience status of the services to support fixing the problem ahead of trouble
+
+
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
 ##### Legend
@@ -69,12 +79,21 @@ more ./local_config.properties
 ```
 server.port=9292
 #  default server.port=8080
+server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003  
+#  if you add this property, you have to add 
+#     ?accessToken=8fce7434-8654-11ea-bc55-0242ac130003 to the URL to se the dashboard 
+# Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
+### Additional grouping and organisatio of services
+
+We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file
+or by adding query parameters to the /api/status call like ?service_type=CS&service_tag=QoS_Group_A
+ 
 
 ###### Created by:
-* Marius Årnes - https://github.com/appartiff
-* Totto - https://github.com/totto
+* Marius Årnes - https://github.com/appartiff - Lead Frontend Developer
+* Totto - https://github.com/totto - Grunt
       
 # Some initial key targets for the project
 

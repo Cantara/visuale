@@ -91,7 +91,7 @@ public class StatusService {
         }
     }
 
-    public boolean updateEnvironment(String envName, String serviceName, String nodeName, Health health) {
+    public boolean updateEnvironment(String envName, String serviceName, String serviceTag, String serviveType, String nodeName, Health health) {
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
@@ -105,6 +105,26 @@ public class StatusService {
                     foundService = true;
                     for (Node node : nodeSet) {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
+                            Health latest = node.getLatestHealth();
+                            if (latest == null) {
+                                Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                if (hasValue(health.getIp())) {
+                                    addnode.setIp(health.getIp());
+                                }
+                                if (hasValue(health.getVersion())) {
+                                    addnode.setVersion(health.getVersion());
+                                }
+                                service.addNode(addnode);
+                                updateEnvironmentAsString();
+                                return true;
+                            } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
+                                node.addHealth(health);
+                                updateEnvironmentAsString();
+                                return true;
+                            }
+//                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
+//                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
+
                             foundNode = true;
                             node.addHealth(health);
                             if (hasValue(health.getIp())) {
@@ -114,21 +134,26 @@ public class StatusService {
                                 node.setVersion(health.getVersion());
                             }
                             updateEnvironmentAsString();
+                            return true;
                         }
                     }
+
                 }
             }
             if (!foundService) {
                 Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service().withName(serviceName).withNode(node);
+                no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
+                        .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviveType)
+                        .withNode(node);
                 environment.addService(service);
                 updateEnvironmentAsString();
+                return true;
             }
             if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
                         Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                        service.withNode(node);
+                        service.addNode(node);
                         updateEnvironmentAsString();
                     }
                 }
@@ -138,9 +163,12 @@ public class StatusService {
         return foundEnvironment;
     }
 
+    public void initializeEnvironment(Environment initenv) {
+        this.environment = initenv;
+    }
 
-    public void initializeEnvironment(String envJson, String envoronment_name) {
-        environment = new Environment().withName(envoronment_name);
+    public void initializeEnvironment(String envJson, String environment_name) {
+        environment = new Environment().withName(environment_name);
         try {
             environment = mapper.readValue(envJson, Environment.class);
             for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
@@ -154,7 +182,7 @@ public class StatusService {
         } catch (Exception e) {
             logger.error("Unable to initialise dashboard environment", e);
         }
-        environment.setName(envoronment_name);
+        environment.setName(environment_name);
     }
 
     public Map<String, Node> getHealthStatusMap() {

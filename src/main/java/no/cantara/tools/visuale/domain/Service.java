@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.util.*;
 
+import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
+        "service_tag",
+        "service_type",
         "healthy_nodes",
         "need_codebase_chores",
         "nodes"
@@ -16,6 +20,10 @@ public class Service {
 
     @JsonProperty("name")
     private String name;
+    @JsonProperty("service_tag")
+    private String serviceTag = "";
+    @JsonProperty("service_type")
+    private ServiceType serviceType = new ServiceType().withServiceCategory(ServiceType.ServiceCategorization.CS);
     @JsonProperty("nodes")
     private Set<Node> nodes = null;
     @JsonIgnore
@@ -80,10 +88,7 @@ public class Service {
     }
 
     public Service withNode(Node node) {
-        if (this.nodes == null) {
-            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
-        }
-        this.nodes.add(node);
+       addNode(node);
         return this;
     }
 
@@ -100,6 +105,26 @@ public class Service {
     public Service withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
         return this;
+    }
+
+    @JsonProperty("service_tag")
+    public String getServiceTag() {
+        return serviceTag;
+    }
+
+    @JsonProperty("service_tag")
+    public void setServiceTag(String serviceTag) {
+        this.serviceTag = serviceTag;
+    }
+
+    @JsonProperty("service_type")
+    public String getServiceType() {
+        return serviceType.getServiceType();
+    }
+
+    @JsonProperty("service_type")
+    public void setServiceType(String serviceType) {
+        this.serviceType.setServiceType(serviceType);
     }
 
     @Override
@@ -119,9 +144,33 @@ public class Service {
     public String toString() {
         return "Service{" +
                 "name='" + name + '\'' +
+                "serviceTag='" + serviceTag + '\'' +
+                "serviceType='" + serviceType + '\'' +
                 ", nodes=" + getNodes() +
                 ", additionalProperties=" + additionalProperties +
                 '}';
+    }
+
+    public Service withServiceTag(String serviceTag) {
+        if (hasValue(serviceTag)) {
+            this.serviceTag = serviceTag;
+        }
+        return this;
+    }
+
+    public Service withServiceType(String serviceType) {
+        if (hasValue(serviceType)) {
+            this.serviceType.setServiceType(serviceType);
+        }
+        return this;
+    }
+
+    public void addNode(Node addnode) {
+        if (this.nodes == null) {
+//            this.nodes = new HashSet<>();
+            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+        }
+        this.nodes.add(addnode);
     }
 
     public class MyNodeNameComp implements Comparator<Node> {
@@ -129,9 +178,15 @@ public class Service {
         @Override
         public int compare(Node e1, Node e2) {
             if (e1.getName() != null && e2.getName() != null) {
+                if (e1.getIp() != null && e2.getIp() != null) {
+                    return e1.getIp().compareTo(e2.getIp());
+                }
                 return e1.getName().compareTo(e2.getName());
             }
             if (e1.getIp() != null && e2.getIp() != null) {
+                if (e1.getName() != null && e2.getName() != null) {
+                    return e1.getName().compareTo(e2.getName());
+                }
                 return e1.getIp().compareTo(e2.getIp());
             }
             return 1;

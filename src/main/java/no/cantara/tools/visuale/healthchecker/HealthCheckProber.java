@@ -51,7 +51,7 @@ public class HealthCheckProber {
                 checkHealth();
             };
             // init Delay = 5, repeat the task every 60 second
-            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 15, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
 
         }
 
@@ -70,7 +70,7 @@ public class HealthCheckProber {
         }
         EnvironmentConfig environmentConfig = new EnvironmentConfig();
 
-        if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironment().length() < 40) {
+        if (environmentConfig.getEnvironment() == null || environmentConfig.getEnvironmentAsString().length() < 40) {
 
             Path fileName = new File("./add_health_resources.txt").toPath();
             try (Scanner scanner = new Scanner(fileName)) {
@@ -96,18 +96,18 @@ public class HealthCheckProber {
                     Health health = HealthMapper.fromRealWorldJson(json);
                     String service = environmentPathMap.get(u).getServiceName();
                     String node = environmentPathMap.get(u).getNodeName();
-                    statusService.updateEnvironment("env", service, node, health);
+                    statusService.updateEnvironment("env", service, "", "", node, health);
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now
-                    healthCheckURLSet.remove(u);
-                    badHealthCheckURLSet.add(u);
+//                    healthCheckURLSet.remove(u);
+//                    badHealthCheckURLSet.add(u);
                 }
             } catch (Exception e) {
                 logger.error("==> Unable to parse json from {} - exception ", u, e);
                 // We reduce noise on wrong urls by removing them right now
-                healthCheckURLSet.remove(u);
-                badHealthCheckURLSet.add(u);
+//                healthCheckURLSet.remove(u);
+//                badHealthCheckURLSet.add(u);
             }
         }
         if (badHealthCheckURLSet.size() > 1) {

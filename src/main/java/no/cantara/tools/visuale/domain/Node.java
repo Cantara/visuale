@@ -176,7 +176,7 @@ public class Node {
         return health;
     }
 
-    private Health getLatestHealth() {
+    public Health getLatestHealth() {
         Health returnHealth = null;
         Instant oldInstant = Instant.now().minus(8, ChronoUnit.DAYS);
         try {

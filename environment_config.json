@@ -7,6 +7,16 @@
       "health_url": "https://devtest.quadim.ai/health"
     },
     {
+      "service_name": "quadim-platform-service",
+      "node_name": "node2",
+      "health_url": "https://devtest.quadim.ai/health"
+    },
+    {
+      "service_name": "quadim-platform-service",
+      "node_name": "node3",
+      "health_url": "https://devtest.quadim.ai/health"
+    },
+    {
       "service_name": "quadim-overlord-service",
       "node_name": "node1",
       "health_url": "https://devtest.quadim.ai/api/overlord/health"

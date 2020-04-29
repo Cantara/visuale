@@ -23,6 +23,14 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
 //        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+        health = HealthMapper.fromRealWorldJson(mapi);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
+        health = HealthMapper.fromRealWorldJson(doorhealth);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+//        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
         health = HealthMapper.fromRealWorldJson(uawa);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
 //        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -438,4 +446,19 @@ class HealthMapperTest {
             "  \"hasApplicationsMetadata\": \"false\",\n" +
             "  \"now\": \"2020-04-23T05:07:40.973Z\",\n" +
             "  \"running since\": \"2020-04-23T05:06:53.319Z\"}\n";
+
+    private String mapi = "{\"Status\":\"true\",\"name\":\"menu-api\",\"ip\":\"172.31.42.94\",\"version\":\"1.0-SNAPSHOT\",\"now\":\"2020-04-28T08:45:19.568010Z\",\"running since\":\"2020-04-28T08:40:04.069113Z\",\"integrations\":[{\"name\":\"preorder-menu\",\"provider\":\"Retail Solution\",\"isMocked\":true}]}";
+
+    private String doorhealth = "{\n" +
+            "  \"Status\": \"true\",\n" +
+            "  \"name\": \"Door: Moterom_180-20101\",\n" +
+            "  \"lockStatus\": \"lock\",\n" +
+            "  \"userIdentifier\": \"Mark\",\n" +
+            "  \"lockTimeStamp\": \"2020-04-29T10:08:53.897581Z\",\n" +
+            "  \"ip\": \"172.31.47.137:20101\",\n" +
+            "  \"version\": \"Door: Moterom_180:20101\",\n" +
+            "  \"now\": \"2020-04-29T10:09:00.941786Z\",\n" +
+            "  \"running since\": \"2020-04-29T09:12:39.827905Z\"\n" +
+            "\n" +
+            "}\n";
 }

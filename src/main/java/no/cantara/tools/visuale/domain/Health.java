@@ -16,6 +16,7 @@ import static no.cantara.tools.visuale.domain.HealthMapper.extractIpv4Address;
         "now",
         "running since",
         "ip",
+        "original_health",
         "additionalProperties"
 })
 public class Health {
@@ -32,6 +33,8 @@ public class Health {
     private String version;
     @JsonProperty("ip")
     private String ip;
+    @JsonProperty("original_health")
+    private String originalHealth;
 
     //@JsonIgnore
     @JsonProperty("additionalProperties")
@@ -52,7 +55,7 @@ public class Health {
         if (version == null) {
             version = "";
         }
-        String key = name.trim() + "+" + version + ":" + ip.trim();
+        String key = name.trim() + "+" + version + ":" + ip.trim() + "-" + runningSince;
         return key;
     }
 
@@ -136,6 +139,21 @@ public class Health {
         return this;
     }
 
+    @JsonProperty("original_health")
+    public String getOriginalHealth() {
+        return originalHealth;
+    }
+
+    @JsonProperty("original_health")
+    public void setOriginalHealth(String originalHealth) {
+        this.originalHealth = originalHealth;
+    }
+
+    public Health withOriginalHealth(String origHealth) {
+        this.originalHealth = origHealth;
+        return this;
+    }
+
     @JsonProperty("version")
     public String getVersion() {
         return version;
@@ -178,6 +196,7 @@ public class Health {
         this.additionalProperties.putAll(additionalProperties1);
         return this;
     }
+
 
     public Health() {
 

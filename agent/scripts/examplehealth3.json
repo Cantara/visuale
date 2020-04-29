@@ -1,0 +1,11 @@
+{
+  "Status": "true",
+  "name": "Door: Moterom_180-20101",
+  "lockStatus": "lock",
+  "userIdentifier": "Mark",
+  "lockTimeStamp": "2020-04-29T10:08:53.897581Z",
+  "ip": "172.31.47.137:20101",
+  "version": "Door: Moterom_180:20101",
+  "now": "2020-04-29T10:09:00.941786Z",
+  "running since": "2020-04-29T09:12:39.827905Z"
+}
