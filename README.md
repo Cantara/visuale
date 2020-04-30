@@ -85,6 +85,16 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 # Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
+#### Using tags to further organise the services
+
+We have added an optional property to a service called service_tag which can be configured in environment_config.json on the node or can be added as a query parameter ?service_tag=asia on the PUT reporting. On setups with tags, we support two additional UI visualizations:
+
+ * groupTagOverService 
+ * groupServiceOverTag
+
+Which can be triggered with ?ui_extension=groupServiceOverTag on the UI to support additional service grouping views.
+
+
 ### Additional grouping and organisatio of services
 
 We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file
