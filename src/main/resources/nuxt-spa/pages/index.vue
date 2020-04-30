@@ -49,10 +49,12 @@
       for (const key of Object.keys(params)) {
         const keyValue = params[key];
         if(key.toLowerCase() === 'accesstoken')
-          if(keyValue !== null && keyValue.length > 0) {
+          if(keyValue !== null && keyValue.length > 0)
             this.setToken(keyValue);
-            break;
-          }
+
+        if(key.toLowerCase() === 'ui_extension')
+          if(keyValue !== null && keyValue.length > 0)
+            this.setStrategy(keyValue);
       }
     }
   }
