@@ -3,6 +3,6 @@ export function displayNodeTableCondition(nodesLength){
 }
 export function pollingIntervalInMilliseconds(){
   if (process.env.NODE_ENV === "development")
-    return 10000;
+    return 30000;
   return 5000;
 }

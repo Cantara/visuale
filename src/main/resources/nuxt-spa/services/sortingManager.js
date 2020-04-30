@@ -23,9 +23,11 @@ function groupServiceOverTagStrategy(serviceRoot){
     {
       if(groupedServicesOverTag[service.service_tag] === undefined)
         groupedServicesOverTag[service.service_tag] = [];
-      groupedServicesOverTag[service.service_tag].push(serviceRoot.services.splice(i,1))
+      let splicedService = serviceRoot.services.splice(i,1)[0];
+     groupedServicesOverTag[service.service_tag].push(splicedService)
     }
   }
+  console.log(serviceRoot);
 }
  function sortByAlphabet  (services) {
   return services.sort(function(a, b) {

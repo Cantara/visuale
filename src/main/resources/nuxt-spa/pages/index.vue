@@ -4,6 +4,7 @@
     <PollingService></PollingService>
     <OnWindowResizeService></OnWindowResizeService>
     <div class="container" :style="dashboardHeight">
+      <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
     <ServerExceptionHandling></ServerExceptionHandling>
@@ -16,14 +17,15 @@
   import PollingService from "../components/PollingService";
   import OnWindowResizeService from "../components/OnWindowResizeService";
   import ServerExceptionHandling from "../components/serverExceptionHandling/ServerExceptionHandling";
-
+import groupedServicesOverTag from "../components/groupedServicesOverTag";
   export default {
 
     components: {
       Service,
       PollingService,
       OnWindowResizeService,
-      ServerExceptionHandling
+      ServerExceptionHandling,
+      groupedServicesOverTag
     },
     computed: {
       ...mapState('layout', ['mobile']),

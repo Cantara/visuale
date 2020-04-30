@@ -2857,7 +2857,7 @@ export function randomMockData(){
   };
   function generateServices(){
     let tagNames = ['QA','DEVTEST','']
-    let numberOfServices = getRndInteger(5,15)
+    let numberOfServices = getRndInteger(15,18)
     let services = [];
     for (let i = 0; i < numberOfServices; i++) {
       let service = {
@@ -2865,7 +2865,7 @@ export function randomMockData(){
         "service_tag": pickRandom(tagNames),
         "service_type": "CS",
         "nodes": generateNodes(),
-        "healthy_nodes": 0,
+        "healthy_nodes": 1,
         "need_codebase_chores": false,
       }
       services.push(service);
