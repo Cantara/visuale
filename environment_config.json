@@ -3,16 +3,36 @@
   "nodes": [
     {
       "service_name": "quadim-platform-service",
+      "service_tag": "europe",
+      "service_type": "CS",
+      "node_name": "node1",
+      "health_url": "https://devtest.quadim.ai/health"
+    },
+    {
+      "service_name": "quadim-platform-service",
+      "service_tag": "asia",
+      "service_type": "CS",
       "node_name": "node1",
       "health_url": "https://devtest.quadim.ai/health"
     },
     {
       "service_name": "quadim-platform-service",
       "node_name": "node2",
+      "service_tag": "VIP",
+      "service_type": "CS",
       "health_url": "https://devtest.quadim.ai/health"
     },
     {
       "service_name": "quadim-platform-service",
+      "node_name": "node3",
+      "service_tag": "VIP",
+      "service_type": "CS",
+      "health_url": "https://devtest.quadim.ai/health"
+    },
+    {
+      "service_name": "quadim-platform-service",
+      "service_tag": "normal",
+      "service_type": "CS",
       "node_name": "node3",
       "health_url": "https://devtest.quadim.ai/health"
     },
