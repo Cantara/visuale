@@ -1,4 +1,5 @@
 import webpack from 'webpack'
+
 export default {
   mode: 'spa',
   /*
@@ -66,9 +67,7 @@ export default {
   */
   build: {
     plugins: [
-      new webpack.ProvidePlugin({
-        '_': 'lodash'
-      })
+
     ],
     postcss: {
       // Add plugin names as key and arguments as value
