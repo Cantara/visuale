@@ -8,7 +8,7 @@
           </div>
         </div>
 
-          <div class="content">
+          <div class="content" :style="dashboardContainerHeight">
             <Service v-for="(service,index) in value" :key="index" :service="service">
             </Service>
           </div>
@@ -42,6 +42,24 @@
               'max-height': this.dashboardContainerHeight  + 'px',
             };
         }
+      },
+      methods:{
+        /*!
+      * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
+      */
+        isOutOfViewport(elem) {
+          const bounding = elem.getBoundingClientRect();
+          // Check if it's out of the viewport on each side
+          const out = {};
+          out.top = bounding.top < 0;
+          out.left = bounding.left < 0;
+          out.bottom = bounding.bottom > (window.innerHeight || document.documentElement.clientHeight);
+          out.right = bounding.right > (window.innerWidth || document.documentElement.clientWidth);
+          out.any = out.top || out.left || out.bottom || out.right;
+          out.all = out.top && out.left && out.bottom && out.right;
+          return out;
+        }
+
       }
 
     }
@@ -53,6 +71,7 @@
   .service-tag-block {
     margin: 0.35em;
     border: 1px solid $color--border;
+
   }
 
 .content{
@@ -72,16 +91,20 @@
 
   .title {
     background: $color--background none repeat scroll 0 0;
-    display: flex;
+
+   //old version
+   // display: flex;
+    //  float: left;
+    display: inline-flex;
     padding: 0 0.35em;
     margin: 0 0.75em;
-    float: left;
+
     color: white;
     line-height: 1rem;
   }
 
   .title > span {
-    padding: 0 0 0 0.35em;
+    padding: 0 0.35em;
     color:$color--service-title;
     line-height: 0.9rem;
   }
