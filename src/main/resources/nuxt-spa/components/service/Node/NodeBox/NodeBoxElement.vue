@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import borderStatusMixin from '../../../borderStatusMixin'
   export default {
     name: "NodeElement",
     props:{
@@ -29,11 +30,10 @@
         type: Number | undefined
       }
     },
-    computed:{
-      borderStatus() {
-        return this.healthy_nodes !=='undefined' && this.healthy_nodes === 0 ? 'border--color-danger' :''
-      }
-    }
+    mixins:[
+      borderStatusMixin]
+    ,
+
   }
 </script>
 

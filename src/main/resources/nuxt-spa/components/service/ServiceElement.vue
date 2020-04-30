@@ -20,7 +20,7 @@
 
 <script>
   import {displayNodeTableCondition} from "../../preferences";
-
+  import borderStatusMixin from "../borderStatusMixin";
   export default {
     name: "ServiceElement",
     props: {
@@ -29,6 +29,7 @@
         required: true
       }
     },
+    mixins:[borderStatusMixin],
     computed: {
       gridStyle() {
         if(this.isNodeTableConditionMet)
@@ -46,16 +47,10 @@
       isNodeTableConditionMet(){
        return displayNodeTableCondition(this.service.nodes.length);
       },
-      borderStatus() {
-        /*   if(this.service.healthy_nodes >= 3)
-             return 'border--color-success';
-           if(this.service.healthy_nodes === 2)
-             return 'border--color-normal';
-           if(this.service.healthy_nodes === 1)
-             return 'border--color-warning';*/
-        if (this.service.healthy_nodes === 0)
-          return 'border--color-danger';
-      }
+      //required for borderstatus mixin
+      healthy_nodes(){
+        return this.service.healthy_nodes;
+      },
     }
   }
 </script>
