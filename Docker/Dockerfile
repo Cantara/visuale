@@ -15,7 +15,7 @@ COPY local_config.properties $HOME/
 RUN chown -R $APP $HOME/
 RUN chown -R $APP $HOME/*
 RUN chown -R $APP $HOME/scripts/*
-RUN su -  $APP -c "chmod 755 /home/visuale/scripts/*"
+RUN su -  $APP -c "chmod 755 /home/visuale/scripts/*.sh"
 RUN su -  $APP -c "crontab  /home/visuale/scripts/CRON"
 RUN su -  $APP -c "/home/visuale/scripts/semantic_update_service.sh"
 #RUN su -  $APP -c "/home/visuale/scripts/download_and_restart_if_new.sh"
