@@ -43,7 +43,9 @@
   padding: 0.5rem 0.35rem;
 
   display: inline-flex;
-  flex-direction: column;
+  max-height: 100vh;
+  column-count: 4
+
 }
   .marker {
     padding: 0;
