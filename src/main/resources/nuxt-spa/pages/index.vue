@@ -41,7 +41,7 @@
     methods:{
       ...mapMutations({
         setToken: 'auth/setToken',
-        setStrategy: 'serviceTag/setStrategy'
+        setStrategy: 'setStrategy'
       })
     },
     created(){

@@ -1,13 +1,14 @@
 import {randomMockData} from "../mock_data/ServicesMockData";
-import isEqual from "lodash/isEqual"
-import cloneDeep from "lodash/cloneDeep"
-import {sortServices, addUniqueKeyToNodes} from "../utils/serviceUtils";
-
+import {sortingManager} from '../services/sortingManager';
 export const state = () => ({
   services: {},
   connectionFailedIntervals: 0,
+  tagStrategy: ''
 });
 export const mutations = {
+  setStrategy (state, strategy) {
+    state.tagStrategy = strategy;
+  },
   setData(state, payload) {
     // if(isEqual(state.services,payload) === false)
     state.services = payload;
@@ -24,10 +25,7 @@ export const getters = {
 
     if (state.services.services === undefined)
       return {services: []};
-    const service = cloneDeep(state.services);
-    sortServices(service.services);
-    //addUniqueKeyToNodes(service.services);
-    return service;
+    return sortingManager(state.tagStrategy,state.services);
   },
   connectionFailed(state) {
     return state.connectionFailedIntervals >= 5
