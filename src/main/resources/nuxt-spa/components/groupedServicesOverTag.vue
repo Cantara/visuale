@@ -7,10 +7,11 @@
             <span>TAG: {{key |truncateText(34)}} </span>
           </div>
         </div>
-        <div class="content">
-          <Service v-for="(service,index) in value" :key="index" :service="service">
-          </Service>
-        </div>
+
+          <div class="content">
+            <Service v-for="(service,index) in value" :key="index" :service="service">
+            </Service>
+          </div>
       </div>
     </div>
   </fragment>
@@ -19,6 +20,7 @@
 <script>
     import ServiceElement from "./service/ServiceElement";
     import Service from "./Service";
+    import {mapGetters,mapState} from 'vuex';
     export default {
         name: "groupedServicesOverTag",
       components: {ServiceElement,Service},
@@ -28,6 +30,19 @@
           type:Object ,
         }
       },
+      computed:{
+        ...mapState('layout', ['mobile']),
+        ...mapGetters({
+          dashboardContainerHeight: 'layout/dashboardContainerHeight',
+          services: 'getServices',
+        }),
+        dashboardHeight() {
+          if (!this.mobile)
+            return {
+              'max-height': this.dashboardContainerHeight  + 'px',
+            };
+        }
+      }
 
     }
 </script>
@@ -39,15 +54,15 @@
     margin: 0.35em;
     border: 1px solid $color--border;
   }
+
 .content{
   padding: 0.5rem 0.35rem;
-
-  display: inline-flex;
-  max-height: 100vh;
-  column-count: 4
-
+  display:inline-flex;
+  flex-flow: column wrap;
+  max-width: 100vw;
 }
   .marker {
+
     padding: 0;
     margin-top: -0.6em;
     text-align: center;
