@@ -1,8 +1,8 @@
 <template>
-<div>
+  <fragment>
   <NodeTable v-if="isNodeTableConditionMet" :service="service"></NodeTable>
   <NodeBox v-else v-for="(node,index) in service.nodes" :key="index" :node="node" :healthy_nodes="service.healthy_nodes"></NodeBox>
-</div>
+  </fragment>
 </template>
 <script>
   import NodeTable from "./Node/NodeTable";

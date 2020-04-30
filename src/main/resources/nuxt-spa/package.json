@@ -21,7 +21,8 @@
     "postcss-hexrgba": "^2.0.0",
     "postcss-nested": "^4.2.1",
     "postcss-responsive-type": "^1.0.0",
-    "v-click-outside": "^3.0.1"
+    "v-click-outside": "^3.0.1",
+    "vue-fragment": "^1.5.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.9.5",
