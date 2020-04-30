@@ -1,4 +1,5 @@
 <template>
+
   <div @click="$emit('click')" class="node-block" :class="borderStatus">
     <div class="marker">
       <div>

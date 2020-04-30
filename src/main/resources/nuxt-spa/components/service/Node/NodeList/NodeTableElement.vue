@@ -1,5 +1,5 @@
 <template>
-  <div>
+
     <div class="marker">
       <div class="content">
         <table>
@@ -17,11 +17,10 @@
           </tbody>
         </table>
       </div>
-    </div>
-    <slot name="modal">
+      <slot name="modal">
 
-    </slot>
-  </div>
+      </slot>
+    </div>
 </template>
 
 <script>
