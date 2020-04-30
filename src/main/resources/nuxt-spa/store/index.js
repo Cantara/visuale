@@ -1,4 +1,4 @@
-import {ServicesMockData} from "../mock_data/ServicesMockData";
+import {randomMockData} from "../mock_data/ServicesMockData";
 import isEqual from "lodash/isEqual"
 import cloneDeep from "lodash/cloneDeep"
 import {sortServices, addUniqueKeyToNodes} from "../utils/serviceUtils";
@@ -37,7 +37,7 @@ export const actions = {
   async fetchData({commit}) {
     if (process.env.NODE_ENV === "development")
     {
-     let response =  ServicesMockData();
+     let response =  randomMockData();
       commit('setData', response);
       return response;
     }
