@@ -1,6 +1,7 @@
 export const state = () => ({
   windowHeight: window.innerHeight,
   headingHeight: 0,
+  headingPaddingBottom:0,
   mobile: false,
 });
 export const mutations = {
@@ -10,6 +11,9 @@ export const mutations = {
   setHeadingHeight(state, payload) {
     state.headingHeight = payload;
   },
+  setHeadingPaddingBottom(state,payload){
+    state.headingPaddingBottom = payload;
+  },
   changeMobileState(state, payload)
   {
     state.mobile = payload;
@@ -17,6 +21,6 @@ export const mutations = {
 };
 export const getters = {
   dashboardContainerHeight: state => {
-    return state.windowHeight - state.headingHeight;
+    return state.windowHeight - (state.headingHeight+ state.headingPaddingBottom);
   }
 };

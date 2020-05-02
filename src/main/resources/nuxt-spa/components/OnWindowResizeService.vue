@@ -11,14 +11,17 @@
         ...mapMutations({
           setWindowHeight: 'layout/setWindowHeight',
           setHeadingHeight: 'layout/setHeadingHeight',
-          changeMobileState:'layout/changeMobileState'
+          setheadingPaddingBottom: 'layout/setHeadingPaddingBottom',
+          changeMobileState:'layout/changeMobileState',
         }),
         handleResize() {
-          const heading = document.getElementById('heading').offsetHeight;
+          const heading = document.getElementById('heading');
+          this.setheadingPaddingBottom(parseInt(window.getComputedStyle(heading).paddingBottom));
           this.setWindowHeight(window.innerHeight);
-          this.setHeadingHeight(heading);
+          this.setHeadingHeight(heading.offsetHeight);
           this.changeMobileState(window.innerWidth < 990);
-        }
+        },
+
       },
       mounted() {
         window.addEventListener('resize', this.handleResize);

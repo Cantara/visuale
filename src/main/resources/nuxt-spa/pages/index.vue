@@ -78,20 +78,12 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
       height:100vh;
     }
   }
-
-
   .container {
     margin: 0 auto;
     display: inline-flex;
     max-width: 100vw;
     flex-flow: column wrap;
     padding: 0 0.7em 0.7em;
-  }
-
-  @media only screen and (min-width: 990px) {
-    .container {
-      padding-top: 1em;
-    }
   }
   h1 {
     padding: 0.35em 0.7em;

@@ -2851,13 +2851,13 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 export function randomMockData(){
-  let serviceNames = ['Visuale DEVTEST','overlord-profile']
+  let serviceNames = ['Visuale DEVTEST','overlord-profile','door-lock','burgerking']
   function pickRandom(array){
    return array[Math.floor(Math.random() * array.length)];
   };
   function generateServices(){
     let tagNames = ['QA','DEVTEST','']
-    let numberOfServices = getRndInteger(10,14)
+    let numberOfServices = getRndInteger(14,20)
     let services = [];
     for (let i = 0; i < numberOfServices; i++) {
       let service = {
@@ -2872,7 +2872,7 @@ export function randomMockData(){
     }
     return services;
     function generateNodes(){
-      let numberOfNodes = getRndInteger(2,3)
+      let numberOfNodes = getRndInteger(1,2)
       let nodes = [];
       for (let i = 0; i < numberOfNodes; i++) {
         let node = {

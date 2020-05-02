@@ -34,7 +34,6 @@ export default {
     {src:"@/plugins/plugins.js", ssr: false},
     {src:"@/plugins/axios.js"}
   ],
-
   /*
   ** Nuxt.js dev-modules
   */
