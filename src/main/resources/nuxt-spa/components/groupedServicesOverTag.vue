@@ -50,9 +50,6 @@
       methods:{
 
       },
-      watch:{
-
-      }
 
     }
 
@@ -64,7 +61,6 @@
   .service-tag-block {
     margin: 0.35em;
     border: 1px solid $color--border;
-
   }
 
 .content{
@@ -72,10 +68,14 @@
   display:inline-flex;
   flex-flow: column wrap;
   max-width: 100vw;
-  display: inline-grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(3, auto);
 }
+  @media (min-width: 990px) {
+    .content{
+      display: inline-grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(3, auto);
+    }
+  }
   .marker {
     padding: 0;
     margin-top: -0.6em;
