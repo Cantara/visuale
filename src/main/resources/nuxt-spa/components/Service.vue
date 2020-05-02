@@ -1,12 +1,15 @@
 <template>
-  <ServiceElement :service="service">
-    <template v-slot:title>
-      <ServiceBattery :healthy_nodes="service.healthy_nodes"/><span>{{service.name |truncateText(34)}} </span>
-    </template>
-    <template v-slot:content>
-      <Node :service="service"></Node>
-    </template>
-  </ServiceElement>
+  <div>
+    <ServiceElement :service="service">
+      <template v-slot:title>
+        <ServiceBattery :healthy_nodes="service.healthy_nodes"/><span>{{service.name |truncateText(34)}} </span>
+      </template>
+      <template v-slot:content>
+        <Node :service="service"></Node>
+      </template>
+    </ServiceElement>
+  </div>
+
 </template>
 <script>
   import ServiceBattery from "./service/ServiceBattery";
@@ -24,6 +27,13 @@
         required: true,
         type: Object,
       }
-    }
+    },
+    mounted() {
+     // window.addEventListener('resize', this.handleResize);
+     // this.handleResize();
+    },
+    beforeDestroy() {
+    //  window.removeEventListener('resize', this.handleResize);
+    },
   }
 </script>

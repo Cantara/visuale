@@ -7,8 +7,7 @@
             <span>TAG: {{key |truncateText(34)}} </span>
           </div>
         </div>
-
-          <div class="content" :style="dashboardContainerHeight">
+          <div class="content" :style="dashboardHeight">
             <Service v-for="(service,index) in value" :key="index" :service="service">
             </Service>
           </div>
@@ -30,6 +29,11 @@
           type:Object ,
         }
       },
+      data() {
+        return {
+          servicesXPosition: {},
+        }
+      },
       computed:{
         ...mapState('layout', ['mobile']),
         ...mapGetters({
@@ -44,25 +48,14 @@
         }
       },
       methods:{
-        /*!
-      * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
-      */
-        isOutOfViewport(elem) {
-          const bounding = elem.getBoundingClientRect();
-          // Check if it's out of the viewport on each side
-          const out = {};
-          out.top = bounding.top < 0;
-          out.left = bounding.left < 0;
-          out.bottom = bounding.bottom > (window.innerHeight || document.documentElement.clientHeight);
-          out.right = bounding.right > (window.innerWidth || document.documentElement.clientWidth);
-          out.any = out.top || out.left || out.bottom || out.right;
-          out.all = out.top && out.left && out.bottom && out.right;
-          return out;
-        }
+
+      },
+      watch:{
 
       }
 
     }
+
 </script>
 
 <style lang="scss" scoped>
@@ -79,14 +72,14 @@
   display:inline-flex;
   flex-flow: column wrap;
   max-width: 100vw;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(3, auto);
 }
   .marker {
-
     padding: 0;
     margin-top: -0.6em;
     text-align: center;
-    display: flex;
-    flex-direction: column;
   }
 
   .title {

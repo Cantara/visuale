@@ -17,23 +17,21 @@ function groupTagOverServiceStrategy(){
 function groupServiceOverTagStrategy(serviceRoot){
   serviceRoot['groupedServicesOverTag'] = {};
   let groupedServicesOverTag = serviceRoot.groupedServicesOverTag;
-  for (let i = 0; i < serviceRoot.services.length; i++) {
+  while (serviceRoot.services.length > 0) {
 
-    let service = serviceRoot.services[i];
+    let service = serviceRoot.services[0];
     if(service.service_tag.length > 0)
     {
       if(groupedServicesOverTag[service.service_tag] === undefined)
         groupedServicesOverTag[service.service_tag] = [];
-      let splicedService = serviceRoot.services.splice(i,1)[0];
+      let splicedService = serviceRoot.services.splice(0,1)[0];
      groupedServicesOverTag[service.service_tag].push(splicedService)
-      i--;
     }
     else{
       if(groupedServicesOverTag['NO TAG'] === undefined)
         groupedServicesOverTag['NO TAG'] = [];
-      let splicedService = serviceRoot.services.splice(i,1)[0];
+      let splicedService = serviceRoot.services.splice(0,1)[0];
       groupedServicesOverTag['NO TAG'].push(splicedService)
-      i--;
     }
   }
   console.log(serviceRoot);

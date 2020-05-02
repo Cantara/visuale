@@ -1,4 +1,5 @@
 <template>
+
   <div class="service-block" :class="borderStatus">
     <div class="marker">
       <div>
