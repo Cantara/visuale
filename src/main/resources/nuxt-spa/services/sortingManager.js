@@ -26,11 +26,7 @@ function groupTagOverServiceStrategy(serviceRoot){
       if(groupedTagOverService[service.name].length ===0)
         groupedTagOverService[service.name].push(splicedService)
       else
-      {
-        console.log(groupedTagOverService[service.name][0].nodes.length)
         groupedTagOverService[service.name][0].nodes.push(...splicedService.nodes);
-        console.log(groupedTagOverService[service.name][0].nodes.length)
-      }
 
 
 
