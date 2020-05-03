@@ -2,7 +2,7 @@
   <fragment>
     <grouped-services-element v-for="(value, key) in groupedTagOverService">
       <template v-slot:title>
-        <span>{{key |truncateText(34)}} </span>
+        <span>SERVICE: {{key |truncateText(34)}} </span>
       </template>
       <template v-slot:content>
         <div>
