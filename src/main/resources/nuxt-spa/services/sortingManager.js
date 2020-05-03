@@ -17,7 +17,6 @@ function groupTagOverServiceStrategy(serviceRoot){
   let groupedTagOverService = serviceRoot['groupedTagOverService'];
 
   while (serviceRoot.services.length > 0) {
-
     let service = serviceRoot.services[0];
       if(groupedTagOverService[service.name] === undefined)
         groupedTagOverService[service.name] = [];
@@ -27,9 +26,6 @@ function groupTagOverServiceStrategy(serviceRoot){
         groupedTagOverService[service.name].push(splicedService)
       else
         groupedTagOverService[service.name][0].nodes.push(...splicedService.nodes);
-
-
-
   }
 }
 //scenario 2
@@ -37,21 +33,13 @@ function groupServiceOverTagStrategy(serviceRoot){
   serviceRoot['groupedServicesOverTag'] = {};
   let groupedServicesOverTag = serviceRoot.groupedServicesOverTag;
   while (serviceRoot.services.length > 0) {
-
     let service = serviceRoot.services[0];
-    if(service.service_tag.length > 0)
-    {
-      if(groupedServicesOverTag[service.service_tag] === undefined)
-        groupedServicesOverTag[service.service_tag] = [];
+    let tagName = service.service_tag.length > 0 ? service.service_tag : 'NO TAG';
+
+      if(groupedServicesOverTag[tagName] === undefined)
+        groupedServicesOverTag[tagName] = [];
       let splicedService = serviceRoot.services.splice(0,1)[0];
-     groupedServicesOverTag[service.service_tag].push(splicedService)
-    }
-    else{
-      if(groupedServicesOverTag['NO TAG'] === undefined)
-        groupedServicesOverTag['NO TAG'] = [];
-      let splicedService = serviceRoot.services.splice(0,1)[0];
-      groupedServicesOverTag['NO TAG'].push(splicedService)
-    }
+     groupedServicesOverTag[tagName].push(splicedService)
   }
 }
  function sortByAlphabet  (services) {
