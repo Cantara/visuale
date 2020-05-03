@@ -1,5 +1,5 @@
 <template>
-
+  <div>
   <div class="service-block" :class="borderStatus">
     <div class="marker">
       <div>
@@ -16,6 +16,7 @@
     <slot name="modal">
 
     </slot>
+  </div>
   </div>
 </template>
 
@@ -58,6 +59,7 @@
 
 <style lang="scss" scoped>
   @import '~/assets/styles/variables/_variables.scss';
+
 
   .service-block {
     margin: 0.35em;

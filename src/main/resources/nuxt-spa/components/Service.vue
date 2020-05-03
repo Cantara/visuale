@@ -1,5 +1,4 @@
 <template>
-  <div>
     <ServiceElement :service="service">
       <template v-slot:title>
         <ServiceBattery :healthy_nodes="service.healthy_nodes"/><span>{{service.name |truncateText(34)}} </span>
@@ -8,8 +7,6 @@
         <Node :service="service"></Node>
       </template>
     </ServiceElement>
-  </div>
-
 </template>
 <script>
   import ServiceBattery from "./service/ServiceBattery";

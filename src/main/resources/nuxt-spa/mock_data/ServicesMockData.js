@@ -2857,7 +2857,7 @@ export function randomMockData(){
   };
   function generateServices(){
     let tagNames = ['QA','DEVTEST','']
-    let numberOfServices = getRndInteger(10,13)
+    let numberOfServices = getRndInteger(5,7)
     let services = [];
     for (let i = 0; i < numberOfServices; i++) {
       let service = {

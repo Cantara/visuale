@@ -7,7 +7,7 @@
             <span>TAG: {{key |truncateText(34)}} </span>
           </div>
         </div>
-          <div class="content" :style="dashboardHeight">
+          <div id="grid" class="content" :style="dashboardHeight(value)">
             <Service v-for="(service,index) in value" :key="index" :service="service">
             </Service>
           </div>
@@ -20,6 +20,8 @@
     import ServiceElement from "./service/ServiceElement";
     import Service from "./Service";
     import {mapGetters,mapState} from 'vuex';
+    import{displayNodeTableCondition} from "../preferences";
+
     export default {
         name: "groupedServicesOverTag",
       components: {ServiceElement,Service},
@@ -31,7 +33,9 @@
       },
       data() {
         return {
-          servicesXPosition: {},
+          serviceTagBlockStyling: {
+
+          }
         }
       },
       computed:{
@@ -40,14 +44,56 @@
           dashboardContainerHeight: 'layout/dashboardContainerHeight',
           services: 'getServices',
         }),
-        dashboardHeight() {
+      },
+      methods:{
+        dashboardHeight(services) {
           if (!this.mobile)
             return {
               'max-height': this.dashboardContainerHeight  + 'px',
+              display: 'inline-grid',
+              'grid-auto-flow': 'column',
+              gridTemplateRows: 'repeat(' + this.calculateGridColumn(services) +', auto)'
             };
-        }
-      },
-      methods:{
+          return {
+            display: 'inline-flex',
+            'flex-flow': 'column wrap'
+          };
+        },
+
+          calculateGridColumn(services){
+            let avaiableHeight = this.dashboardContainerHeight;
+            let tagHeight = 18.4;
+            let usedHeight = tagHeight.valueOf();
+            let rowsSum = 0;
+            let rows= 0;
+            for (let i = 0; i < services.length; i++) {
+              let nodesLength = services[i].nodes.length;
+              let height = 0;
+              if(displayNodeTableCondition(nodesLength))
+              {
+                let titleHeight = 22.6;
+                let nodeHeight = 22.6;
+                let serviceTitleHeight = 16.8;
+                height = titleHeight.valueOf() +serviceTitleHeight.valueOf()  +(nodesLength * nodeHeight.valueOf());
+              }
+              else
+              {
+                height = 16.8 +  (nodesLength >= 2 ? (74 * (nodesLength /2)) : 74);
+              }
+              if(height + usedHeight >= avaiableHeight && rows > 0)
+              {
+                if(!(rowsSum > 0 && rowsSum < rows))
+                  rowsSum = rows.valueOf();
+                rows =0;
+                usedHeight = tagHeight.valueOf();
+              }
+              else {
+                usedHeight += height.valueOf();
+                rows++;
+              }
+            }
+            return rowsSum > 0 ? rowsSum : rows;
+          }
 
       },
 
@@ -65,17 +111,9 @@
 
 .content{
   padding: 0.5rem 0.35rem;
-  display:inline-flex;
-  flex-flow: column wrap;
   max-width: 100vw;
 }
-  @media (min-width: 990px) {
-    .content{
-      display: inline-grid;
-      grid-auto-flow: column;
-      grid-template-rows: repeat(3, auto);
-    }
-  }
+
   .marker {
     padding: 0;
     margin-top: -0.6em;
