@@ -48,12 +48,21 @@
       methods:{
         dashboardHeight(services) {
           if (!this.mobile)
+          {
+            return {
+              'max-height': this.dashboardContainerHeight  + 'px',
+              display: 'inline-flex',
+              'flex-flow': 'column wrap',
+              'width': this.calculateFlexColumnWidth(services) + 'px',
+              'align-items': 'center',
+            };
             return {
               'max-height': this.dashboardContainerHeight  + 'px',
               display: 'inline-grid',
               'grid-auto-flow': 'column',
               gridTemplateRows: 'repeat(' + this.calculateGridColumn(services) +', auto)'
             };
+          }
           return {
             display: 'inline-flex',
             'flex-flow': 'column wrap'
@@ -92,6 +101,43 @@
               }
             }
             return rowsSum > 0 ? rowsSum : rows;
+          },
+          calculateFlexColumnWidth(services){
+
+            let avaiableHeight = this.dashboardContainerHeight;
+            let tagHeight = 28.4;
+            let usedHeight = tagHeight.valueOf();
+            let columns = 1;
+            let addOneColumn = false;
+            for (let i = 0; i < services.length; i++) {
+              let nodesLength = services[i].nodes.length;
+              let height = 0;
+
+              if(displayNodeTableCondition(nodesLength))
+              {
+                let titleHeight = 22.6;
+                let nodeHeight = 22.6;
+                let serviceTitleHeight = 18.8;
+                height = (titleHeight +serviceTitleHeight +(nodesLength * nodeHeight));
+                console.log("tableHeight:" +height)
+              }
+              else
+              {
+                height = 16.8 +  (nodesLength >= 2 ? (74 * Math.ceil(nodesLength /2)) : 74);
+                console.log("boxHeight:" +height)
+              }
+
+              if(height + usedHeight >= avaiableHeight)
+              {
+                usedHeight = tagHeight.valueOf();
+                columns++;
+              }
+              else {
+                usedHeight += height.valueOf();
+
+              }
+            }
+            return  (columns * 326.1) + 2;
           }
 
       },
@@ -104,7 +150,7 @@
   @import '~/assets/styles/variables/_variables.scss';
 
   .service-tag-block {
-    margin: 0.35em;
+    margin: 0.5em;
     border: 1px solid $color--border;
   }
 
