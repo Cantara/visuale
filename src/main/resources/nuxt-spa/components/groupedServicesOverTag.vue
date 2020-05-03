@@ -49,18 +49,19 @@
         dashboardHeight(services) {
           if (!this.mobile)
           {
+
+            return {
+              'max-height': this.dashboardContainerHeight  + 'px',
+              display: 'inline-grid',
+              'grid-auto-flow': 'column',
+              gridTemplateRows: 'repeat(' + this.calculateGridColumn(services) +', auto)'
+            };
             return {
               'max-height': this.dashboardContainerHeight  + 'px',
               display: 'inline-flex',
               'flex-flow': 'column wrap',
               'width': this.calculateFlexColumnWidth(services) + 'px',
               'align-items': 'center',
-            };
-            return {
-              'max-height': this.dashboardContainerHeight  + 'px',
-              display: 'inline-grid',
-              'grid-auto-flow': 'column',
-              gridTemplateRows: 'repeat(' + this.calculateGridColumn(services) +', auto)'
             };
           }
           return {
@@ -105,7 +106,7 @@
           calculateFlexColumnWidth(services){
 
             let avaiableHeight = this.dashboardContainerHeight;
-            let tagHeight = 28.4;
+            let tagHeight = 25.6
             let usedHeight = tagHeight.valueOf();
             let columns = 1;
             let addOneColumn = false;
@@ -117,13 +118,13 @@
               {
                 let titleHeight = 22.6;
                 let nodeHeight = 22.6;
-                let serviceTitleHeight = 18.8;
+                let serviceTitleHeight = 19.1;
                 height = (titleHeight +serviceTitleHeight +(nodesLength * nodeHeight));
                 console.log("tableHeight:" +height)
               }
               else
               {
-                height = 16.8 +  (nodesLength >= 2 ? (74 * Math.ceil(nodesLength /2)) : 74);
+                height = 19.8 +  (nodesLength >= 2 ? (74 * Math.ceil(nodesLength /2)) : 74);
                 console.log("boxHeight:" +height)
               }
 
