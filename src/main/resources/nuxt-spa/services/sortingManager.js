@@ -31,21 +31,6 @@ function groupTagOverServiceStrategy(serviceRoot){
 
 
   }
-
-  while (serviceRoot.services.length > 0) {
-
-    let service = serviceRoot.services[0];
-      if(groupedTagOverService[service.name] === undefined)
-        groupedTagOverService[service.name] = {};
-      if(groupedTagOverService[service.name][service.service_tag] === undefined)
-        groupedTagOverService[service.name][service.service_tag] = [];
-
-      let splicedService = serviceRoot.services.splice(0,1)[0];
-    groupedTagOverService[service.name][service.service_tag].push(splicedService)
-
-  }
-  console.log(serviceRoot);
-
 }
 //scenario 2
 function groupServiceOverTagStrategy(serviceRoot){
