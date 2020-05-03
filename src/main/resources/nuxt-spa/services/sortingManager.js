@@ -3,11 +3,16 @@ import cloneDeep from "lodash/cloneDeep";
 export function sortingManager(strategy,services) {
   const serviceRoot = cloneDeep(services);
   sortByAlphabet(serviceRoot.services);
-
-  if(strategy ==='groupServiceOverTag')
-    groupServiceOverTagStrategy(serviceRoot);
-  if(strategy ==='groupTagOverService')
-    groupTagOverServiceStrategy(serviceRoot);
+  switch(strategy) {
+    case 'groupServiceOverTag':
+      groupServiceOverTagStrategy(serviceRoot);
+      break;
+    case 'groupTagOverService':
+      groupTagOverServiceStrategy(serviceRoot);
+      break;
+    default:
+      break;
+  }
   return serviceRoot;
 }
 

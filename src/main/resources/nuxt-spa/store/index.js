@@ -3,7 +3,8 @@ import {sortingManager} from '../services/sortingManager';
 export const state = () => ({
   services: {},
   connectionFailedIntervals: 0,
-  tagStrategy: ''
+  tagStrategy: '',
+  environment: process.env.NODE_ENV,
 });
 export const mutations = {
   setStrategy (state, strategy) {
@@ -32,8 +33,8 @@ export const getters = {
   }
 };
 export const actions = {
-  async fetchData({commit}) {
-    if (process.env.NODE_ENV === "development")
+  async fetchData({commit,state}) {
+    if (state.environment=== "development")
     {
      let response =  randomMockData();
       commit('setData', response);
