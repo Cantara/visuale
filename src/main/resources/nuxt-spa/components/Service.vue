@@ -1,7 +1,7 @@
 <template>
     <ServiceElement :service="service">
       <template v-slot:title>
-        <ServiceBattery :healthy_nodes="service.healthy_nodes"/><span>{{service.name |truncateText(34)}} </span>
+        <ServiceBattery :healthy_nodes="service.healthy_nodes"/><span>{{title|truncateText(34)}} </span>
       </template>
       <template v-slot:content>
         <Node :service="service"></Node>
@@ -23,6 +23,10 @@
       service: {
         required: true,
         type: Object,
+      },
+      title: {
+        required:false,
+        type:String
       }
     },
     mounted() {

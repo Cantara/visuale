@@ -5,7 +5,8 @@
     <OnWindowResizeService></OnWindowResizeService>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
-      <Service v-for="(service,index) in services.services" :key="index" :service="service"></Service>
+      <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService" ></groupTagOverService>
+      <Service :title="service.name" v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
     <ServerExceptionHandling></ServerExceptionHandling>
   </div>
@@ -18,9 +19,11 @@
   import OnWindowResizeService from "../components/OnWindowResizeService";
   import ServerExceptionHandling from "../components/serverExceptionHandling/ServerExceptionHandling";
 import groupedServicesOverTag from "../components/groupedServicesOverTag";
+  import GroupTagOverService from "../components/groupTagOverService";
   export default {
 
     components: {
+      GroupTagOverService,
       Service,
       PollingService,
       OnWindowResizeService,

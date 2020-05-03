@@ -6,11 +6,49 @@ export function sortingManager(strategy,services) {
 
   if(strategy ==='groupServiceOverTag')
     groupServiceOverTagStrategy(serviceRoot);
+  if(strategy ==='groupTagOverService')
+    groupTagOverServiceStrategy(serviceRoot);
   return serviceRoot;
 }
 
 //scenario 1
-function groupTagOverServiceStrategy(){
+function groupTagOverServiceStrategy(serviceRoot){
+  serviceRoot['groupedTagOverService'] = {};
+  let groupedTagOverService = serviceRoot['groupedTagOverService'];
+
+  while (serviceRoot.services.length > 0) {
+
+    let service = serviceRoot.services[0];
+      if(groupedTagOverService[service.name] === undefined)
+        groupedTagOverService[service.name] = [];
+
+      let splicedService = serviceRoot.services.splice(0,1)[0];
+      if(groupedTagOverService[service.name].length ===0)
+        groupedTagOverService[service.name].push(splicedService)
+      else
+      {
+        console.log(groupedTagOverService[service.name][0].nodes.length)
+        groupedTagOverService[service.name][0].nodes.push(...splicedService.nodes);
+        console.log(groupedTagOverService[service.name][0].nodes.length)
+      }
+
+
+
+  }
+
+  while (serviceRoot.services.length > 0) {
+
+    let service = serviceRoot.services[0];
+      if(groupedTagOverService[service.name] === undefined)
+        groupedTagOverService[service.name] = {};
+      if(groupedTagOverService[service.name][service.service_tag] === undefined)
+        groupedTagOverService[service.name][service.service_tag] = [];
+
+      let splicedService = serviceRoot.services.splice(0,1)[0];
+    groupedTagOverService[service.name][service.service_tag].push(splicedService)
+
+  }
+  console.log(serviceRoot);
 
 }
 //scenario 2
@@ -34,7 +72,6 @@ function groupServiceOverTagStrategy(serviceRoot){
       groupedServicesOverTag['NO TAG'].push(splicedService)
     }
   }
-  console.log(serviceRoot);
 }
  function sortByAlphabet  (services) {
   return services.sort(function(a, b) {
