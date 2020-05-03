@@ -74,12 +74,11 @@
                 let titleHeight = 22.6;
                 let nodeHeight = 22.6;
                 let serviceTitleHeight = 16.8;
-                height = titleHeight.valueOf() +serviceTitleHeight.valueOf()  +(nodesLength * nodeHeight.valueOf());
+                height = (titleHeight +serviceTitleHeight +(nodesLength * nodeHeight));
               }
               else
-              {
-                height = 16.8 +  (nodesLength >= 2 ? (74 * (nodesLength /2)) : 74);
-              }
+                height = 16.8 +  (nodesLength >= 2 ? (74 * Math.ceil(nodesLength /2)) : 74);
+
               if(height + usedHeight >= avaiableHeight && rows > 0)
               {
                 if(!(rowsSum > 0 && rowsSum < rows))
