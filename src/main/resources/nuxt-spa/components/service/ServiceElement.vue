@@ -48,6 +48,8 @@
         };
       },
       nodeBoxWidth(){
+        if(this.service.name.length > 13)
+          return 2;
         return this.service.nodes.length > 1 ? 2 : 1;
       },
       isNodeTableConditionMet(){
