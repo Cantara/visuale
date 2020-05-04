@@ -6,7 +6,7 @@ export function randomMockData(){
   let serviceNames = ['Visuale DEVTEST','overlord-profile','door-lock','burgerking']
   function pickRandom(array){
    return array[Math.floor(Math.random() * array.length)];
-  };
+  }
   function generateServices(){
     let tagNames = ['QA','DEVTEST','']
     let numberOfServices = getRndInteger(20,25)

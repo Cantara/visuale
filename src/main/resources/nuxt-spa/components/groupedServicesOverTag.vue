@@ -1,6 +1,6 @@
 <template>
   <fragment>
-  <grouped-services-element v-for="(value, key) in groupedServicesOverTag">
+  <grouped-services-element v-for="(value, key) in groupedServicesOverTag" :key="key">
     <template v-slot:title>
       <span>TAG: {{key |truncateText(34)}} </span>
     </template>
