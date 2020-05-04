@@ -3,6 +3,7 @@ package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,6 +121,9 @@ public class Health {
     }
 
     public Health withNow(String now) {
+        if (now == null || now.length() > 10) {
+            now = Instant.now().toString();
+        }
         this.now = now;
         return this;
     }
