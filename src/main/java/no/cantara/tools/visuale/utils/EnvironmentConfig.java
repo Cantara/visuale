@@ -49,7 +49,7 @@ public class EnvironmentConfig {
         environment = new Environment().withName(environmentName);
         for (ConfNode confNode : readEnvironment.getNodes()) {
             Node node = new Node().withName(confNode.getNodeName());
-            Service service = new Service().withName(confNode.getServiceName()).withNode(node);
+            Service service = new Service().withName(confNode.getServiceName()).withNode(node).withServiceType(confNode.getServiceType()).withServiceTag(confNode.getServiceTag());
             environment.addService(service);
             try {
                 pollingHealthURISet.add(URI.create(confNode.getHealthUrl()));
