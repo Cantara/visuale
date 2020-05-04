@@ -91,7 +91,7 @@ public class StatusService {
         }
     }
 
-    public boolean updateEnvironment(String envName, String serviceName, String serviceTag, String serviveType, String nodeName, Health health) {
+    public boolean updateEnvironment(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
@@ -104,56 +104,53 @@ public class StatusService {
                     if (hasValue(serviceTag) // we have a tag
                             && service.getServiceTag() != null  // we do not want any NPEs
                             && !service.getServiceTag().equalsIgnoreCase(serviceTag)) {  // And we need a service object for each tag
-                        break;  //  We have a tag and it is different, thus skip parsing nodes
-                    }
-                    Set<Node> nodeSet = service.getNodes();
-                    foundService = true;
-                    for (Node node : nodeSet) {
-                        if (node.getName().equalsIgnoreCase(nodeName)) {
-                            Health latest = node.getLatestHealth();
-                            if (latest == null) {
-                                Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                                if (hasValue(health.getIp())) {
-                                    addnode.setIp(health.getIp());
+                        //  We have a tag and it is different, thus skip parsing nodes
+                    } else {
+                        Set<Node> nodeSet = service.getNodes();
+                        foundService = true;
+                        for (Node node : nodeSet) {
+                            if (node.getName().equalsIgnoreCase(nodeName)) {
+                                Health latest = node.getLatestHealth();
+                                if (latest == null) {
+                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                    if (hasValue(health.getIp())) {
+                                        addnode.setIp(health.getIp());
+                                    }
+                                    if (hasValue(health.getVersion())) {
+                                        addnode.setVersion(health.getVersion());
+                                    }
+                                    service.addNode(addnode);
+                                    updateEnvironmentAsString();
+                                    return true;
+                                } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
+                                    node.addHealth(health);
+                                    updateEnvironmentAsString();
+                                    return true;
                                 }
-                                if (hasValue(health.getVersion())) {
-                                    addnode.setVersion(health.getVersion());
-                                }
-                                service.addNode(addnode);
-                                updateEnvironmentAsString();
-                                return true;
-                            } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
-                                node.addHealth(health);
-                                updateEnvironmentAsString();
-                                return true;
-                            }
 //                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 //                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 
-                            foundNode = true;
-                            node.addHealth(health);
-                            if (hasValue(health.getIp())) {
-                                node.setIp(health.getIp());
+                                foundNode = true;
+                                node.addHealth(health);
+                                if (hasValue(health.getIp())) {
+                                    node.setIp(health.getIp());
+                                }
+                                if (hasValue(health.getVersion())) {
+                                    node.setVersion(health.getVersion());
+                                }
+                                updateEnvironmentAsString();
+                                return true;
                             }
-                            if (hasValue(health.getVersion())) {
-                                node.setVersion(health.getVersion());
-                            }
-                            updateEnvironmentAsString();
-                            return true;
                         }
                     }
-
-
                 }
             }
             if (!foundService) {
                 Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
 
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
-                        .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviveType)
+                        .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType)
                         .withNode(node);
-                service.setServiceTag(serviceTag);
-                service.setServiceType(serviveType);
                 environment.addService(service);
                 updateEnvironmentAsString();
                 return true;
