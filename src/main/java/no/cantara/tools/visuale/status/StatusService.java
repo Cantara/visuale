@@ -100,9 +100,12 @@ public class StatusService {
             foundEnvironment = true;
             Set<Service> serviceSet = environment.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
-                if (service.getName().equalsIgnoreCase(serviceName)
-                        && service.getServiceTag() != null  // we do not want any NPEs
-                        && service.getServiceTag().equalsIgnoreCase(serviceTag)) {  // And we need a service object for each tag
+                if (service.getName().equalsIgnoreCase(serviceName)) {  // We found a candidate
+                    if (hasValue(serviceTag) // we have a tag
+                            && service.getServiceTag() != null  // we do not want any NPEs
+                            && !service.getServiceTag().equalsIgnoreCase(serviceTag)) {  // And we need a service object for each tag
+                        break;  //  We have a tag and it is different, thus skip parsing nodes
+                    }
                     Set<Node> nodeSet = service.getNodes();
                     foundService = true;
                     for (Node node : nodeSet) {
@@ -139,6 +142,7 @@ public class StatusService {
                             return true;
                         }
                     }
+
 
                 }
             }
