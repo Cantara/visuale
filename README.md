@@ -118,7 +118,7 @@ Note: TAGS are not case-sensitive in Visuale.
 ![An example of grouping of services by TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
 
 ##### groupByService example
-![An example of grouping of services by Service](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale dashboard - groupByService.png)
+![An example of grouping of services by Service](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale%20dashboard%20-%20groupByService.png)
 
 
 
