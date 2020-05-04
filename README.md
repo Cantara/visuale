@@ -115,10 +115,10 @@ on the URL of the UI to support additional service grouping views.
 Note: TAGS are not case-sensitive in Visuale.
 
 ##### https://visuale.cantara.no/?ui_extension=groupByTag example
-![An example of grouping of services bt TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
+![An example of grouping of services by TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
 
 ##### groupByService example
-
+![An example of grouping of services by Service](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale dashboard - groupByService.png)
 
 
 
