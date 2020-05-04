@@ -13,7 +13,6 @@ export function sortingManager(strategy,services) {
     default:
       break;
   }
-  console.log(serviceRoot);
   return serviceRoot;
 }
 
