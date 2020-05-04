@@ -4,10 +4,10 @@ export function sortingManager(strategy,services) {
   const serviceRoot = cloneDeep(services);
   sortByAlphabet(serviceRoot.services,'name');
   switch(strategy) {
-    case 'groupServiceOverTag':
+    case 'groupByTag':
       groupServiceOverTagStrategy(serviceRoot);
       break;
-    case 'groupTagOverService':
+    case 'groupByService':
       groupTagOverServiceStrategy(serviceRoot);
       break;
     default:

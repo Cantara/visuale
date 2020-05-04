@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div class="service-block" :class="borderStatus">
+  <div class="service-block"  :class="borderStatus">
     <div class="marker">
       <div>
         <div class="title">
