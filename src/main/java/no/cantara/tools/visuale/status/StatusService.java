@@ -157,9 +157,13 @@ public class StatusService {
             if (!foundNode) {
                 for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                     if (service.getName().equalsIgnoreCase(serviceName)) {
-                        Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                        service.addNode(node);
-                        updateEnvironmentAsString();
+                        if (service.getServiceTag() != null  // we do not want any NPEs
+                                && service.getServiceTag().equalsIgnoreCase(serviceTag)) {
+                            Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                            service.addNode(node);
+                            updateEnvironmentAsString();
+                            return true;
+                        }
                     }
                 }
             }
