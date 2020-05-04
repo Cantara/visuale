@@ -92,28 +92,35 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 # Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
+
+### Additional grouping and organisatio of services
+
+We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file or by adding query parameters to the /api/status call like 
+ * ?service_type=CS&service_tag=QoS_Group_A
+ 
+ 
 #### Using tags to further organise the services
 
 We have added an optional property to a service called service_tag which can be configured in environment_config.json on the node or can be added as a query parameter ?service_tag=asia on the PUT reporting. On setups with tags, we support two additional UI visualizations:
 
- * groupTagOverService 
- * groupServiceOverTag
+ * groupByTag 
+ * groupByService
 
 Which can be seen in the dashboard with 
- * ?ui_extension=groupServiceOverTag or 
- * ?ui_extension=groupTagOverService 
+ * ?ui_extension=groupByService or 
+ * ?ui_extension=groupByTag 
   
 on the URL of the UI to support additional service grouping views.
 
 Note: TAGS are not case-sensitive in Visuale.
 
+##### groupByTag example
 ![An example of grouping of services bt TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
 
-### Additional grouping and organisatio of services
+##### groupByService example
 
-We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file
-or by adding query parameters to the /api/status call like ?service_type=CS&service_tag=QoS_Group_A
- 
+
+
 
       
 # Some initial key targets for the project
