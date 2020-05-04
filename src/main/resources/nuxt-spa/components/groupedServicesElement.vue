@@ -31,7 +31,7 @@
   }
 
   .content{
-    padding: 0.5rem 0.35rem;
+    padding: 0.25em 0.5rem 0.5rem;
     max-width: 100vw;
   }
 
@@ -43,10 +43,6 @@
 
   .title {
     background: $color--background none repeat scroll 0 0;
-
-    //old version
-    // display: flex;
-    //  float: left;
     display: inline-flex;
     padding: 0 0.35em;
     margin: 0 0.75em;

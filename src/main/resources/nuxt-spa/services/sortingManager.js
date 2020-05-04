@@ -2,7 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 export function sortingManager(strategy,services) {
   const serviceRoot = cloneDeep(services);
-  sortByAlphabet(serviceRoot.services);
+  sortByAlphabet(serviceRoot.services,'name');
   switch(strategy) {
     case 'groupServiceOverTag':
       groupServiceOverTagStrategy(serviceRoot);
@@ -13,6 +13,7 @@ export function sortingManager(strategy,services) {
     default:
       break;
   }
+  console.log(serviceRoot);
   return serviceRoot;
 }
 
@@ -47,10 +48,10 @@ function groupServiceOverTagStrategy(serviceRoot){
      groupedServicesOverTag[tagName].push(splicedService)
   }
 }
- function sortByAlphabet  (services) {
+ function sortByAlphabet  (services,key) {
   return services.sort(function(a, b) {
-    const serviceA = a.name.toUpperCase();
-    const serviceB = b.name.toUpperCase();
+    const serviceA = a[key].toUpperCase();
+    const serviceB = b[key].toUpperCase();
     return (serviceA < serviceB) ? -1 : (serviceA > serviceB) ? 1 : 0;
   });
 }

@@ -37,14 +37,18 @@
         if(this.isNodeTableConditionMet)
           return {
             paddingTop:'0.5rem',
+            width:'22.4rem',
           };
         else
         return {
-          gridTemplateColumns: `repeat(2,10.2rem)`,
+          gridTemplateColumns: 'repeat('+this.nodeBoxWidth+',10.4rem)',
           padding:'0.5rem',
           display:'inline-grid',
           gridGap:'0.6rem'
         };
+      },
+      nodeBoxWidth(){
+        return this.service.nodes.length > 1 ? 2 : 1;
       },
       isNodeTableConditionMet(){
        return displayNodeTableCondition(this.service.nodes.length);
@@ -64,7 +68,7 @@
   .service-block {
     margin: 0.35em;
     border: 1px solid $color--border;
-    width:22.1rem;
+   // width:22.1rem;
   }
 
   .marker {
