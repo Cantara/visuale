@@ -138,10 +138,17 @@ public class Health {
 
     @JsonProperty("running since")
     public void setRunningSince(String runningSince) {
+        if (runningSince == null || runningSince.length() < 10) {
+            runningSince = Instant.now().toString();
+        }
+
         this.runningSince = runningSince;
     }
 
     public Health withRunningSince(String runningSince) {
+        if (runningSince == null || runningSince.length() < 10) {
+            runningSince = Instant.now().toString();
+        }
         this.runningSince = runningSince;
         return this;
     }
