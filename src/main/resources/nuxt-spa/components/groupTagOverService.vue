@@ -5,7 +5,7 @@
         <span>SERVICE: {{key |truncateText(34)}} </span>
       </template>
       <template v-slot:content>
-        <div>
+        <div class="align-left">
           <div id="grid" class="content" :style="dashboardHeight(value)">
             <Service :title="'TAG: '+tagTitle(service.service_tag)" v-for="(service,key) in value" :key="key" :service="service">
             </Service>
