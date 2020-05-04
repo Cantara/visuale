@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.*;
 
-import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
 public class StatusService {
@@ -40,13 +39,29 @@ public class StatusService {
         startSyncThread();
     }
 
-    public StatusService(String environmentJson, String environmentName) {
-        environment = null;
-        initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
+    public void initializeEnvironment(Environment initenv) {
+        this.environment = initenv;
         updateEnvironmentAsString();
-        startSyncThread();
     }
 
+    public void initializeEnvironment(String envJson, String environment_name) {
+        environment = new Environment().withName(environment_name);
+        try {
+            environment = mapper.readValue(envJson, Environment.class);
+            for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
+                for (Node node : service.getNodes()) {
+                    if (node.getName() == null || node.getName().length() < 2) {
+                        node.setName(service.getName());
+                    }
+                    healthResults.put(node.getLookupKey(), node);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Unable to initialise dashboard environment", e);
+        }
+        environment.setName(environment_name);
+        updateEnvironmentAsString();
+    }
 
     public int updateHealthMap(Health updatedHealth) {
         if (updatedHealth.isEmpty()) {
@@ -173,27 +188,7 @@ public class StatusService {
         return foundEnvironment;
     }
 
-    public void initializeEnvironment(Environment initenv) {
-        this.environment = initenv;
-    }
 
-    public void initializeEnvironment(String envJson, String environment_name) {
-        environment = new Environment().withName(environment_name);
-        try {
-            environment = mapper.readValue(envJson, Environment.class);
-            for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
-                for (Node node : service.getNodes()) {
-                    if (node.getName() == null || node.getName().length() < 2) {
-                        node.setName(service.getName());
-                    }
-                    healthResults.put(node.getLookupKey(), node);
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Unable to initialise dashboard environment", e);
-        }
-        environment.setName(environment_name);
-    }
 
     public Map<String, Node> getHealthStatusMap() {
         return healthResults;
