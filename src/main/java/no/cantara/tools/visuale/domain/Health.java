@@ -117,14 +117,14 @@ public class Health {
 
     @JsonProperty("now")
     public void setNow(String now) {
-        if (now == null || now.length() > 10) {
+        if (now == null || now.length() < 10) {
             now = Instant.now().toString();
         }
         this.now = now;
     }
 
     public Health withNow(String now) {
-        if (now == null || now.length() > 10) {
+        if (now == null || now.length() < 10) {
             now = Instant.now().toString();
         }
         this.now = now;
