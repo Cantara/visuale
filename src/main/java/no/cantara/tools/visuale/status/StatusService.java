@@ -144,9 +144,12 @@ public class StatusService {
             }
             if (!foundService) {
                 Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
                         .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviveType)
                         .withNode(node);
+                service.setServiceTag(serviceTag);
+                service.setServiceType(serviveType);
                 environment.addService(service);
                 updateEnvironmentAsString();
                 return true;

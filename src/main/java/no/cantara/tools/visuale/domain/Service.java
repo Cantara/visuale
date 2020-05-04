@@ -132,12 +132,14 @@ public class Service {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Service service = (Service) o;
-        return Objects.equals(name, service.name);
+        return Objects.equals(name, service.name) &&
+                Objects.equals(serviceTag, service.serviceTag) &&
+                Objects.equals(serviceType, service.serviceType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, serviceTag, serviceType);
     }
 
     @Override
