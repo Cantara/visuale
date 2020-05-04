@@ -35,8 +35,8 @@ Visuale is not meant to be a replacement for traditional system monitooring tool
 #### Test yourself
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
-* Extension 1: https://visuale.cantara.no/?ui_extension=groupTagOverService
-* Extension 2: https://visuale.cantara.no/?ui_extension=groupServiceOverTag
+  * Extension 1: https://visuale.cantara.no/?ui_extension=groupByTag
+  * Extension 2: https://visuale.cantara.no/?ui_extension=groupByService
 
 
 #### Build and test from source code
@@ -114,7 +114,7 @@ on the URL of the UI to support additional service grouping views.
 
 Note: TAGS are not case-sensitive in Visuale.
 
-##### groupByTag example
+##### https://visuale.cantara.no/?ui_extension=groupByTag example
 ![An example of grouping of services bt TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
 
 ##### groupByService example
