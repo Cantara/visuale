@@ -22,15 +22,16 @@ function groupTagOverServiceStrategy(serviceRoot) {
   let groupedTagOverService = serviceRoot['groupedTagOverService'];
 
   while (serviceRoot.services.length > 0) {
-    let service = serviceRoot.services[0];
-    if (groupedTagOverService[service.name] === undefined)
-      groupedTagOverService[service.name] = [];
 
     let splicedService = serviceRoot.services.splice(0, 1)[0];
-    if (groupedTagOverService[service.name].length === 0)
-      groupedTagOverService[service.name].push(splicedService)
+    if (groupedTagOverService[splicedService.name] === undefined)
+      groupedTagOverService[splicedService.name] = [];
+
+    let index = groupedTagOverService[splicedService.name].findIndex(x=>x.service_tag === splicedService.service_tag);
+    if (index ===-1)
+      groupedTagOverService[splicedService.name].push(splicedService)
     else
-      groupedTagOverService[service.name][0].nodes.push(...splicedService.nodes);
+      groupedTagOverService[splicedService.name][index].nodes.push(...splicedService.nodes);
   }
 }
 
