@@ -2,13 +2,13 @@
 
  
 ![Visuale logo](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale.png)
-# Visuale
+## Visuale
 
-- A real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
+- A near real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
 
 Visuale is not meant to be a replacement for traditional system monitooring tools like Grafana, but an addition/extention for the important needs for Cintinous Deployment/Continours production of micro-service solutions including: 
 
-### Some key unique selling points (USP)
+#### Some key unique selling points (USP)
 
 * live and transparent reporting of the version of the service for each node for continous deployment solutions
 * live insight into what services and nodes which are running in an environment
@@ -18,6 +18,7 @@ Visuale is not meant to be a replacement for traditional system monitooring tool
 
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
+
 ##### Legend
 * Battery Symbol 
   * The service level (SLA/HA) quality of the service. It is calculated based on the number of healthy nodes weigthed against distributed system norms
@@ -26,13 +27,19 @@ Visuale is not meant to be a replacement for traditional system monitooring tool
 * Traffic Light Symbol
   * the observed heartbeat state of the node, signalling which nodes which are not considered healthy
 
-## Test yourself
+###### Created by:
+* Marius Årnes - https://github.com/appartiff - Lead Frontend Developer
+* Totto - https://github.com/totto - Grunt
+
+
+#### Test yourself
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
+* Extension 1: https://visuale.cantara.no/?ui_extension=groupTagOverService
+* Extension 2: https://visuale.cantara.no/?ui_extension=groupServiceOverTag
 
 
-
-# Build and test from source code
+#### Build and test from source code
 
 ```
 $ mvn clean package
@@ -41,7 +48,7 @@ $ wget http://localhost:8080/status
 ```
 * Dashboard UI here:  http://localhost:8080/
 
-## Configuration
+#### Configuration
 
 You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
 
@@ -92,8 +99,15 @@ We have added an optional property to a service called service_tag which can be 
  * groupTagOverService 
  * groupServiceOverTag
 
-Which can be triggered with ?ui_extension=groupServiceOverTag on the UI to support additional service grouping views.
+Which can be seen in the dashboard with 
+ * ?ui_extension=groupServiceOverTag or 
+ * ?ui_extension=groupTagOverService 
+  
+on the URL of the UI to support additional service grouping views.
 
+Note: TAGS are not case-sensitive in Visuale.
+
+![An example of grouping of services bt TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
 
 ### Additional grouping and organisatio of services
 
@@ -101,9 +115,6 @@ We support two mechanisms to organize services: servive_tag and service_type whi
 or by adding query parameters to the /api/status call like ?service_type=CS&service_tag=QoS_Group_A
  
 
-###### Created by:
-* Marius Årnes - https://github.com/appartiff - Lead Frontend Developer
-* Totto - https://github.com/totto - Grunt
       
 # Some initial key targets for the project
 

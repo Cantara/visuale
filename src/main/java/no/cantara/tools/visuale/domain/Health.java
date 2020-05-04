@@ -3,6 +3,7 @@ package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,10 +117,16 @@ public class Health {
 
     @JsonProperty("now")
     public void setNow(String now) {
+        if (now == null || now.length() < 10) {
+            now = Instant.now().toString();
+        }
         this.now = now;
     }
 
     public Health withNow(String now) {
+        if (now == null || now.length() < 10) {
+            now = Instant.now().toString();
+        }
         this.now = now;
         return this;
     }
@@ -131,10 +138,17 @@ public class Health {
 
     @JsonProperty("running since")
     public void setRunningSince(String runningSince) {
+        if (runningSince == null || runningSince.length() < 10) {
+            runningSince = Instant.now().toString();
+        }
+
         this.runningSince = runningSince;
     }
 
     public Health withRunningSince(String runningSince) {
+        if (runningSince == null || runningSince.length() < 10) {
+            runningSince = Instant.now().toString();
+        }
         this.runningSince = runningSince;
         return this;
     }

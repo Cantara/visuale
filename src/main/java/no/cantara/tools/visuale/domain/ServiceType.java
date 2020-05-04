@@ -1,5 +1,7 @@
 package no.cantara.tools.visuale.domain;
 
+import java.util.Objects;
+
 public class ServiceType {
 
     private String serviceType;
@@ -29,4 +31,16 @@ public class ServiceType {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServiceType that = (ServiceType) o;
+        return Objects.equals(serviceType, that.serviceType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(serviceType);
+    }
 }
