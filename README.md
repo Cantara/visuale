@@ -94,11 +94,11 @@ We have added an optional property to a service called service_tag which can be 
 
 Which can be triggered with 
  * ?ui_extension=groupServiceOverTag or 
-  *?ui_extension=groupTagOverService 
+ * ?ui_extension=groupTagOverService 
   
 on the URL of the UI to support additional service grouping views.
 
-![An example of grouping of services](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-Dashboard Grouped by TAG.png)
+![An example of grouping of services bt TAG](https://github.com/Cantara/visuale/blob/master/doc/images/Visuale-Dashboard%20Grouped%20by%20TAG.png)
 
 ### Additional grouping and organisatio of services
 
