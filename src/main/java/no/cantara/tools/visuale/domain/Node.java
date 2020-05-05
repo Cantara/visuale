@@ -194,6 +194,24 @@ public class Node {
         return returnHealth;
     }
 
+    public Health getEarliestHealth() {
+        Health returnHealth = null;
+        Instant oldInstant = Instant.now().minus(8, ChronoUnit.DAYS);
+        try {
+            for (Health h : getHealth()) {
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                if (reqInstant.isBefore(oldInstant)) {
+                    oldInstant = reqInstant;
+                    returnHealth = h;
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Unable to parse dates in Health", e);
+        }
+        return returnHealth;
+    }
+
     @JsonProperty("health")
     public void setHealth(Set<Health> health) {
         this.health = health;

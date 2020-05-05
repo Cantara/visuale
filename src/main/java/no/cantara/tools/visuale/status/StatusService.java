@@ -9,6 +9,9 @@ import no.cantara.tools.visuale.domain.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -126,6 +129,7 @@ public class StatusService {
                         for (Node node : nodeSet) {
                             if (node.getName().equalsIgnoreCase(nodeName)) {
                                 Health latest = node.getLatestHealth();
+                                Health earliest = node.getEarliestHealth();
                                 if (latest == null) {
                                     Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                                     if (hasValue(health.getIp())) {
@@ -138,6 +142,10 @@ public class StatusService {
                                     updateEnvironmentAsString();
                                     return true;
                                 } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
+                                    OffsetDateTime date = OffsetDateTime.parse(health.getNow());
+                                    if (date.isAfter(OffsetDateTime.from(Instant.now().minus(3, ChronoUnit.MINUTES)))) {
+                                        health.setRunningSince(earliest.getRunningSince());
+                                    }
                                     node.addHealth(health);
                                     updateEnvironmentAsString();
                                     return true;
