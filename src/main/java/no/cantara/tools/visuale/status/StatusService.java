@@ -9,9 +9,6 @@ import no.cantara.tools.visuale.domain.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -150,10 +147,10 @@ public class StatusService {
 //                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 
                                 foundNode = true;
-                                OffsetDateTime date = OffsetDateTime.parse(health.getNow());
-                                if (date.isAfter(OffsetDateTime.from(Instant.now().minus(3, ChronoUnit.MINUTES)))) {
-                                    health.setRunningSince(earliest.getRunningSince());
-                                }
+//                                OffsetDateTime date = OffsetDateTime.parse(health.getNow());
+//                                if (date.isAfter(OffsetDateTime.from(Instant.now().minus(3, ChronoUnit.MINUTES)))) {
+//                                    health.setRunningSince(earliest.getRunningSince());
+//                                }
 
                                 node.addHealth(health);
                                 if (hasValue(health.getIp())) {
