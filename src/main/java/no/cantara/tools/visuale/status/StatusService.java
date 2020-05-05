@@ -142,10 +142,6 @@ public class StatusService {
                                     updateEnvironmentAsString();
                                     return true;
                                 } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
-                                    OffsetDateTime date = OffsetDateTime.parse(health.getNow());
-                                    if (date.isAfter(OffsetDateTime.from(Instant.now().minus(3, ChronoUnit.MINUTES)))) {
-                                        health.setRunningSince(earliest.getRunningSince());
-                                    }
                                     node.addHealth(health);
                                     updateEnvironmentAsString();
                                     return true;
@@ -154,6 +150,11 @@ public class StatusService {
 //                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
 
                                 foundNode = true;
+                                OffsetDateTime date = OffsetDateTime.parse(health.getNow());
+                                if (date.isAfter(OffsetDateTime.from(Instant.now().minus(3, ChronoUnit.MINUTES)))) {
+                                    health.setRunningSince(earliest.getRunningSince());
+                                }
+
                                 node.addHealth(health);
                                 if (hasValue(health.getIp())) {
                                     node.setIp(health.getIp());
