@@ -46,12 +46,21 @@ function groupTagOverServiceStrategy(serviceRoot) {
 function groupServiceOverTagStrategy(serviceRoot) {
   serviceRoot['groupedServicesOverTag'] = {};
   let groupedServicesOverTag = serviceRoot.groupedServicesOverTag;
+
+
+  //sort keys before creating properties, this makes the object sorted when looping through
+  const uniques = [...new Set(serviceRoot.services.map(item => item.service_tag))];
+  uniques.sort();
+  for (let i = 0; i < uniques.length; i++) {
+    let unique = uniques[i];
+    let tagName = unique.length > 0 ? unique : 'NO TAG';
+    if (groupedServicesOverTag[tagName] === undefined)
+      groupedServicesOverTag[tagName] = [];
+  }
+
   while (serviceRoot.services.length > 0) {
     let service = serviceRoot.services[0];
     let tagName = service.service_tag.length > 0 ? service.service_tag : 'NO TAG';
-
-    if (groupedServicesOverTag[tagName] === undefined)
-      groupedServicesOverTag[tagName] = [];
     let splicedService = serviceRoot.services.splice(0, 1)[0];
     groupedServicesOverTag[tagName].push(splicedService)
   }
