@@ -5,14 +5,21 @@ export function sortingManager(strategy, services) {
   sortByAlphabet(serviceRoot.services, 'name');
   switch (strategy) {
     case 'groupByTag':
+    {
       groupServiceOverTagStrategy(serviceRoot);
       break;
+    }
+
     case 'groupByService':
+    {
       groupTagOverServiceStrategy(serviceRoot);
+      groupBySortByProperty(serviceRoot.groupedTagOverService,'service_tag');
       break;
+    }
     default:
       break;
   }
+  console.log(serviceRoot);
   return serviceRoot;
 }
 
@@ -50,6 +57,15 @@ function groupServiceOverTagStrategy(serviceRoot) {
   }
 }
 
+
+function groupBySortByProperty(services,index){
+
+  for (const key in services) {
+    if (services.hasOwnProperty(key)) {
+      sortByAlphabet(services[key],index)
+    }
+  }
+}
 function sortByAlphabet(services, key) {
   return services.sort(function (a, b) {
     const serviceA = a[key].toUpperCase();

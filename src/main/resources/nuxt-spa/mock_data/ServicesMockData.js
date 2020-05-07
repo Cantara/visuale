@@ -3,12 +3,12 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 export function randomMockData(){
-  let serviceNames = ['Visuale DEVTEST','overlord-profile','door-lock','burgerking']
+  let serviceNames = ['A','B','C','D']
   function pickRandom(array){
    return array[Math.floor(Math.random() * array.length)];
   }
   function generateServices(){
-    let tagNames = ['QA','DEVTEST','']
+    let tagNames = ['A','B','','C']
     let numberOfServices = getRndInteger(1,25)
     let services = [];
     for (let i = 0; i < numberOfServices; i++) {
