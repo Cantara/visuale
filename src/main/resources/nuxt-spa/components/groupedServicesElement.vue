@@ -44,5 +44,4 @@
     margin-top: -0.6em;
     text-align: center;
   }
-
 </style>

@@ -6,7 +6,7 @@
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService" ></groupTagOverService>
-      <Service :service-type-status="true" :title="service.name" v-for="(service,index) in services.services" :key="index" :service="service"></Service>
+      <Service :service-type-status="serviceType" :title="service.name" v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
     <ServerExceptionHandling></ServerExceptionHandling>
   </div>
@@ -32,6 +32,7 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
     },
     computed: {
       ...mapState('layout', ['mobile']),
+      ...mapState(['serviceType']),
       ...mapGetters({
         dashboardContainerHeight: 'layout/dashboardContainerHeight',
         services: 'getServices',
@@ -46,20 +47,23 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
     methods:{
       ...mapMutations({
         setToken: 'auth/setToken',
-        setStrategy: 'setStrategy'
+        setStrategy: 'setStrategy',
+        setServiceType: 'setServiceType'
       })
     },
     created(){
       let params = this.$route.query;
       for (const key of Object.keys(params)) {
         const keyValue = params[key];
-        if(key.toLowerCase() === 'accesstoken')
-          if(keyValue !== null && keyValue.length > 0)
+        if(keyValue !== null && keyValue.length > 0)
+        {
+          if(key.toLowerCase() === 'accesstoken')
             this.setToken(keyValue);
-
-        if(key.toLowerCase() === 'ui_extension')
-          if(keyValue !== null && keyValue.length > 0)
+          if(key.toLowerCase() === 'ui_extension')
             this.setStrategy(keyValue);
+          if(key.toLowerCase() === 'servicetype')
+            this.setServiceType(keyValue === 'true');
+        }
       }
     }
   }

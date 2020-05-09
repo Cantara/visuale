@@ -4,6 +4,7 @@ export const state = () => ({
   services: {},
   connectionFailedIntervals: 0,
   tagStrategy: '',
+  serviceType: false,
   environment: process.env.NODE_ENV,
 });
 export const mutations = {
@@ -11,8 +12,10 @@ export const mutations = {
     state.tagStrategy = strategy;
   },
   setData(state, payload) {
-    // if(isEqual(state.services,payload) === false)
     state.services = payload;
+  },
+  setServiceType(state,payload){
+    state.serviceType = payload;
   },
   incrementConnectionFailed(state) {
     state.connectionFailedIntervals++;

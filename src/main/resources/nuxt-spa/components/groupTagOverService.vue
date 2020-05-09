@@ -7,7 +7,7 @@
       <template v-slot:content>
         <div class="align-left">
           <div id="grid" class="content" :style="dashboardHeight(value)">
-            <Service :service-type-status="true" :title="'TAG: '+tagTitle(service.service_tag)" v-for="(service,key) in value" :key="key" :service="service">
+            <Service :service-type-status="serviceType" :title="'TAG: '+tagTitle(service.service_tag)" v-for="(service,key) in value" :key="key" :service="service">
             </Service>
           </div>
         </div>
@@ -36,6 +36,7 @@
         ...mapGetters({
           services: 'getServices',
         }),
+        ...mapState(['serviceType']),
       },
       methods:{
           tagTitle(name){
