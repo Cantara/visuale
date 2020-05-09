@@ -1,7 +1,9 @@
 <template>
     <ServiceElement :service="service">
       <template v-slot:title>
-        <ServiceBattery :healthy_nodes="service.healthy_nodes"/><span>{{title|truncateText(34)}} </span>
+        <ServiceBattery :healthy_nodes="service.healthy_nodes"/>
+        <span class="tag-title">{{title|truncateText(34)}}</span>
+        <ServiceType v-if="serviceTypeStatus" :service_type="service.service_type"></ServiceType>
       </template>
       <template v-slot:content>
         <Node :service="service"></Node>
@@ -12,12 +14,14 @@
   import ServiceBattery from "./service/ServiceBattery";
   import ServiceElement from "./service/ServiceElement";
   import Node from "./service/Node";
+  import ServiceType from "./ServiceType";
   export default {
     name: "Service",
     components:{
       ServiceBattery,
       ServiceElement,
-      Node
+      Node,
+      ServiceType
     },
     props:{
       service: {
@@ -27,6 +31,11 @@
       title: {
         required:false,
         type:String
+      },
+      serviceTypeStatus:{
+        required: false,
+        type:Boolean,
+        default:false,
       }
     },
     mounted() {
@@ -38,3 +47,6 @@
     },
   }
 </script>
+<style scoped>
+
+</style>

@@ -6,7 +6,7 @@
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService" ></groupTagOverService>
-      <Service :title="service.name" v-for="(service,index) in services.services" :key="index" :service="service"></Service>
+      <Service :service-type-status="true" :title="service.name" v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
     <ServerExceptionHandling></ServerExceptionHandling>
   </div>

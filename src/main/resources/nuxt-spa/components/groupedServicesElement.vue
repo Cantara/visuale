@@ -3,10 +3,10 @@
     <div class="service-tag-block">
       <div class="marker">
         <div>
-          <div class="title">
+          <ServiceTitleElement>
             <slot name="title">
             </slot>
-          </div>
+          </ServiceTitleElement>
         </div>
         <slot name="content">
 
@@ -17,8 +17,12 @@
 </template>
 
 <script>
+  import ServiceTitleElement from "./ServiceTitleElement";
     export default {
-        name: "groupedServicesElement"
+        name: "groupedServicesElement",
+      components: {
+        ServiceTitleElement
+      }
     }
 </script>
 
@@ -41,19 +45,4 @@
     text-align: center;
   }
 
-  .title {
-    background: $color--background none repeat scroll 0 0;
-    display: inline-flex;
-    padding: 0 0.35em;
-    margin: 0 0.75em;
-
-    color: white;
-    line-height: 1rem;
-  }
-
-  .title > span {
-    padding: 0 0.35em;
-    color:$color--service-title;
-    line-height: 0.9rem;
-  }
 </style>

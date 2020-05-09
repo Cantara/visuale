@@ -6,25 +6,23 @@ export function sortingManager(strategy, services) {
   switch (strategy) {
     case 'groupByTag':
     {
-      groupServiceOverTagStrategy(serviceRoot);
+      groupByTagStrategy(serviceRoot);
       break;
     }
-
     case 'groupByService':
     {
-      groupTagOverServiceStrategy(serviceRoot);
+      groupByServiceStrategy(serviceRoot);
       groupBySortByProperty(serviceRoot.groupedTagOverService,'service_tag');
       break;
     }
     default:
       break;
   }
-  console.log(serviceRoot);
   return serviceRoot;
 }
 
 //scenario 1
-function groupTagOverServiceStrategy(serviceRoot) {
+function groupByServiceStrategy(serviceRoot) {
   serviceRoot['groupedTagOverService'] = {};
   let groupedTagOverService = serviceRoot['groupedTagOverService'];
 
@@ -43,7 +41,7 @@ function groupTagOverServiceStrategy(serviceRoot) {
 }
 
 //scenario 2
-function groupServiceOverTagStrategy(serviceRoot) {
+function groupByTagStrategy(serviceRoot) {
   serviceRoot['groupedServicesOverTag'] = {};
   let groupedServicesOverTag = serviceRoot.groupedServicesOverTag;
 

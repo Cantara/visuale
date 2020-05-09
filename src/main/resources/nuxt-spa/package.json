@@ -41,6 +41,8 @@
     "jest": "^25.4.0",
     "node-sass": "^4.13.1",
     "postcss-loader": "^3.0.0",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "vue-svg-loader": "^0.16.0",
+    "vue-template-compiler": "^2.6.11"
   }
 }

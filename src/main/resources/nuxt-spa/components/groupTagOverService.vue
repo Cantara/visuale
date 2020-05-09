@@ -2,12 +2,12 @@
   <fragment>
     <grouped-services-element v-for="(value, key) in groupedTagOverService" :key="key">
       <template v-slot:title>
-        <span>SERVICE: {{key |truncateText(34)}} </span>
+        <span class="tag-title">SERVICE: {{key |truncateText(34)}} </span>
       </template>
       <template v-slot:content>
         <div class="align-left">
           <div id="grid" class="content" :style="dashboardHeight(value)">
-            <Service :title="'TAG: '+tagTitle(service.service_tag)" v-for="(service,key) in value" :key="key" :service="service">
+            <Service :service-type-status="true" :title="'TAG: '+tagTitle(service.service_tag)" v-for="(service,key) in value" :key="key" :service="service">
             </Service>
           </div>
         </div>

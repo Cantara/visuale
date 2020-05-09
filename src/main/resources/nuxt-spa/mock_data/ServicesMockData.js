@@ -4,6 +4,7 @@ function getRndInteger(min, max) {
 }
 export function randomMockData(){
   let serviceNames = ['A','B','C','D']
+  let serviceTypes = ['CS','H2A','A2A','ACS']
   function pickRandom(array){
    return array[Math.floor(Math.random() * array.length)];
   }
@@ -15,7 +16,7 @@ export function randomMockData(){
       let service = {
         "name": pickRandom(serviceNames),
         "service_tag": pickRandom(tagNames),
-        "service_type": "CS",
+        "service_type": pickRandom(serviceTypes),
         "nodes": generateNodes(),
         "healthy_nodes": 1,
         "need_codebase_chores": false,
@@ -24,7 +25,7 @@ export function randomMockData(){
     }
     return services;
     function generateNodes(){
-      let numberOfNodes = getRndInteger(1,1)
+      let numberOfNodes = getRndInteger(2,5)
       let nodes = [];
       for (let i = 0; i < numberOfNodes; i++) {
         let node = {

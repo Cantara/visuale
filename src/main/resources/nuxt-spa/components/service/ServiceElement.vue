@@ -3,10 +3,11 @@
   <div class="service-block"  :class="borderStatus">
     <div class="marker">
       <div>
-        <div class="title">
+        <ServiceTitleElement>
           <slot name="title">
+
           </slot>
-        </div>
+        </ServiceTitleElement>
       </div>
         <div class="content" :style="gridStyle">
           <slot name="content">
@@ -22,6 +23,7 @@
 
 <script>
   import {displayNodeTableCondition} from "../../preferences";
+  import ServiceTitleElement from "../ServiceTitleElement";
   import borderStatusMixin from "../borderStatusMixin";
   export default {
     name: "ServiceElement",
@@ -30,6 +32,9 @@
         type: Object,
         required: true
       }
+    },
+    components:{
+      ServiceTitleElement
     },
     mixins:[borderStatusMixin],
     computed: {
@@ -81,19 +86,4 @@
     flex-direction: column;
   }
 
-  .title {
-    background: $color--background none repeat scroll 0 0;
-    display: flex;
-    padding: 0 0.35em;
-    margin: 0 0.75em;
-    float: left;
-    color: white;
-    line-height: 1rem;
-  }
-
-  .title > span {
-    padding: 0 0 0 0.35em;
-    color:$color--service-title;
-    line-height: 0.9rem;
-  }
 </style>
