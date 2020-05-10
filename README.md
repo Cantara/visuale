@@ -121,7 +121,13 @@ Note: TAGS are not case-sensitive in Visuale.
 ![An example of grouping of services by Service](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale%20dashboard%20-%20groupByService.png)
 
 
+#### Visualizing the type of services running in the Dashboard
 
+Visuale support categorization of services into types of services. This can be added to the service with the additional service_type parameter (both as a query-parameter on PUT health updates or in the environment json configuration. The visualization of service categories is switched on by the following query parameter for the dashboard:
+
+ * servicetype=true
+
+As of the initial release, Visuale support the Cantara Service Categorization (https://wiki.cantara.no/display/OWSOA/Service+Categories), but we may add support for installation spesific service categorization if enough people want this.
       
 # Some initial key targets for the project
 
