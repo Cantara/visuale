@@ -40,6 +40,13 @@ public class HealthDeserializer extends StdDeserializer<Health> {
         if ("true".equalsIgnoreCase(statusValue.toLowerCase())) {
             statusValue = "OK";
         }
+        if ("HEALTHY".equalsIgnoreCase(statusValue.toLowerCase())) {
+            statusValue = "OK";
+        }
+        if ("OK".equalsIgnoreCase(statusValue.toLowerCase())) {
+            statusValue = "OK";
+        }
+        
         String nowValue = jsonFlattenedMap.remove("now");
         String ipValue = jsonFlattenedMap.remove("ip");
         String versionValue = jsonFlattenedMap.remove("version");
