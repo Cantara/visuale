@@ -72,14 +72,6 @@ more ./environment_config.json
 }
 ```
 
-And then you can add some push health agents:
-```
-# Let us add some dummy services by using the visuale health resurce...
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n1
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n2
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
-```
-
 If you want to override the server port, you may add a local_config.properties file
 
 more ./local_config.properties
@@ -92,8 +84,29 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 # Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
+#### Push status to Visuale
 
-### Additional grouping and organisatio of services
+And then you can add some push health agents:
+```
+# Let us add some dummy services by using the visuale health resurce...
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n1
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n2
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
+```
+Json body
+```
+{
+  "Status": "OK",
+  "name": "Jenkins",
+  "version": "2.222",
+  "ip": "172.31.34.121 "
+}
+```
+
+Path
+http://localhost:8080/status/<service-name>/visuale/<nodeId>
+
+### Additional grouping and organisation of services
 
 We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file or by adding query parameters to the /api/status call like 
  * ?service_type=CS&service_tag=QoS_Group_A
