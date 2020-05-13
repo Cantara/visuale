@@ -48,6 +48,14 @@ $ wget http://localhost:8080/status
 ```
 * Dashboard UI here:  http://localhost:8080/
 
+#### Build from IDE
+
+The UI client is built on package stage. You must run:
+```
+$ mvn clean package
+```
+... before running Main from Intellj
+
 #### Configuration
 
 You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
