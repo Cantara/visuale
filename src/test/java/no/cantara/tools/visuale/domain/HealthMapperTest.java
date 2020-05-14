@@ -31,6 +31,9 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
 //        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+        health = HealthMapper.fromRealWorldJson(old_school_health);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+
         health = HealthMapper.fromRealWorldJson(uawa);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
 //        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -461,4 +464,6 @@ class HealthMapperTest {
             "  \"running since\": \"2020-04-29T09:12:39.827905Z\"\n" +
             "\n" +
             "}\n";
+
+    private String old_school_health = "{\"outcome\":\"UP\",\"status\":\"UP\",\"checks\":[]}";
 }
