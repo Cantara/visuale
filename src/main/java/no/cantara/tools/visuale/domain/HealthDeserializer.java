@@ -40,13 +40,23 @@ public class HealthDeserializer extends StdDeserializer<Health> {
         if ("true".equalsIgnoreCase(statusValue.toLowerCase())) {
             statusValue = "OK";
         }
+        if ("HEALTHY".equalsIgnoreCase(statusValue.toLowerCase())) {
+            statusValue = "OK";
+        }
+        if ("OK".equalsIgnoreCase(statusValue.toLowerCase())) {
+            statusValue = "OK";
+        }
+        if ("UP".equalsIgnoreCase(statusValue.toLowerCase())) {
+            statusValue = "OK";
+        }
+
         String nowValue = jsonFlattenedMap.remove("now");
         String ipValue = jsonFlattenedMap.remove("ip");
         String versionValue = jsonFlattenedMap.remove("version");
         String runningSinceValue = jsonFlattenedMap.remove("running since");
         String nameValue = jsonFlattenedMap.remove("name");
 
-        if (ipValue == null || ipValue.length() < 1 && versionValue.length() > 30) {
+        if ((ipValue == null || ipValue.length() < 1) && (versionValue != null && versionValue.length() > 30)) {
             int beginindex = 1 + versionValue.lastIndexOf("-");
             int endindex = beginindex + 17;
             if (endindex > versionValue.length()) {
@@ -57,7 +67,7 @@ public class HealthDeserializer extends StdDeserializer<Health> {
             }
 
         }
-        if (nameValue == null || nameValue.length() < 1 && versionValue.length() > 30) {
+        if ((nameValue == null || nameValue.length() < 1) && (versionValue != null && versionValue.length() > 30)) {
             int beginindex = 1 + versionValue.lastIndexOf("[");
             int endindex = beginindex + 30;
             if (endindex > versionValue.length()) {

@@ -48,6 +48,14 @@ $ wget http://localhost:8080/status
 ```
 * Dashboard UI here:  http://localhost:8080/
 
+#### Build from IDE
+
+The UI client is built on package stage. You must run:
+```
+$ mvn clean package
+```
+... before running Main from Intellj
+
 #### Configuration
 
 You can configure the visuale environment by creating a json file ./environment_config.json in the current directory
@@ -72,14 +80,6 @@ more ./environment_config.json
 }
 ```
 
-And then you can add some push health agents:
-```
-# Let us add some dummy services by using the visuale health resurce...
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n1
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n2
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
-```
-
 If you want to override the server port, you may add a local_config.properties file
 
 more ./local_config.properties
@@ -92,8 +92,29 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 # Not real security, but will allow simple wall-mounted screens to access without too much pain
 ```
 
+#### Push status to Visuale
 
-### Additional grouping and organisatio of services
+And then you can add some push health agents:
+```
+# Let us add some dummy services by using the visuale health resurce...
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n1
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n2
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
+```
+Json body
+```
+{
+  "Status": "OK",
+  "name": "Jenkins",
+  "version": "2.222",
+  "ip": "172.31.34.121 "
+}
+```
+
+Path
+http://localhost:8080/status/<service-name>/visuale/<nodeId>
+
+### Additional grouping and organisation of services
 
 We support two mechanisms to organize services: servive_tag and service_type which can be set from the environment_config.json file or by adding query parameters to the /api/status call like 
  * ?service_type=CS&service_tag=QoS_Group_A
@@ -121,7 +142,13 @@ Note: TAGS are not case-sensitive in Visuale.
 ![An example of grouping of services by Service](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale%20dashboard%20-%20groupByService.png)
 
 
+#### Visualizing the type of services running in the Dashboard
 
+Visuale support categorization of services into types of services. This can be added to the service with the additional service_type parameter (both as a query-parameter on PUT health updates or in the environment json configuration. The visualization of service categories is switched on by the following query parameter for the dashboard:
+
+ * servicetype=true
+
+As of the initial release, Visuale support the Cantara Service Categorization (https://wiki.cantara.no/display/OWSOA/Service+Categories), but we may add support for installation spesific service categorization if enough people want this.
       
 # Some initial key targets for the project
 
