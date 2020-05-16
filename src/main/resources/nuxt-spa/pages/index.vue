@@ -87,6 +87,6 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
     padding: 0.35em 0.7em;
     height: 2em;
     color: $color--description;
-    display: inline-block;
+    display: block;
   }
 </style>
