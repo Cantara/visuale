@@ -1,6 +1,10 @@
 <template>
   <div class="background">
     <nuxt />
+    <StoreMediator/>
+    <PollingService/>
+    <OnWindowResizeService/>
+    <ServerExceptionHandling/>
     <footer>
  <!--     Created by:
       Marius Årnes - https://github.com/appartiff
@@ -9,11 +13,21 @@
   </div>
 </template>
 <script>
+  import PollingService from "../components/PollingService";
+  import OnWindowResizeService from "../components/OnWindowResizeService";
+  import ServerExceptionHandling from "../components/serverExceptionHandling/ServerExceptionHandling";
+  import StoreMediator from "../components/StoreMediator";
   export default {
     errorCaptured(error, vm, info) {
       console.log(error, vm, info);
       return false;
     },
+    components:{
+      PollingService,
+      OnWindowResizeService,
+      ServerExceptionHandling,
+      StoreMediator
+    }
   }
 </script>
 <style lang="scss" scoped>

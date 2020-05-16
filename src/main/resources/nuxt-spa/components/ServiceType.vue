@@ -7,7 +7,6 @@
     <A2A class="icon" v-else-if="service_type === 'A2A'"></A2A>
   </div>
 </template>
-
 <script>
 
   import CS from '~/static/CS.svg';

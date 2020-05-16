@@ -1,23 +1,17 @@
 <template>
   <div id="dashboard">
     <h1 id="heading">{{services.name}}</h1>
-    <PollingService></PollingService>
-    <OnWindowResizeService></OnWindowResizeService>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService" ></groupTagOverService>
       <Service :service-type-status="serviceType" :title="service.name" v-for="(service,index) in services.services" :key="index" :service="service"></Service>
     </div>
-    <ServerExceptionHandling></ServerExceptionHandling>
   </div>
 </template>
 
 <script>
   import {mapState, mapGetters,mapMutations} from 'vuex';
   import Service from "../components/Service";
-  import PollingService from "../components/PollingService";
-  import OnWindowResizeService from "../components/OnWindowResizeService";
-  import ServerExceptionHandling from "../components/serverExceptionHandling/ServerExceptionHandling";
 import groupedServicesOverTag from "../components/groupedServicesOverTag";
   import GroupTagOverService from "../components/groupTagOverService";
   export default {
@@ -25,9 +19,6 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
     components: {
       GroupTagOverService,
       Service,
-      PollingService,
-      OnWindowResizeService,
-      ServerExceptionHandling,
       groupedServicesOverTag
     },
     computed: {

@@ -3,10 +3,10 @@
     <div class="service-tag-block">
       <div class="marker">
         <div>
-          <ServiceTitleElement>
+          <TitleElement>
             <slot name="title">
             </slot>
-          </ServiceTitleElement>
+          </TitleElement>
         </div>
         <slot name="content">
 
@@ -17,11 +17,11 @@
 </template>
 
 <script>
-  import ServiceTitleElement from "./ServiceTitleElement";
+  import TitleElement from "./TitleElement";
     export default {
         name: "groupedServicesElement",
       components: {
-        ServiceTitleElement
+        TitleElement
       }
     }
 </script>

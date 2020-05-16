@@ -23,7 +23,7 @@
 
 <script>
   import {displayNodeTableCondition} from "../../preferences";
-  import ServiceTitleElement from "../ServiceTitleElement";
+  import ServiceTitleElement from "../TitleElement";
   import borderStatusMixin from "../borderStatusMixin";
   export default {
     name: "ServiceElement",
