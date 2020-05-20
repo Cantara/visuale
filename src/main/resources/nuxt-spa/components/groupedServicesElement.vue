@@ -3,7 +3,7 @@
     <div class="service-tag-block">
       <div class="marker">
         <div>
-          <TitleElement>
+          <TitleElement :isGrouped="true">
             <slot name="title">
             </slot>
           </TitleElement>

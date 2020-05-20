@@ -5,12 +5,10 @@
     <OnWindowResizeService/>
     <ServerExceptionHandling/>
     <nuxt />
-
     <footer>
  <!--     Created by:
       Marius Årnes - https://github.com/appartiff
       Totto - https://github.com/totto-->
-
     </footer>
 
   </div>

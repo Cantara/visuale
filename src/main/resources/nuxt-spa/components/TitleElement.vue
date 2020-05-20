@@ -1,5 +1,5 @@
 <template>
-  <div class="title">
+  <div class="title" :class="isGrouped ? 'group-title' : ''">
     <slot>
     </slot>
   </div>
@@ -7,7 +7,14 @@
 
 <script>
     export default {
-        name: "ServiceTitleElement"
+        name: "ServiceTitleElement",
+      props:{
+          isGrouped: {
+            type:Boolean,
+            required:false,
+            default:false
+          }
+      }
     }
 </script>
 
@@ -19,6 +26,9 @@
     float: left;
     color: white;
     line-height: 1rem;
+  }
+  .group-title > :first-child {
+    margin-left: 1.65rem!important;
   }
   .title > :first-child {
     margin: 0 0 0 0.75em;
