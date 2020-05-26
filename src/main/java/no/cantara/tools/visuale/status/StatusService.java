@@ -116,6 +116,7 @@ public class StatusService {
             Set<Service> serviceSet = environment.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                 if (service.getName().equalsIgnoreCase(serviceName)) {  // We found a candidate
+                    foundService = true;
                     if (hasValue(serviceTag) // we have a tag
                             && service.getServiceTag() != null  // we do not want any NPEs
                             && !service.getServiceTag().equalsIgnoreCase(serviceTag)) {  // And we need a service object for each tag
