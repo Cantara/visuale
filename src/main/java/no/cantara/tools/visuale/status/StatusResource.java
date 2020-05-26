@@ -91,7 +91,9 @@ public class StatusResource implements Service {
      * @return {@link Response}
      */
     @SuppressWarnings("checkstyle:designforextension")
-    public synchronized void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
+    public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
+        // synchronized TODO revisit this  foundService = true;
+
         logger.debug("updateFullHealthInfo");
         String envName = request.path().param("env");
         String serviceName = request.path().param("service");
