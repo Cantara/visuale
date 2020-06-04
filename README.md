@@ -97,9 +97,9 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 And then you can add some push health agents:
 ```
 # Let us add some dummy services by using the visuale health resurce...
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n1
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n2
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/Visuale%20DEVTEST/visuale/n3
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/Visuale%20DEVTEST/visuale/n1
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/Visuale%20DEVTEST/visuale/n2
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/Visuale%20DEVTEST/visuale/n3
 ```
 Json body
 ```
