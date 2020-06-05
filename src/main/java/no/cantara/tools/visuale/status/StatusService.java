@@ -129,18 +129,27 @@ public class StatusService {
                                 Health latest = node.getLatestHealth();
                                 Health earliest = node.getEarliestHealth();
                                 if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
-                                    if (latest == null) {
-                                        Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                                        if (hasValue(health.getIp())) {
-                                            addnode.setIp(health.getIp());
-                                        }
-                                        if (hasValue(health.getVersion())) {
-                                            addnode.setVersion(health.getVersion());
-                                        }
-                                        service.addNode(addnode);
-                                        updateEnvironmentAsString();
-                                        return true;
+                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                    if (hasValue(health.getIp())) {
+                                        addnode.setIp(health.getIp());
                                     }
+                                    if (hasValue(health.getVersion())) {
+                                        addnode.setVersion(health.getVersion());
+                                    }
+                                    service.addNode(addnode);
+                                    updateEnvironmentAsString();
+                                    return true;
+                                } else if (latest == null) {
+                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                                    if (hasValue(health.getIp())) {
+                                        addnode.setIp(health.getIp());
+                                    }
+                                    if (hasValue(health.getVersion())) {
+                                        addnode.setVersion(health.getVersion());
+                                    }
+                                    service.addNode(addnode);
+                                    updateEnvironmentAsString();
+                                    return true;
                                 } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
                                     node.addHealth(health);
                                     updateEnvironmentAsString();
