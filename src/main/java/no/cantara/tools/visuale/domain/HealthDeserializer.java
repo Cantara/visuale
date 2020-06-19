@@ -51,9 +51,18 @@ public class HealthDeserializer extends StdDeserializer<Health> {
         }
 
         String nowValue = jsonFlattenedMap.remove("now");
+        if ((nowValue == null || nowValue.length() < 1)) {
+            nowValue = jsonFlattenedMap.remove("timestamp");
+        }
+
+
         String ipValue = jsonFlattenedMap.remove("ip");
         String versionValue = jsonFlattenedMap.remove("version");
         String runningSinceValue = jsonFlattenedMap.remove("running since");
+        if ((runningSinceValue == null || runningSinceValue.length() < 1)) {
+            runningSinceValue = jsonFlattenedMap.remove("runningsince");
+        }
+
         String nameValue = jsonFlattenedMap.remove("name");
 
         if ((ipValue == null || ipValue.length() < 1) && (versionValue != null && versionValue.length() > 30)) {
