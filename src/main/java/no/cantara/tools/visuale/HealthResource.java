@@ -32,9 +32,8 @@ public class HealthResource implements Service {
     private static Set<URI> okPollingURLs = new CopyOnWriteArraySet<>();
     private static Set<URI> failedPollingURLs = new CopyOnWriteArraySet<>();
     private static String runningSince;
-    private static String myVersion;
-    private static String myIp;
-    private static String myIpAddresses;
+    private String myVersion;
+    private String myIp;
 
     /**
      * A service registers itself by updating the routine rules.
@@ -62,11 +61,18 @@ public class HealthResource implements Service {
 
 
     public String getHealthTextJson() {
+        if (!hasValue(myVersion)) {
+            myVersion = getVersion();
+        }
+        if (!hasValue(myIp)) {
+            myIp = getMyIPAddresssString();
+        }
+
         return "{\n" +
                 "  \"Status\": \"" + ok + "\",\n" +
                 "  \"name\": \"" + applicationInstanceName + "\",\n" +
-                "  \"ip\": \"" + getMyIPAddresssString() + "\",\n" +
-                "  \"version\": \"" + getVersion() + "\",\n" +
+                "  \"ip\": \"" + myIp + "\",\n" +
+                "  \"version\": \"" + myVersion + "\",\n" +
                 "  \"okPollingURLs\": \"" + Arrays.asList(okPollingURLs) + "\",\n" +
                 "  \"failedPollingURLs\": \"" + Arrays.asList(failedPollingURLs) + "\",\n" +
                 "  \"now\": \"" + Instant.now() + "\",\n" +
@@ -81,55 +87,47 @@ public class HealthResource implements Service {
     }
 
     private static String getVersion() {
-        if (!hasValue(myVersion)) {
-            Properties mavenProperties = new Properties();
-            String resourcePath = "/META-INF/maven/no.cantara.tools/" + applicationInstanceName + "/pom.properties";
-            URL mavenVersionResource = HealthResource.class.getResource(resourcePath);
-            if (mavenVersionResource != null) {
-                try {
-                    mavenProperties.load(mavenVersionResource.openStream());
-                    myVersion = mavenProperties.getProperty("version", "missing version info in " + resourcePath);
-                    return myVersion;
-                } catch (IOException e) {
-                    log.warn("Problem reading version resource from classpath: ", e);
-                }
+        Properties mavenProperties = new Properties();
+        String resourcePath = "/META-INF/maven/no.cantara.tools/" + applicationInstanceName + "/pom.properties";
+        URL mavenVersionResource = HealthResource.class.getResource(resourcePath);
+        if (mavenVersionResource != null) {
+            try {
+                mavenProperties.load(mavenVersionResource.openStream());
+                return mavenProperties.getProperty("version", "missing version info in " + resourcePath);
+            } catch (IOException e) {
+                log.warn("Problem reading version resource from classpath: ", e);
             }
-            myVersion = getMyIPAddresssesString();
         }
-        return "(DEV VERSION)" + " [" + applicationInstanceName + " - " + myVersion + "]";
+        return "(DEV VERSION)" + " [" + applicationInstanceName + " - " + getMyIPAddresssString() + "]";
     }
 
     public static String getMyIPAddresssesString() {
-        if (!hasValue(myIpAddresses)) {
-            String ipAdresses = "";
 
-            try {
-                ipAdresses = InetAddress.getLocalHost().getHostAddress();
-                Enumeration n = NetworkInterface.getNetworkInterfaces();
+        String ipAdresses = "";
 
-                while (n.hasMoreElements()) {
-                    NetworkInterface e = (NetworkInterface) n.nextElement();
+        try {
+            ipAdresses = InetAddress.getLocalHost().getHostAddress();
+            Enumeration n = NetworkInterface.getNetworkInterfaces();
 
-                    InetAddress addr;
-                    for (Enumeration a = e.getInetAddresses(); a.hasMoreElements(); ipAdresses = ipAdresses + "  " + addr.getHostAddress()) {
-                        addr = (InetAddress) a.nextElement();
-                    }
+            while (n.hasMoreElements()) {
+                NetworkInterface e = (NetworkInterface) n.nextElement();
+
+                InetAddress addr;
+                for (Enumeration a = e.getInetAddresses(); a.hasMoreElements(); ipAdresses = ipAdresses + "  " + addr.getHostAddress()) {
+                    addr = (InetAddress) a.nextElement();
                 }
-                myIpAddresses = ipAdresses;
-            } catch (Exception e) {
-                return "Not resolved";
             }
+        } catch (Exception e) {
+            return "Not resolved";
         }
 
-        return myIpAddresses;
+        return ipAdresses;
     }
 
     public static String getMyIPAddresssString() {
-        if (!hasValue(myIp)) {
-            String fullString = getMyIPAddresssesString();
-            myIp = fullString.substring(0, fullString.indexOf(" "));
-        }
-        return myIp;
+
+        String fullString = getMyIPAddresssesString();
+        return fullString.substring(0, fullString.indexOf(" "));
     }
 
     public static void setOkPollingURLs(Set<URI> okPollingURLs) {
