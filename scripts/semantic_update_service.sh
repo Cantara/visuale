@@ -37,6 +37,10 @@ CLASSIFIER=
 DELAY= #hours or minutes support, e.g. '100m' and '24h'. Optional
 USERNAME=
 PASSWORD=
+
+# Allow for property override, to simplify deployment and configuration
+source ./scripts/semantic_update_service.properties
+
 CURL_AUTH= #-u$USERNAME:$PASSWORD
 
 function usage() {
