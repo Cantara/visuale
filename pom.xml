@@ -334,14 +334,14 @@
                 <version>1.5.0</version>
                 <executions>
                     <execution>
-                        <id>run tests</id>
+                        <id>run tests -y</id>
                         <configuration>
                             <executable>${npm.executable}</executable>
                             <arguments>test</arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm run build</id>
+                        <id>npm run build -y</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
