@@ -121,6 +121,9 @@ public class StatusService {
                             && service.getServiceTag() != null  // we do not want any NPEs
                             && !service.getServiceTag().equalsIgnoreCase(serviceTag)) {  // And we need a service object for each tag
                         //  We have a tag and it is different, thus skip parsing nodes
+                        if (hasValue(serviceType)) {
+                            service.setServiceType(serviceType);
+                        }
                     } else {
                         Set<Node> nodeSet = service.getNodes();
                         foundService = true;
