@@ -46,6 +46,10 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+        health = HealthMapper.fromRealWorldJson(failing_in_the_wild_json_health);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
         health = HealthMapper.fromRealWorldJson(demoHealthString);
         assertTrue("N/A".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -466,4 +470,7 @@ class HealthMapperTest {
             "}\n";
 
     private String old_school_health = "{\"outcome\":\"UP\",\"status\":\"UP\",\"checks\":[]}";
+
+    private String failing_in_the_wild_json_health = "{\"Status\":\"true\",\"name\":\"room-authorization-api\",\"ip\":\"172.31.13.23\",\"version\":\"0.6.6\",\"now\":\"2020-08-17T20:54:10.583681Z\",\"running since\":\"2020-08-01T17:31:03.398711Z\",\"\n" +
+            "integrations\":[{\"name\":\"Nexudus-webhook\",\"isMocked\":true}]}";
 }

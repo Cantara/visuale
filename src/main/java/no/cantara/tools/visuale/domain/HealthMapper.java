@@ -23,12 +23,14 @@ public class HealthMapper {
         }
 
         Health health = new Health();
-        try {
-            health = mapper.readValue(json, Health.class);
-            health.setOriginalHealth(json);
+        if (!tryCustomDeserializer) {
+            try {
+                health = mapper.readValue(json, Health.class);
+                health.setOriginalHealth(json);
 
-        } catch (Exception e) {
-            log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
+            } catch (Exception e) {
+                log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
+            }
         }
 
 
