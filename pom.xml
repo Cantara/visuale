@@ -132,7 +132,30 @@
             <artifactId>helidon-webserver-netty</artifactId>
             <version>${helidon.version}</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-codec-http</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-codec-http2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-codec-http -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>4.1.51.Final</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-codec-http2 -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http2</artifactId>
+            <version>4.1.51.Final</version>
+        </dependency>
+
         <dependency>
             <groupId>io.helidon.webserver</groupId>
             <artifactId>helidon-webserver-json</artifactId>
