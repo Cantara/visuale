@@ -138,7 +138,7 @@ public class StatusResource implements Service {
             if (healthJsonString != null || healthJsonString.toString().length() < 1) {
                 myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
             }
-            if (myHealth != null && myHealth.getRunningSince().length() > 5) {
+            if (myHealth != null && myHealth.getRunningSince() != null && myHealth.getRunningSince().length() > 5) {
                 statusService.updateEnvironment(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
             }
             return myHealth;
