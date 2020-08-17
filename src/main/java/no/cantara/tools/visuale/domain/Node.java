@@ -108,8 +108,10 @@ public class Node {
         Instant lastSeenInstant = Instant.now().minus(30, ChronoUnit.DAYS);
         try {
             Health h = getLatestHealth();
-            OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-            return date.toInstant();
+            if (h != null) {
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                return date.toInstant();
+            }
         } catch (Exception e) {
             logger.error("Exception trying to parse now from health", e);
         }
@@ -120,15 +122,18 @@ public class Node {
     public boolean isHealthy() {
         try {
             Health h = getLatestHealth();
-            OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-            Instant lastSeenInstant = date.toInstant();
-            Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-            if (lastSeenInstant.isBefore(five_minutes_ago)) {
-                return false;
+            if (h != null) {
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant lastSeenInstant = date.toInstant();
+                Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
+                if (lastSeenInstant.isBefore(five_minutes_ago)) {
+                    return false;
+                }
+                if (h != null && h.getStatus() != null && h.getStatus().equalsIgnoreCase("OK")) {
+                    return true;
+                }
             }
-            if (h != null && h.getStatus() != null && h.getStatus().equalsIgnoreCase("OK")) {
-                return true;
-            }
+            return false;
         } catch (Exception e) {
             logger.warn("Unable to parse/calculate lastSeen:", e);
         }
@@ -138,6 +143,9 @@ public class Node {
     @JsonProperty("is_unstable")
     public boolean isUnstable() {
         Health h = getLatestHealth();
+        if (h == null) {
+            return true;
+        }
         try {
             OffsetDateTime date = OffsetDateTime.parse(h.getNow());
             Instant uptimeInstant = date.toInstant();
@@ -157,17 +165,20 @@ public class Node {
         boolean isSecure = false;
         Instant uptimeInstant = Instant.MIN;
         Health h = getLatestHealth();
-        try {
-            OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-            uptimeInstant = date.toInstant();
-        } catch (Exception e) {
-            logger.error("Exception trying to parse now from health", e);
+        if (h != null) {
+            try {
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                uptimeInstant = date.toInstant();
+            } catch (Exception e) {
+                logger.error("Exception trying to parse now from health", e);
+            }
+            Instant seven_days_ago = Instant.now().minus(7, ChronoUnit.DAYS);
+            if (uptimeInstant.getEpochSecond() > seven_days_ago.getEpochSecond()) {
+                isSecure = true;
+            }
+            return isSecure;
         }
-        Instant seven_days_ago = Instant.now().minus(7, ChronoUnit.DAYS);
-        if (uptimeInstant.getEpochSecond() > seven_days_ago.getEpochSecond()) {
-            isSecure = true;
-        }
-        return isSecure;
+        return false;
     }
 
 
