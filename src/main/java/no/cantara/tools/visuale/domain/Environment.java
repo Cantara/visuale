@@ -3,7 +3,11 @@ package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -15,7 +19,7 @@ public class Environment {
     @JsonProperty("name")
     private String name;
     @JsonProperty("services")
-    private Set<Service> services = new HashSet<>(); //new TreeSet<Service>(new MyServiceNameComp());
+    private Set<Service> services = new CopyOnWriteArraySet<>(); // new HashSet<>(); //new TreeSet<Service>(new MyServiceNameComp());
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -47,7 +51,7 @@ public class Environment {
 
     public void addService(Service service) {
         if (this.services == null) {
-            this.services = new HashSet<>();
+            this.services = new CopyOnWriteArraySet<>(); // new HashSet<>();
 //            this.services = new TreeSet<Service>(new MyServiceNameComp());
         }
         for (Service existingservice : services) {
@@ -61,7 +65,7 @@ public class Environment {
     }
 
     public Environment withServices(Set<Service> services) {
-        this.services = new TreeSet<Service>(new MyServiceNameComp());
+        this.services = new CopyOnWriteArraySet<>(); // new TreeSet<Service>(new MyServiceNameComp());
         services.addAll(services);
         return this;
     }

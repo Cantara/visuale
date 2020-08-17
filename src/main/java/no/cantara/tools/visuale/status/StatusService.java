@@ -237,6 +237,10 @@ public class StatusService {
     }
 
     private synchronized void updateEnvironmentAsString() {
+
+    }
+
+    private synchronized void updateEnvironmentAsString2() {
         try {
             processHealthQueue();
             environmentAsString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
@@ -251,7 +255,7 @@ public class StatusService {
 
     private void startSyncThread() {
         Runnable task2 = () -> {
-            updateEnvironmentAsString();
+            updateEnvironmentAsString2();
         };
         // init Delay = 5, repeat the task every 60 second
         ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 3, 1, TimeUnit.SECONDS);
