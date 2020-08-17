@@ -50,6 +50,10 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+        health = HealthMapper.fromRealWorldJson(badOauthHeathJson);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
         health = HealthMapper.fromRealWorldJson(demoHealthString);
         assertTrue("N/A".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -473,4 +477,22 @@ class HealthMapperTest {
 
     private String failing_in_the_wild_json_health = "{\"Status\":\"true\",\"name\":\"room-authorization-api\",\"ip\":\"172.31.13.23\",\"version\":\"0.6.6\",\"now\":\"2020-08-17T20:54:10.583681Z\",\"running since\":\"2020-08-01T17:31:03.398711Z\",\"\n" +
             "integrations\":[{\"name\":\"Nexudus-webhook\",\"isMocked\":true}]}";
+
+    private String badOauthHeathJson = "{\n" +
+            "  \"Status\": \"OK\",\n" +
+            "  \"Version\": \"2.2.63-SNAPSHOT [Whydah-OAuth2Service-1 - 172.31.33.19  fe80:0:0:0:46e:ebff:fe9f:ce74%eth0  172.31.33.19  0:0:0:0:0:0:0:1%lo  127.0.0.1]\"\n" +
+            ",\n" +
+            "  \"IP\": \"172.31.33.19  fe80:0:0:0:46e:ebff:fe9f:ce74%eth0  172.31.33.19  0:0:0:0:0:0:0:1%lo  127.0.0.1\",\n" +
+            "  \"DEFCON\": \"DEFCON5\",\n" +
+            "  \"STS\": \"null\",\n" +
+            "  \"UAS\": \"null\",\n" +
+            "  \"hasApplicationToken\": \"false\",\n" +
+            "  \"hasValidApplicationToken\": \"false\",\n" +
+            "  \"hasApplicationsMetadata\": \"false\",\n" +
+            "  \"ConfiguredApplications\": \"0\",\n" +
+            "  \"now\": \"2020-08-17T21:11:26.766Z\",\n" +
+            "  \"running since\": \"2020-08-17T08:26:39.925Z\",\n" +
+            "\n" +
+            "  \"clientIDs\": []\n" +
+            "}";
 }
