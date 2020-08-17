@@ -84,6 +84,11 @@ public final class Main {
                 .register(JsonSupport.get())
                 .register(healthResource)
                 .register(statusResource)
+
+                .register("/nuxt-spa", StaticContentSupport.builder("/nuxt-spa")
+                        .build())
+                .register("/_nuxt", StaticContentSupport.builder("/nuxt-spa/dist/_nuxt")
+                        .build())
                 .register("/", StaticContentSupport.builder("/nuxt-spa/dist")
                         .welcomeFileName("index.html")
                         .build())
