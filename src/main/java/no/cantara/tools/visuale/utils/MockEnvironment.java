@@ -7,6 +7,7 @@ public class MockEnvironment {
             "    \"services\": [\n" +
             "      {\n" +
             "        \"name\": \"Quadim Overlord-Service\",\n" +
+            "        \"service_type\": \"CS\",\n" +
             "        \"nodes\": [\n" +
             "          {\n" +
             "            \"ip\": \"10.45.54.23\",\n" +
@@ -56,6 +57,7 @@ public class MockEnvironment {
             "      },\n" +
             "      {\n" +
             "        \"name\": \"Quadim Overlord Profil Service\",\n" +
+            "        \"service_type\": \"A2A\",\n" +
             "        \"nodes\": [\n" +
             "          {\n" +
             "            \"ip\": \"10.45.54.27\",\n" +
@@ -83,6 +85,7 @@ public class MockEnvironment {
             "      },\n" +
             "      {\n" +
             "        \"name\": \"Quadim API Service\",\n" +
+            "        \"service_type\": \"ACS\",\n" +
             "        \"nodes\": [\n" +
             "          {\n" +
             "            \"ip\": \"10.45.54.27\",\n" +

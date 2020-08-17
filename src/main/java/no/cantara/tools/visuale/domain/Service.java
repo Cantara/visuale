@@ -124,7 +124,9 @@ public class Service {
 
     @JsonProperty("service_type")
     public void setServiceType(String serviceType) {
-        this.serviceType.setServiceType(serviceType);
+        if (hasValue(serviceType)) {
+            this.serviceType.setServiceType(serviceType);
+        }
     }
 
     @Override

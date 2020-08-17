@@ -4,14 +4,14 @@
     {
       "service_name": "quadim-platform-service",
       "service_tag": "europe",
-      "service_type": "CS",
+      "service_type": "ACS",
       "node_name": "node1",
       "health_url": "https://devtest.quadim.ai/health"
     },
     {
       "service_name": "quadim-platform-service",
       "service_tag": "asia",
-      "service_type": "CS",
+      "service_type": "ACS",
       "node_name": "node1",
       "health_url": "https://devtest.quadim.ai/health"
     },
@@ -19,7 +19,7 @@
       "service_name": "quadim-platform-service",
       "node_name": "node2",
       "service_tag": "VIP",
-      "service_type": "CS",
+      "service_type": "ACS",
       "health_url": "https://devtest.quadim.ai/health"
     },
     {
@@ -54,6 +54,7 @@
     {
       "service_name": "quadim-skill-service",
       "node_name": "node1",
+      "service_type": "ACS",
       "health_url": "https://devtest.quadim.ai/api/skill/health"
     },
     {
@@ -64,6 +65,7 @@
     {
       "service_name": "quadim-filestore-service",
       "node_name": "node1",
+      "service_type": "A2A",
       "health_url": "https://devtest.quadim.ai/api/measurement/health"
     }
   ]

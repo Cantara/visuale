@@ -112,12 +112,12 @@ public final class Main {
                 .thenApply(webServer -> {
                             if (accessToken == null || accessToken.length() < 1) {
                                 String endpoint = "http://localhost:" + webServer.port();
-                                System.out.println("- Visit Dashboard at: " + endpoint + "/");
+                                System.out.println("- Visit Dashboard at: " + endpoint + "/?ui_extension=groupByTag&servicetype=true");
                                 System.out.println(" - Health checks available on: " + endpoint + "/health");
                                 System.out.println(" - Environment status available on:  " + endpoint + "/status/");
                             } else {
                                 String endpoint = "http://localhost:" + webServer.port();
-                                System.out.println(" Visit Dashboard at: " + endpoint + "/?accessToken=" + accessToken);
+                                System.out.println(" Visit Dashboard at: " + endpoint + "/?accessToken=" + accessToken + "&ui_extension=groupByTag&servicetype=true");
                                 System.out.println(" - Health checks available on: " + endpoint + "/health");
                                 System.out.println(" - Environment status available on:  " + endpoint + "/status/?accessToken=" + accessToken);
 

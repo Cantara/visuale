@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.util.Arrays;
@@ -36,15 +37,23 @@ public class StatusResourceIntegrationTest {
         try {
             Client client = ClientBuilder.newClient();
 
-            String jsonObject = client
+            Response jsonObject = client
                     .target(getConnectionString("/status"))
                     .request()
-                    .get(String.class);
-            Assertions.assertTrue(jsonObject.length() > 5);
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .get();
+            Assertions.assertEquals(200, jsonObject.getStatus(), "GET health status code");
+            Assertions.assertTrue(jsonObject.getEntity().toString().length() > 5);
+
+            //  Response r = client
+            //                .target(uri)
+            //                .path("/booking/create")
+            //                .request()
+            //                .post(Entity.entity(updatedRequest, MediaType.APPLICATION_JSON_TYPE));
 
             Health h = new Health().withStatus("OK").withName("test-health").withVersion("0.2.1").withIp("10.3.2.30").withNow(Instant.now().toString());
             Response r = client
-                    .target(getConnectionString("/api/status/myenv/myservice/mynode?servive_tag=mytag&service_type=ACS"))
+                    .target(getConnectionString("/api/status/myenv/myservice/mynode?service_tag=mytag&service_type=ACS"))
                     .request()
                     .put(Entity.json(h));
             Assertions.assertEquals(204, r.getStatus(), "POST status code");

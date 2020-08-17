@@ -2,10 +2,7 @@ package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.cantara.tools.visuale.domain.Environment;
-import no.cantara.tools.visuale.domain.Health;
-import no.cantara.tools.visuale.domain.Node;
-import no.cantara.tools.visuale.domain.Service;
+import no.cantara.tools.visuale.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +51,9 @@ public class StatusService {
                         node.setName(service.getName());
                     }
                     healthResults.put(node.getLookupKey(), node);
+                }
+                if (service.getServiceType() == null) {
+                    service.setServiceType(ServiceType.ServiceCategorization.CS.name());
                 }
             }
         } catch (Exception e) {
@@ -124,6 +124,9 @@ public class StatusService {
                     } else {
                         Set<Node> nodeSet = service.getNodes();
                         foundService = true;
+                        if (service.getServiceType() != null && serviceType != null && !service.getServiceType().equalsIgnoreCase(serviceType)) {
+                            service.setServiceType(serviceType);
+                        }
                         for (Node node : nodeSet) {
                             if (node.getName().equalsIgnoreCase(nodeName)) {
                                 Health latest = node.getLatestHealth();
@@ -195,6 +198,9 @@ public class StatusService {
                                 && service.getServiceTag().equalsIgnoreCase(serviceTag)) {
                             Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                             service.addNode(node);
+                            if (serviceType != null) {
+                                service.setServiceType(serviceType);
+                            }
                             updateEnvironmentAsString();
                             return true;
                         }
@@ -228,7 +234,7 @@ public class StatusService {
             processHealthQueue();
             environmentAsString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
         } catch (Exception e) {
-            logger.error("Unable to uodate environmentAsString", e);
+            logger.error("Unable to update environmentAsString", e);
         }
     }
 

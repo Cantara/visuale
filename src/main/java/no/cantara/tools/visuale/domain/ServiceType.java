@@ -13,7 +13,7 @@ public class ServiceType {
                 return;
             }
         }
-        this.serviceType = serviceType;
+        //this.serviceType = serviceType;
     }
 
     public ServiceType withServiceCategory(ServiceCategorization cs) {
