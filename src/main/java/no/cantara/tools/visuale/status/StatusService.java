@@ -101,7 +101,7 @@ public class StatusService {
                     }
                 }
             } catch (Exception e) {
-                logger.error("Received unmappable health", e);
+                logger.error("Received un-mappable health.", e);
             }
         }
     }
@@ -124,7 +124,7 @@ public class StatusService {
                     } else {
                         Set<Node> nodeSet = service.getNodes();
                         foundService = true;
-                        if (service.getServiceType() != null && serviceType != null && !service.getServiceType().equalsIgnoreCase(serviceType)) {
+                        if (hasValue(serviceType)) {
                             service.setServiceType(serviceType);
                         }
                         for (Node node : nodeSet) {
@@ -174,6 +174,10 @@ public class StatusService {
                                 if (hasValue(health.getVersion())) {
                                     node.setVersion(health.getVersion());
                                 }
+                                if (hasValue(serviceType)) {
+                                    service.setServiceType(serviceType);
+                                }
+
                                 updateEnvironmentAsString();
                                 return true;
                             }
@@ -198,7 +202,7 @@ public class StatusService {
                                 && service.getServiceTag().equalsIgnoreCase(serviceTag)) {
                             Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                             service.addNode(node);
-                            if (serviceType != null) {
+                            if (hasValue(serviceType)) {
                                 service.setServiceType(serviceType);
                             }
                             updateEnvironmentAsString();
