@@ -1,10 +1,10 @@
 package no.cantara.tools.visuale;
 
-import io.helidon.media.jsonb.server.JsonBindingSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
+import io.helidon.webserver.json.JsonSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +42,8 @@ public class HealthResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/health", JsonBindingSupport.create(), this::showEnvironment)
-                .get("/api/health", JsonBindingSupport.create(), this::showEnvironment);
+        rules.get("/health", JsonSupport.get(), this::showEnvironment)
+                .get("/api/health", JsonSupport.get(), this::showEnvironment);
         runningSince = getRunningSince();
     }
 

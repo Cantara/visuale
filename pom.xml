@@ -50,18 +50,20 @@
         </developer>
     </developers>
 
-    <parent>
-        <groupId>io.helidon.applications</groupId>
-        <artifactId>helidon-mp</artifactId>
-        <version>1.4.4</version>
-        <!--<version>2.0.0-M2</version> -->
-        <relativePath />
-    </parent>
+    <!--    <parent>-->
+    <!--        <groupId>io.helidon.applications</groupId>-->
+    <!--        <artifactId>helidon-mp</artifactId>-->
+    <!--        <version>2.0.1</version>-->
+    <!--        <relativePath />-->
+    <!--    </parent>-->
 
 
     <properties>
         <mainClass>no.cantara.tools.visuale.Main</mainClass>
         <slf4j.version>1.7.30</slf4j.version>
+        <helidon.version>0.10.6</helidon.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <npm.executable>npm</npm.executable>
     </properties>
 
@@ -77,24 +79,131 @@
             <artifactId>Hystrix-BaseCommands</artifactId>
             <version>0.1.15</version>
         </dependency>
-<!--
+        <!--       &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.bundles/helidon-bundles-webserver &ndash;&gt;
+               <dependency>
+                   <groupId>io.helidon.bundles</groupId>
+                   <artifactId>helidon-bundles-webserver</artifactId>
+                   <version>2.0.1</version>
+               </dependency>
+               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.bundles/helidon-bundles-config &ndash;&gt;
+               <dependency>
+                   <groupId>io.helidon.bundles</groupId>
+                   <artifactId>helidon-bundles-config</artifactId>
+                   <version>2.0.1</version>
+               </dependency>
+               <dependency>
+                   <groupId>io.helidon.microprofile.bundles</groupId>
+                   <artifactId>helidon-microprofile</artifactId>
+                   <version>2.0.1</version>
+               </dependency>
+               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.common/helidon-common &ndash;&gt;
+               <dependency>
+                   <groupId>io.helidon.common</groupId>
+                   <artifactId>helidon-common</artifactId>
+                   <version>2.0.1</version>
+               </dependency>
+               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.media/helidon-media-common &ndash;&gt;
+               <dependency>
+                   <groupId>io.helidon.media</groupId>
+                   <artifactId>helidon-media-common</artifactId>
+                   <version>2.0.1</version>
+               </dependency>
+               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.media/helidon-media-jsonp &ndash;&gt;
+               <dependency>
+                   <groupId>io.helidon.media</groupId>
+                   <artifactId>helidon-media-jsonp</artifactId>
+                   <version>2.0.1</version>
+               </dependency>-->
+        <!--Config-->
         <dependency>
-            <groupId>io.helidon.microprofile.bundles</groupId>
-            <artifactId>helidon-microprofile</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
+            <groupId>io.helidon.config</groupId>
+            <artifactId>helidon-config-yaml</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+
+        <!--WebServer-->
+        <dependency>
+            <groupId>io.helidon.webserver</groupId>
+            <artifactId>helidon-webserver</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.webserver</groupId>
+            <artifactId>helidon-webserver-netty</artifactId>
+            <version>${helidon.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.webserver</groupId>
+            <artifactId>helidon-webserver-json</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+
+        <!--Security-->
+        <dependency>
+            <groupId>io.helidon.security</groupId>
+            <artifactId>helidon-security</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.security</groupId>
+            <artifactId>helidon-security-provider-http-auth</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.security</groupId>
+            <artifactId>helidon-security-integration-webserver</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+
+        <!--  &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.bundles/helidon-bundles-project &ndash;&gt;
+          <dependency>
+              <groupId>io.helidon.bundles</groupId>
+              <artifactId>helidon-bundles-project</artifactId>
+              <version>2.0.1</version>
+              <type>pom</type>
+          </dependency>-->
+
+        <!--
+                <dependency>
+                    <groupId>io.helidon.microprofile.bundles</groupId>
+                    <artifactId>helidon-microprofile</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.yaml</groupId>
+                            <artifactId>snakeyaml</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
+            <version>2.31</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
         <dependency>
-            <groupId>io.helidon.media.jsonb</groupId>
-            <artifactId>helidon-media-jsonb-server</artifactId>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>2.31</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <!--   <dependency>
+               <groupId>io.helidon.media.jsonb</groupId>
+               <artifactId>helidon-media-jsonb-server</artifactId>
+           </dependency>
+   -->
+        <!-- https://mvnrepository.com/artifact/javax.activation/javax.activation-api -->
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>javax.activation-api</artifactId>
+            <version>1.2.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.netty/netty-codec -->
@@ -129,33 +238,19 @@
             <version>1.26</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.jboss</groupId>
-            <artifactId>jandex</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>javax.activation-api</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.30</version>
-        </dependency>
+
+        <!-- <dependency>
+             <groupId>org.slf4j</groupId>
+             <artifactId>slf4j-log4j12</artifactId>
+             <version>1.7.30</version>
+         </dependency>-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
+
 
 
         <dependency>
@@ -180,6 +275,20 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jboss/jandex -->
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jandex</artifactId>
+            <version>2.2.1.Final</version>
         </dependency>
 
 
@@ -236,7 +345,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <!--<version>2.2</version>-->
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifestEntries>

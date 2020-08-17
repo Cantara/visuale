@@ -1,10 +1,10 @@
 package no.cantara.tools.visuale;
 
-import io.helidon.media.jsonb.server.JsonBindingSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerConfiguration;
 import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
+import io.helidon.webserver.json.JsonSupport;
 import no.cantara.config.ServiceConfig;
 import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
@@ -79,16 +79,16 @@ public final class Main {
             startHealthReportSimulator(statusResource.getStatusService(), environmentConfig);
         }
 
-
         HealthResource healthResource = new HealthResource();
         Routing routing = Routing.builder()
-                .register(JsonBindingSupport.create())
+                .register(JsonSupport.get())
                 .register(healthResource)
                 .register(statusResource)
                 .register("/", StaticContentSupport.builder("/nuxt-spa/dist")
                         .welcomeFileName("index.html")
                         .build())
                 .build();
+
 
         ServerConfiguration serverConfig = null;
         if (port != 0) {

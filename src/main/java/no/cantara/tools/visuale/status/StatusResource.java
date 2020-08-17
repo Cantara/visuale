@@ -1,11 +1,11 @@
 package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.helidon.media.jsonb.server.JsonBindingSupport;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
+import io.helidon.webserver.json.JsonSupport;
 import no.cantara.tools.visuale.Main;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
@@ -31,14 +31,14 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", JsonBindingSupport.create(), this::showEnvironment)
-                .options("/status", JsonBindingSupport.create(), this::showEnvironmentOptionHeaders)
-                .get("/api/status", JsonBindingSupport.create(), this::showEnvironment)
-                .options("/api/status", JsonBindingSupport.create(), this::showEnvironmentOptionHeaders)
-                .put("/status", JsonBindingSupport.create(), this::updateHealthInfo)
-                .put("/api/status", JsonBindingSupport.create(), this::updateHealthInfo)
-                .put("/status/{env}/{service}/{node}", JsonBindingSupport.create(), this::updateFullHealthInfo)
-                .put("/api/status/{env}/{service}/{node}", JsonBindingSupport.create(), this::updateFullHealthInfo);
+        rules.get("/status", JsonSupport.get(), this::showEnvironment)
+                .options("/status", JsonSupport.get(), this::showEnvironmentOptionHeaders)
+                .get("/api/status", JsonSupport.get(), this::showEnvironment)
+                .options("/api/status", JsonSupport.get(), this::showEnvironmentOptionHeaders)
+                .put("/status", JsonSupport.get(), this::updateHealthInfo)
+                .put("/api/status", JsonSupport.get(), this::updateHealthInfo)
+                .put("/status/{env}/{service}/{node}", JsonSupport.get(), this::updateFullHealthInfo)
+                .put("/api/status/{env}/{service}/{node}", JsonSupport.get(), this::updateFullHealthInfo);
     }
 
 
@@ -143,7 +143,7 @@ public class StatusResource implements Service {
             }
             return myHealth;
         } catch (Exception e) {
-            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
+            logger.error("Unable to parse and update health info for payload: {}, {}", healthJsonString, e);
         }
         return null;
     }
