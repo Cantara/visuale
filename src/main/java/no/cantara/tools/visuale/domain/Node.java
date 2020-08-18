@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -40,6 +41,8 @@ public class Node {
     private Set<Health> health = new CopyOnWriteArraySet<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonIgnore
+    private int calculatedDrift = 0;
 
 
     @JsonIgnore
@@ -104,6 +107,36 @@ public class Node {
 
 
     @JsonIgnore
+    private int getCalculatedDrift() {
+        return calculatedDrift;
+    }
+
+    @JsonIgnore
+    private void calculatedDrift() {
+        if (getHealth() == null || getHealth().size() == 0) {
+            return;
+        }
+        try {
+            int measurements = getHealth().size();
+            long total = 0;
+            for (Health h : getHealth()) {
+                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                Instant reqInstant = date.toInstant();
+                OffsetDateTime recdate = OffsetDateTime.parse(h.getReceivedNow());
+                Instant recInstant = recdate.toInstant();
+                Duration between = Duration.between(recInstant, reqInstant);
+
+                long seconds = between.getSeconds();
+                total += seconds;
+            }
+            double average = total / measurements;
+            calculatedDrift = (int) average;
+        } catch (Exception e) {
+            logger.warn("Unable to parse dates in Health", e);
+        }
+    }
+
+    @JsonIgnore
     private Instant getLastSeen() {
         Instant lastSeenInstant = Instant.now().minus(30, ChronoUnit.DAYS);
         try {
@@ -125,7 +158,8 @@ public class Node {
             if (h != null) {
                 OffsetDateTime date = OffsetDateTime.parse(h.getNow());
                 Instant lastSeenInstant = date.toInstant();
-                Instant eight_minutes_ago = Instant.now().minus(8, ChronoUnit.MINUTES);
+                Instant eight_minutes_ago = Instant.now().minus(8, ChronoUnit.MINUTES)
+                        .plus(getCalculatedDrift(), ChronoUnit.SECONDS);
                 if (lastSeenInstant.isBefore(eight_minutes_ago)) {
                     return false;
                 }
@@ -149,7 +183,8 @@ public class Node {
         try {
             OffsetDateTime date = OffsetDateTime.parse(h.getNow());
             Instant uptimeInstant = date.toInstant();
-            Instant three_minutes_ago = Instant.now().minus(3, ChronoUnit.MINUTES);
+            Instant three_minutes_ago = Instant.now().minus(3, ChronoUnit.MINUTES).plus(getCalculatedDrift(), ChronoUnit.SECONDS);
+            ;
             if (uptimeInstant.getEpochSecond() > three_minutes_ago.getEpochSecond()) {
                 return false;
             }
@@ -230,6 +265,7 @@ public class Node {
 
     public void addHealth(Health healthValue) {
         if (health == null || health.size() > 5) {  // simple housecleaning
+            calculatedDrift();
             this.health = new CopyOnWriteArraySet<>();
         }
         if (healthValue.getIp() == null || healthValue.getIp().length() < 5) {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +43,7 @@ public class HealthMapper {
                 mycustommapper.registerModule(module);
                 Health myHealth = mycustommapper.readValue(json, Health.class);
                 myHealth.setOriginalHealth(json);
+                myHealth.setReceivedNow(Instant.now().toString());
                 return myHealth;
             } catch (Exception e) {
                 log.error("Unable to custom deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));

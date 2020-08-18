@@ -28,6 +28,8 @@ public class Health {
     private String name;
     @JsonProperty("now")
     private String now;
+
+    private String receivedNow;
     @JsonProperty("running since")
     private String runningSince;
     @JsonProperty("version")
@@ -138,6 +140,14 @@ public class Health {
         return this;
     }
 
+    public String getReceivedNow() {
+        return receivedNow;
+    }
+
+    public void setReceivedNow(String receivedNow) {
+        this.receivedNow = receivedNow;
+    }
+
     @JsonProperty("running since")
     public String getRunningSince() {
         return runningSince;
@@ -223,10 +233,11 @@ public class Health {
 
     }
 
-    public Health(String status, String name, String now, String runningSince, String version, String ip) {
+    public Health(String status, String name, String now, String receivedNow, String runningSince, String version, String ip) {
         this.status = status;
         this.name = name;
         this.now = now;
+        this.receivedNow = receivedNow;
         this.runningSince = runningSince;
         this.version = version;
         this.ip = ip;
@@ -238,6 +249,7 @@ public class Health {
                 "status='" + status + '\'' +
                 ", name='" + name + '\'' +
                 ", now='" + now + '\'' +
+                ", receivedNow='" + receivedNow + '\'' +
                 ", runningSince='" + runningSince + '\'' +
                 ", version='" + version + '\'' +
                 ", ip='" + ip + '\'' +
