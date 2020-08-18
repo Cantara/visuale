@@ -68,7 +68,7 @@ public class Service {
             }
 
         }
-        if (healthy_nodes == 0) {
+        if (healthy_nodes < 1) {
             NotificationService.sendAlarm(getName(), "No healthy services");
         } else if (healthy_nodes < 2) {
             NotificationService.sendWarning(getName(), "Less than two healthy services");

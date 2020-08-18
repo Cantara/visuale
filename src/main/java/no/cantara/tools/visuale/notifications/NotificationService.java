@@ -18,9 +18,11 @@ public class NotificationService {
 
     public static Map warningMap = new HashMap<>();
     public static Map alarmMap = new HashMap<>();
+    private static boolean initialBootWarning = true;
+    private static boolean initialBootAlarm = true;
 
     public static boolean sendWarning(String service, String warningMessage) {
-        if (warningMap.get(service) == null) {
+        if (warningMap.get(service) != null) {
             warningMap.put(service, warningMessage);
             appendWarningToFile(service, warningMessage, false);
         }
@@ -28,7 +30,7 @@ public class NotificationService {
     }
 
     public static boolean sendAlarm(String service, String alarmMessage) {
-        if (alarmMap.get(service) == null) {
+        if (alarmMap.get(service) != null) {
             alarmMap.put(service, alarmMessage);
             appendAlarmToFile(service, alarmMessage, false);
         }
@@ -47,13 +49,19 @@ public class NotificationService {
         return true;
     }
 
-    private static void appendAlarmToFile(String service, String message, boolean cleared) {
+    private static void appendAlarmToFile(String service, String amessage, boolean cleared) {
         try {
-            FileWriter fileWriter = new FileWriter(alarmFilename, true);
+            FileWriter fileWriter;
+            if (initialBootAlarm) {
+                initialBootAlarm = false;
+                fileWriter = new FileWriter(alarmFilename, false);
+            } else {
+                fileWriter = new FileWriter(alarmFilename, true);
+            }
             PrintWriter printWriter = new PrintWriter(fileWriter, true);
             if (!cleared) {
                 printWriter.println("Alarm for " + service);
-                printWriter.println("    " + Instant.now().toString() + " - " + message + "\n");
+                printWriter.println("    " + Instant.now().toString() + " - " + amessage + " - \n");
             } else {
                 printWriter.println("Alarm for " + service + " cleared - time: " + Instant.now().toString());
             }
@@ -68,7 +76,13 @@ public class NotificationService {
 
     private static void appendWarningToFile(String service, String mwessage, boolean cleared) {
         try {
-            FileWriter fileWriter = new FileWriter(warningFilename, true);
+            FileWriter fileWriter;
+            if (initialBootWarning) {
+                initialBootWarning = false;
+                fileWriter = new FileWriter(warningFilename, false);
+            } else {
+                fileWriter = new FileWriter(warningFilename, true);
+            }
             PrintWriter printWriter = new PrintWriter(fileWriter, true);
             if (!cleared) {
                 printWriter.println("Warning for " + service);
