@@ -22,7 +22,7 @@ public class NotificationService {
     private static boolean initialBootAlarm = true;
 
     public static boolean sendWarning(String service, String warningMessage) {
-        if (warningMap.get(service) != null) {
+        if (warningMap.get(service) == null) {
             warningMap.put(service, warningMessage);
             appendWarningToFile(service, warningMessage, false);
         }
@@ -30,7 +30,7 @@ public class NotificationService {
     }
 
     public static boolean sendAlarm(String service, String alarmMessage) {
-        if (alarmMap.get(service) != null) {
+        if (alarmMap.get(service) == null) {
             alarmMap.put(service, alarmMessage);
             appendAlarmToFile(service, alarmMessage, false);
         }
