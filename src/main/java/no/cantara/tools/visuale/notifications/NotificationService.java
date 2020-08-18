@@ -36,11 +36,11 @@ public class NotificationService {
     }
 
     public static boolean clearService(String service) {
-        if (alarmMap.get(service) == null) {
+        if (alarmMap.get(service) != null) {
             alarmMap.remove(service);
             appendAlarmToFile(service, "", false);
         }
-        if (warningMap.get(service) == null) {
+        if (warningMap.get(service) != null) {
             warningMap.remove(service);
             appendWarningToFile(service, "", false);
         }
@@ -53,27 +53,33 @@ public class NotificationService {
             PrintWriter printWriter = new PrintWriter(fileWriter, true);
             if (!cleared) {
                 printWriter.println("Alarm for " + service);
-                printWriter.println("    " + Instant.now().toString() + " - " + message);
+                printWriter.println("    " + Instant.now().toString() + " - " + message + "\n");
             } else {
-                printWriter.println("Alarm for " + service + " cleared - time" + Instant.now().toString());
+                printWriter.println("Alarm for " + service + " cleared - time: " + Instant.now().toString());
             }
+            printWriter.flush();
             printWriter.close();
+            fileWriter.flush();
+            fileWriter.close();
         } catch (Exception e) {
             logger.error("Unable to send and persist alarm");
         }
     }
 
-    private static void appendWarningToFile(String service, String message, boolean cleared) {
+    private static void appendWarningToFile(String service, String mwessage, boolean cleared) {
         try {
             FileWriter fileWriter = new FileWriter(warningFilename, true);
             PrintWriter printWriter = new PrintWriter(fileWriter, true);
             if (!cleared) {
                 printWriter.println("Warning for " + service);
-                printWriter.println("    " + Instant.now().toString() + " - " + message);
+                printWriter.println("    " + Instant.now().toString() + " - " + mwessage + "\n");
             } else {
-                printWriter.println("Warning for " + service + " cleared - time" + Instant.now().toString());
+                printWriter.println("Warning for " + service + " cleared - time: " + Instant.now().toString());
             }
+            printWriter.flush();
             printWriter.close();
+            fileWriter.flush();
+            fileWriter.close();
         } catch (Exception e) {
             logger.error("Unable to send and persist warning");
         }
