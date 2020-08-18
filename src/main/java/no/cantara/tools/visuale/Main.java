@@ -31,6 +31,7 @@ public final class Main {
     public static String accessToken = null;
 
     private static final StatusResource statusResource = new StatusResource();
+    private static final HealthResource healthResource = new HealthResource();
 
     /**
      * Cannot be instantiated.
@@ -53,7 +54,7 @@ public final class Main {
         try {
             portNo = Integer.parseInt(port);
         } catch (Exception e) {
-            log.error("Unable to find config property for server.port, found:{} - using fallbackvalue ", port, portNo);
+            log.error("Unable to find config property for server.port, found:{} - using fallback value ", port, portNo);
         }
 
         accessToken = ServiceConfig.getProperty("server.accessToken");
@@ -79,12 +80,12 @@ public final class Main {
             startHealthReportSimulator(statusResource.getStatusService(), environmentConfig);
         }
 
-        HealthResource healthResource = new HealthResource();
         Routing routing = Routing.builder()
                 .register(JsonSupport.get())
                 .register(healthResource)
                 .register(statusResource)
-
+                .register("/favicon.ico", StaticContentSupport.builder("/nuxt-spa/dist/favicon.ico")
+                        .build())
                 .register("/nuxt-spa", StaticContentSupport.builder("/nuxt-spa")
                         .build())
                 .register("/_nuxt", StaticContentSupport.builder("/nuxt-spa/dist/_nuxt")
