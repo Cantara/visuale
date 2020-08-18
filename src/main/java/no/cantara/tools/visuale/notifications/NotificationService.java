@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NotificationService {
 
@@ -16,8 +16,8 @@ public class NotificationService {
     private static final String alarmFilename = "./logs/service-notification-alarms.log";
     private static final String warningFilename = "./logs/service-notification-warnings.log";
 
-    public static Map warningMap = new HashMap<>();
-    public static Map alarmMap = new HashMap<>();
+    public static Map warningMap = new ConcurrentHashMap();
+    public static Map alarmMap = new ConcurrentHashMap<>();
     private static boolean initialBootWarning = true;
     private static boolean initialBootAlarm = true;
 
