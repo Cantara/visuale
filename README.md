@@ -35,7 +35,9 @@ Visuale is not meant to be a replacement for traditional system monitooring tool
 #### Test yourself
 You may have a look and push data at the latest version which is reset frequently here:
 * https://visuale.cantara.no/
-  * Extension 1: https://visuale.cantara.no/?ui_extension=groupByTag
+  * Extension 1: 
+    * https://visuale.cantara.no/?ui_extension=groupByTag
+    * https://visuale.cantara.no/?ui_extension=groupByTag&&servicetype=true
   * Extension 2: https://visuale.cantara.no/?ui_extension=groupByService
 
 
@@ -44,7 +46,7 @@ You may have a look and push data at the latest version which is reset frequentl
 ```
 $ mvn clean package
 $ java -jar target/visuale.jar
-$ wget http://localhost:8080/status
+$ wget http://localhost:8080/api/status
 ```
 * Dashboard UI here:  http://localhost:8080/
 
@@ -112,7 +114,7 @@ Json body
 ```
 
 Path
-http://localhost:8080/status/<service-name>/visuale/<nodeId>
+http://localhost:8080/api/status/<service-name>/visuale/<nodeId>
 
 ### Additional grouping and organisation of services
 
@@ -146,7 +148,7 @@ Note: TAGS are not case-sensitive in Visuale.
 
 Visuale support categorization of services into types of services. This can be added to the service with the additional service_type parameter (both as a query-parameter on PUT health updates or in the environment json configuration. The visualization of service categories is switched on by the following query parameter for the dashboard:
 
- * servicetype=true
+ * &servicetype=true
 
 As of the initial release, Visuale support the Cantara Service Categorization (https://wiki.cantara.no/display/OWSOA/Service+Categories), but we may add support for installation spesific service categorization if enough people want this.
       
@@ -166,7 +168,7 @@ As of the initial release, Visuale support the Cantara Service Categorization (h
 - :heavy_check_mark: we will support both pull-based info... and pod/instance CRON jobs which push the health json to the 
 - :heavy_check_mark: normal update interval from the service should be 5 or 10 second
 - :heavy_check_mark: it might support clicking into a service or a node to see all the details...    
-- :white_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
+- :heavy_check_mark: The backend should attempt to do some simple semantic mapping for different json health structures
 
 
     
@@ -184,10 +186,10 @@ sudo docker run --rm -p 8080:8080 visuale:latest
 wget //http://localhost:8080/
 
 # Let us add some dummy services by using the visuale health itself...
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n1
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n2
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n3
-JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/status/env/visuale/n4
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/env_devtest/visuale/n1
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/env_devtest/visuale/n2
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/env_devtest/visuale/n3
+JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="${JSON}"   http://localhost:8080/api/status/env_devtest/visuale/n4
 
 # Observe the UI gets updated with a new visuale cluster...
 
