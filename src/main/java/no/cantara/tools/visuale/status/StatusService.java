@@ -238,12 +238,13 @@ public class StatusService {
         return environment;
     }
 
-    private void updateEnvironmentAsStringQueue() {
+    private synchronized void updateEnvironmentAsStringQueue() {
+        updateEnvironmentAsStringExecution();
         if (envCount < 10) {
             envCount++;
         } else {
             envCount = 0;
-            updateEnvironmentAsStringExecution();
+
         }
     }
 
