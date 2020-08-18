@@ -6,6 +6,7 @@ import no.cantara.tools.visuale.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,8 @@ public class StatusService {
 
     private static int envCount = 0;
 
-    private Map<String, Node> healthResults = new HashMap<>();
+    private Map<String, Node> healthResultsQueue = new HashMap<>();
+    private Map<String, EnvironmentUpdateHolder> environmentUpdateQueue = new HashMap<>();
     private Set<Health> healthQueue = new CopyOnWriteArraySet<>();
 
     private Environment environment = new Environment();
@@ -52,7 +54,7 @@ public class StatusService {
                     if (node.getName() == null || node.getName().length() < 2) {
                         node.setName(service.getName());
                     }
-                    healthResults.put(node.getLookupKey(), node);
+                    healthResultsQueue.put(node.getLookupKey(), node);
                 }
                 if (service.getServiceType() == null) {
                     service.setServiceType(ServiceType.ServiceCategorization.CS.name());
@@ -67,14 +69,27 @@ public class StatusService {
 
     public int updateHealthMap(Health updatedHealth) {
         if (updatedHealth.isEmpty()) {
-            return healthResults.size();
+            return healthResultsQueue.size();
         }
         logger.trace("Received health update: {}", updatedHealth);
         healthQueue.add(updatedHealth);
         if (healthQueue.size() > 5) {
             updateEnvironmentAsStringExecution();
         }
-        return healthResults.size();
+        return healthResultsQueue.size();
+    }
+
+    private synchronized void processEnvironmentQueue() {
+        for (String updatedEnvironmentTimestamp : environmentUpdateQueue.keySet()) {
+            EnvironmentUpdateHolder environmentUpdateHolder = environmentUpdateQueue.remove(updatedEnvironmentTimestamp);
+            updateEnvironmentExecution(
+                    environmentUpdateHolder.envName,
+                    environmentUpdateHolder.serviceName,
+                    environmentUpdateHolder.serviceTag,
+                    environmentUpdateHolder.serviceType,
+                    environmentUpdateHolder.nodeName,
+                    environmentUpdateHolder.health);
+        }
     }
 
     private synchronized void processHealthQueue() {
@@ -82,7 +97,7 @@ public class StatusService {
             healthQueue.remove(updatedHealth);
             //logger.trace("Received health update: {}", updatedHealth);
             try {
-                Node node = healthResults.get(updatedHealth.getLookupKey());
+                Node node = healthResultsQueue.get(updatedHealth.getLookupKey());
                 if (node == null) {
                     logger.debug("Added new service from health update: {}", updatedHealth);
                     String name = updatedHealth.getName();
@@ -94,7 +109,7 @@ public class StatusService {
                     no.cantara.tools.visuale.domain.Service s =
                             new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
                     environment.addService(s);
-                    healthResults.put(node.getLookupKey(), node);
+                    healthResultsQueue.put(node.getLookupKey(), node);
                 } else {
                     //logger.trace("Updated service from health update: {}", updatedHealth);
                     node.addHealth(updatedHealth);
@@ -109,6 +124,12 @@ public class StatusService {
     }
 
     public boolean updateEnvironment(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
+        EnvironmentUpdateHolder environmentUpdateHolder = new EnvironmentUpdateHolder(envName, serviceName, serviceTag, serviceType, nodeName, health);
+        environmentUpdateQueue.put(Instant.now().toString(), environmentUpdateHolder);
+        return true;
+    }
+
+    private synchronized boolean updateEnvironmentExecution(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
@@ -223,11 +244,11 @@ public class StatusService {
 
 
     public Map<String, Node> getHealthStatusMap() {
-        return healthResults;
+        return healthResultsQueue;
     }
 
     public int getHealthStatusMapSize() {
-        return healthResults.size();
+        return healthResultsQueue.size();
     }
 
     public void setEnvironment(Environment environment) {
@@ -252,6 +273,7 @@ public class StatusService {
         String updatedEnvironmentString = null;
         try {
             processHealthQueue();
+            processEnvironmentQueue();
             updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
         } catch (Exception e) {
             logger.error("Unable to update environmentAsString:", e);
