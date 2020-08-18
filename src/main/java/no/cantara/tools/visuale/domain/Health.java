@@ -4,6 +4,7 @@ package no.cantara.tools.visuale.domain;
 import com.fasterxml.jackson.annotation.*;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,7 +155,7 @@ public class Health {
     @JsonProperty("running since")
     public void setRunningSince(String runningSince) {
         if (runningSince == null || runningSince.length() < 10) {
-//            runningSince = Instant.now().minus(5,ChronoUnit.MINUTES).toString();
+            runningSince = Instant.now().plus(15, ChronoUnit.MINUTES).toString();
         }
 
         this.runningSince = runningSince;
@@ -162,7 +163,7 @@ public class Health {
 
     public Health withRunningSince(String runningSince) {
         if (runningSince == null || runningSince.length() < 10) {
-            //           runningSince = Instant.now().toString();
+            runningSince = Instant.now().plus(15, ChronoUnit.MINUTES).toString();
         }
         this.runningSince = runningSince;
         return this;
