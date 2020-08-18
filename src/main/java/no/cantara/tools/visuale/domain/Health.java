@@ -111,12 +111,10 @@ public class Health {
     @JsonProperty("ip")
     public void setIp(String ip) {
         this.ip = extractIpv4Address(ip);
-        ;
     }
 
     public Health withIp(String ip) {
         this.ip = extractIpv4Address(ip);
-        ;
         return this;
     }
 
