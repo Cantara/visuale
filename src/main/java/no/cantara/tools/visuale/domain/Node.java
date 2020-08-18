@@ -281,20 +281,20 @@ public class Node {
         if (calculatedRunningSince == null) {
             Instant nowInstant = Instant.now();
             try {
-                OffsetDateTime date = OffsetDateTime.parse(healthValue.getNow());
+                OffsetDateTime date = OffsetDateTime.parse(healthValue.getRunningSince());
                 Instant reqInstant = date.toInstant();
 
                 // We only correlate now in health if time is in the future
                 if (reqInstant.isAfter(nowInstant)) {
-                    healthValue.setNow(nowInstant.toString());
+                    healthValue.setRunningSince(nowInstant.toString());
                     calculatedRunningSince = nowInstant.toString();
                 }
             } catch (Exception e) {
-                healthValue.setNow(nowInstant.toString());
+                healthValue.setRunningSince(nowInstant.toString());
                 calculatedRunningSince = nowInstant.toString();
             }
         } else {
-            healthValue.setNow(calculatedRunningSince);
+            healthValue.setRunningSince(calculatedRunningSince);
         }
 
         this.health.add(healthValue);
