@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -23,8 +22,8 @@ public class StatusService {
 
     private static int envCount = 0;
 
-    private Map<String, Node> healthResultsQueue = new HashMap<>();
-    private Map<String, EnvironmentUpdateHolder> environmentUpdateQueue = new HashMap<>();
+    private Map<String, Node> healthResultsQueue = new ConcurrentHashMap<>();
+    private Map<String, EnvironmentUpdateHolder> environmentUpdateQueue = new ConcurrentHashMap<>();
     private Set<Health> healthQueue = new CopyOnWriteArraySet<>();
 
     private Environment environment = new Environment();
@@ -82,13 +81,15 @@ public class StatusService {
     private synchronized void processEnvironmentQueue() {
         for (String updatedEnvironmentTimestamp : environmentUpdateQueue.keySet()) {
             EnvironmentUpdateHolder environmentUpdateHolder = environmentUpdateQueue.remove(updatedEnvironmentTimestamp);
-            updateEnvironmentExecution(
-                    environmentUpdateHolder.envName,
-                    environmentUpdateHolder.serviceName,
-                    environmentUpdateHolder.serviceTag,
-                    environmentUpdateHolder.serviceType,
-                    environmentUpdateHolder.nodeName,
-                    environmentUpdateHolder.health);
+            if (environmentUpdateHolder != null) {
+                updateEnvironmentExecution(
+                        environmentUpdateHolder.envName,
+                        environmentUpdateHolder.serviceName,
+                        environmentUpdateHolder.serviceTag,
+                        environmentUpdateHolder.serviceType,
+                        environmentUpdateHolder.nodeName,
+                        environmentUpdateHolder.health);
+            }
         }
     }
 

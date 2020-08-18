@@ -2,6 +2,7 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import no.cantara.tools.visuale.notifications.NotificationService;
 
 import java.util.*;
 
@@ -66,6 +67,13 @@ public class Service {
                 healthy_nodes++;
             }
 
+        }
+        if (healthy_nodes == 0) {
+            NotificationService.sendAlarm(getName(), "No healthy services");
+        } else if (healthy_nodes < 2) {
+            NotificationService.sendWarning(getName(), "Less than two healthy services");
+        } else {
+            NotificationService.clearService(getName());
         }
         return healthy_nodes;
     }
