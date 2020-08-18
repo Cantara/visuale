@@ -125,8 +125,8 @@ public class Node {
             if (h != null) {
                 OffsetDateTime date = OffsetDateTime.parse(h.getNow());
                 Instant lastSeenInstant = date.toInstant();
-                Instant five_minutes_ago = Instant.now().minus(5, ChronoUnit.MINUTES);
-                if (lastSeenInstant.isBefore(five_minutes_ago)) {
+                Instant eight_minutes_ago = Instant.now().minus(8, ChronoUnit.MINUTES);
+                if (lastSeenInstant.isBefore(eight_minutes_ago)) {
                     return false;
                 }
                 if (h != null && h.getStatus() != null && h.getStatus().equalsIgnoreCase("OK")) {
@@ -149,8 +149,8 @@ public class Node {
         try {
             OffsetDateTime date = OffsetDateTime.parse(h.getNow());
             Instant uptimeInstant = date.toInstant();
-            Instant ninety_seconds_ago = Instant.now().minus(90, ChronoUnit.SECONDS);
-            if (uptimeInstant.getEpochSecond() > ninety_seconds_ago.getEpochSecond()) {
+            Instant three_minutes_ago = Instant.now().minus(3, ChronoUnit.MINUTES);
+            if (uptimeInstant.getEpochSecond() > three_minutes_ago.getEpochSecond()) {
                 return false;
             }
         } catch (Exception e) {
