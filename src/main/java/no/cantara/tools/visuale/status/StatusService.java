@@ -20,6 +20,8 @@ public class StatusService {
 
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
+    private static int envCount = 0;
+
     private Map<String, Node> healthResults = new HashMap<>();
     private Set<Health> healthQueue = new CopyOnWriteArraySet<>();
 
@@ -27,18 +29,18 @@ public class StatusService {
 
     private String environmentAsString;
 
-    private final boolean STRICT_EMVIRONMANT = false;
+    private final boolean STRICT_ENVIRONMENT = false;
     ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
 
 
     public StatusService() {
-        updateEnvironmentAsString();
+        updateEnvironmentAsStringExecution();
         startSyncThread();
     }
 
     public void initializeEnvironment(Environment initenv) {
         this.environment = initenv;
-        updateEnvironmentAsString();
+        updateEnvironmentAsStringExecution();
     }
 
     public void initializeEnvironment(String envJson, String environment_name) {
@@ -60,7 +62,7 @@ public class StatusService {
             logger.error("Unable to initialise dashboard environment", e);
         }
         environment.setName(environment_name);
-        updateEnvironmentAsString();
+        updateEnvironmentAsStringExecution();
     }
 
     public int updateHealthMap(Health updatedHealth) {
@@ -70,7 +72,7 @@ public class StatusService {
         logger.trace("Received health update: {}", updatedHealth);
         healthQueue.add(updatedHealth);
         if (healthQueue.size() > 5) {
-            updateEnvironmentAsString();
+            updateEnvironmentAsStringExecution();
         }
         return healthResults.size();
     }
@@ -111,7 +113,7 @@ public class StatusService {
         boolean foundService = false;
         boolean foundEnvironment = false;
 
-        if (!STRICT_EMVIRONMANT || environment.getName().equalsIgnoreCase(envName)) {
+        if (!STRICT_ENVIRONMENT || environment.getName().equalsIgnoreCase(envName)) {
             foundEnvironment = true;
             Set<Service> serviceSet = environment.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
@@ -143,7 +145,7 @@ public class StatusService {
                                         addnode.setVersion(health.getVersion());
                                     }
                                     service.addNode(addnode);
-                                    updateEnvironmentAsString();
+                                    updateEnvironmentAsStringQueue();
                                     return true;
                                 } else if (latest == null) {
                                     Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
@@ -154,11 +156,11 @@ public class StatusService {
                                         addnode.setVersion(health.getVersion());
                                     }
                                     service.addNode(addnode);
-                                    updateEnvironmentAsString();
+                                    updateEnvironmentAsStringQueue();
                                     return true;
                                 } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
                                     node.addHealth(health);
-                                    updateEnvironmentAsString();
+                                    updateEnvironmentAsStringQueue();
                                     return true;
                                 }
 //                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
@@ -181,7 +183,7 @@ public class StatusService {
                                     service.setServiceType(serviceType);
                                 }
 
-                                updateEnvironmentAsString();
+                                updateEnvironmentAsStringQueue();
                                 return true;
                             }
                         }
@@ -195,7 +197,7 @@ public class StatusService {
                         .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType)
                         .withNode(node);
                 environment.addService(service);
-                updateEnvironmentAsString();
+                updateEnvironmentAsStringQueue();
                 return true;
             }
             if (!foundNode) {
@@ -208,7 +210,7 @@ public class StatusService {
                             if (hasValue(serviceType)) {
                                 service.setServiceType(serviceType);
                             }
-                            updateEnvironmentAsString();
+                            updateEnvironmentAsStringQueue();
                             return true;
                         }
                     }
@@ -236,16 +238,25 @@ public class StatusService {
         return environment;
     }
 
-    private synchronized void updateEnvironmentAsString() {
-
+    private void updateEnvironmentAsStringQueue() {
+        if (envCount < 10) {
+            envCount++;
+        } else {
+            envCount = 0;
+            updateEnvironmentAsStringExecution();
+        }
     }
 
-    private synchronized void updateEnvironmentAsString2() {
+    private synchronized void updateEnvironmentAsStringExecution() {
+        String updatedEnvironmentString = null;
         try {
             processHealthQueue();
-            environmentAsString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
+            updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
         } catch (Exception e) {
-            logger.error("Unable to update environmentAsString", e);
+            logger.error("Unable to update environmentAsString:", e);
+        }
+        if (hasValue(updatedEnvironmentString)) {
+            environmentAsString = updatedEnvironmentString;
         }
     }
 
@@ -255,7 +266,7 @@ public class StatusService {
 
     private void startSyncThread() {
         Runnable task2 = () -> {
-            updateEnvironmentAsString2();
+            updateEnvironmentAsStringExecution();
         };
         // init Delay = 5, repeat the task every 60 second
         ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 3, 1, TimeUnit.SECONDS);
