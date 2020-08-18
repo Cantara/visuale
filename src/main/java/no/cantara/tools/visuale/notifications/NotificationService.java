@@ -49,8 +49,8 @@ public class NotificationService {
 
     private static void appendAlarmToFile(String service, String message, boolean cleared) {
         try {
-            FileWriter fileWriter = new FileWriter(alarmFilename);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
+            FileWriter fileWriter = new FileWriter(alarmFilename, true);
+            PrintWriter printWriter = new PrintWriter(fileWriter, true);
             if (!cleared) {
                 printWriter.println("Alarm for " + service);
                 printWriter.println("    " + Instant.now().toString() + " - " + message);
@@ -65,8 +65,8 @@ public class NotificationService {
 
     private static void appendWarningToFile(String service, String message, boolean cleared) {
         try {
-            FileWriter fileWriter = new FileWriter(warningFilename);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
+            FileWriter fileWriter = new FileWriter(warningFilename, true);
+            PrintWriter printWriter = new PrintWriter(fileWriter, true);
             if (!cleared) {
                 printWriter.println("Warning for " + service);
                 printWriter.println("    " + Instant.now().toString() + " - " + message);
