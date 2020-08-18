@@ -43,6 +43,8 @@ public class Node {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     @JsonIgnore
     private int calculatedDrift = 0;
+    @JsonIgnore
+    private String calculatedRunningSince;
 
 
     @JsonIgnore
@@ -275,6 +277,22 @@ public class Node {
             if (healthValue.getName() != null && healthValue.getName().length() > 2) {
                 setName(healthValue.getName());
             }
+        }
+        if (calculatedRunningSince == null) {
+            try {
+                OffsetDateTime date = OffsetDateTime.parse(healthValue.getNow());
+                Instant reqInstant = date.toInstant();
+                Instant nowInstant = Instant.now();
+                // We only correlate now in health if time is in the future
+                if (reqInstant.isAfter(nowInstant)) {
+                    healthValue.setNow(nowInstant.toString());
+                    calculatedRunningSince = nowInstant.toString();
+                }
+            } catch (Exception e) {
+
+            }
+        } else {
+            healthValue.setNow(calculatedRunningSince);
         }
 
         this.health.add(healthValue);
