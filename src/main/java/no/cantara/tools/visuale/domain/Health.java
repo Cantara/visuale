@@ -4,6 +4,7 @@ package no.cantara.tools.visuale.domain;
 import com.fasterxml.jackson.annotation.*;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,14 +128,14 @@ public class Health {
     @JsonProperty("now")
     public void setNow(String now) {
         if (now == null || now.length() < 10) {
-            now = Instant.now().toString();
+            now = Instant.now().minus(5, ChronoUnit.MINUTES).toString();
         }
         this.now = now;
     }
 
     public Health withNow(String now) {
         if (now == null || now.length() < 10) {
-            now = Instant.now().toString();
+            now = Instant.now().minus(5, ChronoUnit.MINUTES).toString();
         }
         this.now = now;
         return this;
