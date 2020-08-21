@@ -99,7 +99,7 @@ public class NotificationService {
     }
 
     public static synchronized boolean clearService(String service) {
-        String timestampText = " - timestamp:" + Instant.now().toString();
+        String timestampText = " - Timestamp: " + Instant.now().toString();
         if (alarmMap.get(service) != null) {
             alarmMap.remove(service);
             appendAlarmToFile(service, "", true);
