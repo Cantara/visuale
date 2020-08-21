@@ -60,10 +60,9 @@ public class NotificationService {
         slackWarningChannel = getProperty(SLACK_WARNING_CHANNEL_KEY);
         slack = Slack.getInstance();
         setupClient();
-
-        sendAlarm("test", "atull");
+//       sendAlarm("test", "atull");
 //        sendWarning("test", "wtull");
-        clearService("test");
+//        clearService("test");
 
     }
 
