@@ -92,6 +92,14 @@ server.accessToken=8fce7434-8654-11ea-bc55-0242ac130003
 #  if you add this property, you have to add 
 #     ?accessToken=8fce7434-8654-11ea-bc55-0242ac130003 to the URL to se the dashboard 
 # Not real security, but will allow simple wall-mounted screens to access without too much pain
+
+
+
+# Slack Alerting - add/update this to your slack configurations if you want status notifications from Visuale on slack
+slack_alerting_enabled=true
+slack_token=my slack token
+slack_alarm_channel=#devtest-alerts
+slack_warning_channel=#devtest-warnings
 ```
 
 #### Push status to Visuale
