@@ -66,7 +66,7 @@ public class NotificationService {
 
     }
 
-    public static boolean sendWarning(String service, String warningMessage) {
+    public static synchronized boolean sendWarning(String service, String warningMessage) {
         if (!loadedStateFromFile) {
             restoreNotificationStateMaps();
             loadedStateFromFile = true;
@@ -82,7 +82,7 @@ public class NotificationService {
         return true;
     }
 
-    public static boolean sendAlarm(String service, String alarmMessage) {
+    public static synchronized boolean sendAlarm(String service, String alarmMessage) {
         if (!loadedStateFromFile) {
             restoreNotificationStateMaps();
             loadedStateFromFile = true;
@@ -98,7 +98,7 @@ public class NotificationService {
         return true;
     }
 
-    public static boolean clearService(String service) {
+    public static synchronized boolean clearService(String service) {
         String timestampText = " - timestamp:" + Instant.now().toString();
         if (alarmMap.get(service) != null) {
             alarmMap.remove(service);
