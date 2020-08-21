@@ -72,6 +72,8 @@ public class NotificationService {
             loadedStateFromFile = true;
         }
         if (warningMap.get(service) == null) {
+            String timestampText = " - timestamp:" + Instant.now().toString();
+            warningMessage = warningMessage + timestampText;
             warningMap.put(service, warningMessage);
             appendWarningToFile(service, warningMessage, false);
             notifySlackWarning(service, warningMessage);
@@ -86,6 +88,8 @@ public class NotificationService {
             loadedStateFromFile = true;
         }
         if (alarmMap.get(service) == null) {
+            String timestampText = " - timestamp:" + Instant.now().toString();
+            alarmMessage = alarmMessage + timestampText;
             alarmMap.put(service, alarmMessage);
             appendAlarmToFile(service, alarmMessage, false);
             notifySlackAlarm(service, alarmMessage);
@@ -95,14 +99,17 @@ public class NotificationService {
     }
 
     public static boolean clearService(String service) {
+        String timestampText = " - timestamp:" + Instant.now().toString();
         if (alarmMap.get(service) != null) {
             alarmMap.remove(service);
             appendAlarmToFile(service, "", true);
+            service = service + timestampText;
             clearSlackAlarm(service);
         }
         if (warningMap.get(service) != null) {
             warningMap.remove(service);
             appendWarningToFile(service, "", true);
+            service = service + timestampText;
             clearSlackWarning(service);
         }
         return true;
