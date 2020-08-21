@@ -72,7 +72,7 @@ public class NotificationService {
             loadedStateFromFile = true;
         }
         if (warningMap.get(service) == null) {
-            String timestampText = " - timestamp:" + Instant.now().toString();
+            String timestampText = " - Timestamp: " + Instant.now().toString();
             warningMessage = warningMessage + timestampText;
             warningMap.put(service, warningMessage);
             appendWarningToFile(service, warningMessage, false);
@@ -88,7 +88,7 @@ public class NotificationService {
             loadedStateFromFile = true;
         }
         if (alarmMap.get(service) == null) {
-            String timestampText = " - timestamp:" + Instant.now().toString();
+            String timestampText = " - Timestamp: " + Instant.now().toString();
             alarmMessage = alarmMessage + timestampText;
             alarmMap.put(service, alarmMessage);
             appendAlarmToFile(service, alarmMessage, false);
@@ -103,14 +103,12 @@ public class NotificationService {
         if (alarmMap.get(service) != null) {
             alarmMap.remove(service);
             appendAlarmToFile(service, "", true);
-            service = service + timestampText;
-            clearSlackAlarm(service);
+            clearSlackAlarm(service, timestampText);
         }
         if (warningMap.get(service) != null) {
             warningMap.remove(service);
             appendWarningToFile(service, "", true);
-            service = service + timestampText;
-            clearSlackWarning(service);
+            clearSlackWarning(service, timestampText);
         }
         return true;
     }
@@ -243,11 +241,11 @@ public class NotificationService {
         }
     }
 
-    public static void clearSlackAlarm(String service) {
+    public static void clearSlackAlarm(String service, String timestampText) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service")
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
                     .build();
 
             try {
@@ -287,11 +285,11 @@ public class NotificationService {
         }
     }
 
-    public static void clearSlackWarning(String service) {
+    public static void clearSlackWarning(String service, String timestampText) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service")
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
                     .build();
 
             try {
