@@ -6,6 +6,7 @@ import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
+import no.cantara.tools.visuale.status.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -218,7 +219,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
-                    .text(SLACK_ALERT_EMOJI + " " + service + " down - " + message)
+                    .text(SLACK_ALERT_EMOJI + StatusService.DASHBOARD_ENVIRONMENT_NAME + "-" + " " + service + " down - " + message)
                     .build();
 
             try {
@@ -262,7 +263,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_WARNING_EMOJI + " " + service + " down - " + message)
+                    .text(SLACK_WARNING_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + "-" + service + " down - " + message)
                     .build();
 
             try {

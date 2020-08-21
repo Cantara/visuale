@@ -2,6 +2,7 @@ package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.cantara.tools.visuale.HealthResource;
 import no.cantara.tools.visuale.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,9 @@ public class StatusService {
     private Map<String, Node> healthResultsQueue = new ConcurrentHashMap<>();
     private Map<String, EnvironmentUpdateHolder> environmentUpdateQueue = new ConcurrentHashMap<>();
     private Set<Health> healthQueue = new CopyOnWriteArraySet<>();
-
     private Environment environment = new Environment();
+
+    public static String DASHBOARD_ENVIRONMENT_NAME = HealthResource.applicationInstanceName;
 
     private String environmentAsString;
 
@@ -41,11 +43,13 @@ public class StatusService {
 
     public void initializeEnvironment(Environment initenv) {
         this.environment = initenv;
+        DASHBOARD_ENVIRONMENT_NAME = environment.getName();
         updateEnvironmentAsStringExecution();
     }
 
     public void initializeEnvironment(String envJson, String environment_name) {
         environment = new Environment().withName(environment_name);
+        DASHBOARD_ENVIRONMENT_NAME = environment.getName();
         try {
             environment = mapper.readValue(envJson, Environment.class);
             for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {

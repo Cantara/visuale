@@ -27,7 +27,7 @@ import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
 public class HealthResource implements Service {
     public static final Logger log = LoggerFactory.getLogger(HealthResource.class);
-    private static final String applicationInstanceName = "visuale";
+    public static final String applicationInstanceName = "visuale";
     private boolean ok = true;
     private static Set<URI> okPollingURLs = new CopyOnWriteArraySet<>();
     private static Set<URI> failedPollingURLs = new CopyOnWriteArraySet<>();
