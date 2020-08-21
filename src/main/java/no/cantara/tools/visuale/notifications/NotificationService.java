@@ -262,7 +262,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_WARNING_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is down. \n - " + message)
+                    .text(SLACK_WARNING_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is having trouble. \n - " + message)
                     .build();
 
             try {
