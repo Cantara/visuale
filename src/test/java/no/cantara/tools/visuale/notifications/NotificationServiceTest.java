@@ -2,6 +2,8 @@ package no.cantara.tools.visuale.notifications;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 public class NotificationServiceTest {
 
     @Test
@@ -10,7 +12,7 @@ public class NotificationServiceTest {
 
 
         NotificationService.sendWarning("xtest-service2", "warning-test-message");
-        NotificationService.clearSlackAlarm("xtest-service");
-        NotificationService.clearSlackAlarm("xtest-service2");
+        NotificationService.clearSlackAlarm("xtest-service", Instant.now().toString());
+        NotificationService.clearSlackAlarm("xtest-service2", Instant.now().toString());
     }
 }
