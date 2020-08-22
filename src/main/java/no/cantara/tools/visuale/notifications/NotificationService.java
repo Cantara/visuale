@@ -219,7 +219,7 @@ public class NotificationService {
         return true;
     }
 
-    public static void notifySlackAlarm(String service, String message) {
+    private static void notifySlackAlarm(String service, String message) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
@@ -241,11 +241,11 @@ public class NotificationService {
         }
     }
 
-    public static void clearSlackAlarm(String service, String timestampText) {
+    private static void clearSlackAlarm(String service, String timestampText) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. Timestamp: " + timestampText)
                     .build();
 
             try {
@@ -263,7 +263,7 @@ public class NotificationService {
         }
     }
 
-    public static void notifySlackWarning(String service, String message) {
+    private static void notifySlackWarning(String service, String message) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
@@ -285,11 +285,11 @@ public class NotificationService {
         }
     }
 
-    public static void clearSlackWarning(String service, String timestampText) {
+    private static void clearSlackWarning(String service, String timestampText) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. Timestamp: " + timestampText)
                     .build();
 
             try {

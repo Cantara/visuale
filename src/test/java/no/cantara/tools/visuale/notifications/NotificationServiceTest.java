@@ -2,17 +2,19 @@ package no.cantara.tools.visuale.notifications;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
+import java.util.UUID;
 
 public class NotificationServiceTest {
 
+    String ref = UUID.randomUUID().toString();
+
     @Test
     public void testSendAlert() {
-        NotificationService.sendAlarm("xtest-service", "alarm-test-message");
+        NotificationService.sendAlarm("service-alarm-test-" + ref, "debug-alarm-test-message");
 
 
-        NotificationService.sendWarning("xtest-service2", "warning-test-message");
-        NotificationService.clearSlackAlarm("xtest-service", Instant.now().toString());
-        NotificationService.clearSlackAlarm("xtest-service2", Instant.now().toString());
+        NotificationService.sendWarning("service-warning-test-" + ref, "debug-warning-test-message");
+        NotificationService.clearService("service-alarm-test-" + ref);
+        NotificationService.clearService("service-warning-test-" + ref);
     }
 }
