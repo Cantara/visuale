@@ -245,7 +245,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. Timestamp: " + timestampText)
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
                     .build();
 
             try {
@@ -289,7 +289,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. Timestamp: " + timestampText)
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
                     .build();
 
             try {
