@@ -32,8 +32,8 @@ public class NotificationService {
     private static final String warningFilename = "./logs/service-notification-warnings.log";
     private static final String notificationStateFilename = "./logs/service-notification-mapname.json";
 
-    public static Map warningMap = new ConcurrentHashMap();
-    public static Map alarmMap = new ConcurrentHashMap<>();
+    public static Map<String, String> warningMap = new ConcurrentHashMap();
+    public static Map<String, String> alarmMap = new ConcurrentHashMap<>();
     private static boolean initialBootWarning = true;
     private static boolean initialBootAlarm = true;
 
@@ -71,7 +71,7 @@ public class NotificationService {
             restoreNotificationStateMaps();
             loadedStateFromFile = true;
         }
-        if (warningMap.get(service) == null) {
+        if (warningMap.get(service) == null || !warningMessage.equalsIgnoreCase(warningMap.get(service))) {
             String timestampText = " - Timestamp: " + Instant.now().toString();
             warningMessage = warningMessage + timestampText;
             warningMap.put(service, warningMessage);
@@ -87,7 +87,7 @@ public class NotificationService {
             restoreNotificationStateMaps();
             loadedStateFromFile = true;
         }
-        if (alarmMap.get(service) == null) {
+        if (alarmMap.get(service) == null | !alarmMessage.equalsIgnoreCase(alarmMap.get(service))) {
             String timestampText = " - Timestamp: " + Instant.now().toString();
             alarmMessage = alarmMessage + timestampText;
             alarmMap.put(service, alarmMessage);
