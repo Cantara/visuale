@@ -73,8 +73,8 @@ public class NotificationService {
         }
         if (warningMap.get(service) == null || !warningMessage.equalsIgnoreCase(warningMap.get(service))) {
             String timestampText = " - Timestamp: " + Instant.now().toString();
-            warningMessage = warningMessage + timestampText;
             warningMap.put(service, warningMessage);
+            warningMessage = warningMessage + timestampText;
             appendWarningToFile(service, warningMessage, false);
             notifySlackWarning(service, warningMessage);
             storeNotificationStateMaps();
@@ -89,8 +89,8 @@ public class NotificationService {
         }
         if (alarmMap.get(service) == null | !alarmMessage.equalsIgnoreCase(alarmMap.get(service))) {
             String timestampText = " - Timestamp: " + Instant.now().toString();
-            alarmMessage = alarmMessage + timestampText;
             alarmMap.put(service, alarmMessage);
+            alarmMessage = alarmMessage + timestampText;
             appendAlarmToFile(service, alarmMessage, false);
             notifySlackAlarm(service, alarmMessage);
             storeNotificationStateMaps();
