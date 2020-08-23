@@ -69,9 +69,9 @@ public class Service {
 
         }
         if (healthy_nodes < 1) {
-            NotificationService.sendAlarm(getName(), "No healthy service nodes");
+            NotificationService.sendAlarm(getName(), "Alarm - No healthy service nodes");
         } else if (healthy_nodes < 2) {
-            NotificationService.sendWarning(getName(), "Less than two healthy service nodes");
+            NotificationService.sendWarning(getName(), "Warning - Less than two healthy service nodes, healthy nodes now: [" + healthy_nodes + "]");
         } else {
             NotificationService.clearService(getName());
         }
