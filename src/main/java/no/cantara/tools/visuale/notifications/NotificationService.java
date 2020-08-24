@@ -77,6 +77,10 @@ public class NotificationService {
             warningMessage = warningMessage + timestampText;
             appendWarningToFile(service, warningMessage, false);
             notifySlackWarning(service, warningMessage);
+            // Check if we are recovering form an alarm situation, if so we chear the alarm
+            if (alarmMap.get(service) != null) {
+                clearSlackAlarm(service, timestampText);
+            }
             storeNotificationStateMaps();
         }
         return true;
