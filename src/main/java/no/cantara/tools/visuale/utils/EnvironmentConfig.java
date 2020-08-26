@@ -1,6 +1,9 @@
 package no.cantara.tools.visuale.utils;
 
+import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import no.cantara.tools.visuale.domain.*;
 import no.cantara.tools.visuale.healthchecker.CommandGetHealthJson;
 import no.cantara.tools.visuale.utils.config.ConfEnv;
@@ -19,13 +22,17 @@ import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 public class EnvironmentConfig {
 
     public static final Logger logger = LoggerFactory.getLogger(EnvironmentConfig.class);
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
+            .findAndRegisterModules();
     private boolean exists = false;
     private ConfEnv confEnv;
     private String environmentName = "";
     private Environment environment;
     private String environmentAsString;
-    private static Set<URI> pollingHealthURISet = new CopyOnWriteArraySet();
+    private final static Set<URI> pollingHealthURISet = new CopyOnWriteArraySet();
 
     public EnvironmentConfig() {
 

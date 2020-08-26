@@ -1,7 +1,9 @@
 package no.cantara.tools.visuale.status;
 
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import no.cantara.tools.visuale.HealthResource;
 import no.cantara.tools.visuale.domain.*;
 import org.slf4j.Logger;
@@ -17,7 +19,11 @@ import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
 public class StatusService {
 
-    public static ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+    public static ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
+            .findAndRegisterModules();//.enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature());
 
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
