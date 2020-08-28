@@ -343,8 +343,11 @@
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.9.1</version>
+                <configuration>
+                    <workingDirectory>${basedir}/src/main/resources/nuxt-spa</workingDirectory>
+                    <installDirectory>target</installDirectory>
+                </configuration>
                 <executions>
-
                 <execution>
                     <id>install node and npm</id>
                     <goals>
@@ -355,6 +358,7 @@
                         <npmVersion>5.6.0</npmVersion>
                     </configuration>
                 </execution>
+                    <!--
                     <execution>
                         <id>run tests -y</id>
                         <goals>
@@ -364,20 +368,19 @@
                             <arguments>test</arguments>
                         </configuration>
                     </execution>
+                     -->
                     <execution>
                         <id>npm run build -y</id>
-                        <phase>generate-sources</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                         <configuration>
                             <arguments>
-                                <argument>run</argument>
-                                <argument>build</argument>
+                               build
                             </arguments>
-                            <workingDirectory>${basedir}/src/main/resources/nuxt-spa</workingDirectory>
                         </configuration>
                     </execution>
+
                 </executions>
             </plugin>
             <plugin>
