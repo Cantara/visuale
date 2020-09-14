@@ -8,7 +8,7 @@
     "dev": "set NODE_ENV=dev && nuxt",
     "build": "npm install && nuxt build",
     "start": "set NODE_ENV=dev && nuxt start",
-    "generate": "nuxt generate",
+    "generate": "npm rebuild node-sass && nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest",
     "analyze": "nuxt build --analyze"
