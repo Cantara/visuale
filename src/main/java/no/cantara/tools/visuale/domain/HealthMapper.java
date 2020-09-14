@@ -28,7 +28,7 @@ public class HealthMapper {
         if (json == null || json.length() < 1) {
             return new Health().withStatus("DOWN");
         }
-        json = json.replace("", "");
+        //json = json.replace("", "");
 
         Health health = new Health();
         if (!tryCustomDeserializer) {
