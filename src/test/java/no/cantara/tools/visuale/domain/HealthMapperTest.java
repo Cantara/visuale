@@ -50,6 +50,11 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+
+        health = HealthMapper.fromRealWorldJson(oauth2HealthJson);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
         health = HealthMapper.fromRealWorldJson(badOauthHeathJson);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -495,4 +500,65 @@ class HealthMapperTest {
             "\n" +
             "  \"clientIDs\": []\n" +
             "}";
+
+    private String oauth2HealthJson = "{\n" +
+            "  \"Status\": \"OK\",\n" +
+            "  \"Version\": \"2.2.63-SNAPSHOT [Whydah-OAuth2Service-1 - 172.31.33.19  fe80:0:0:0:46e:ebff:fe9f:ce74%eth0  172.31.33.19  0:0:0:0:0:0:0:1%lo  127.0.0.1]\",\n" +
+            "  \"now\": \"2020-09-14T08:33:04.666Z\",\n" +
+            "  \"IP\": \"172.31.33.19\",\n" +
+            "  \"DEFCON\": \"DEFCON5\",\n" +
+            "  \"STS\": \"https://entrasso-demo.entraos.io/tokenservice/\",\n" +
+            "  \"UAS\": \"https://entrasso-demo.entraos.io/useradminservice/\",\n" +
+            "  \"hasApplicationToken\": \"true\",\n" +
+            "  \"hasValidApplicationToken\": \"true\",\n" +
+            "  \"hasApplicationsMetadata\": \"true\",\n" +
+            "  \"ConfiguredApplications\": \"15\",\n" +
+            "  \"running since\": \"2020-09-14T08:24:44.146Z\",\n" +
+            "\n" +
+            "  \"clientIDs\": \n" +
+            "  [\n" +
+            "     {\n" +
+            "         \"clientId\":          \"aN6hrfyLwBl3PTnWKWWn_g--\",\n" +
+            "         \"applicationName\":   \"ACSResource\",\n" +
+            "         \"applicationUrl\":    \"null\",\n" +
+            "         \"redirectUrl\":       \"null\",\n" +
+            "         \"logoUrl\":           \"https://www.theregister.co.uk/Design/graphics/icons/vulture_black_60_trans.png\"\n" +
+            "     },\n" +
+            "     {\n" +
+            "         \"clientId\":          \"idDgvpypxAllhrO7Tkuocw--\",\n" +
+            "         \"applicationName\":   \"Whydah-CRMService\",\n" +
+            "         \"applicationUrl\":    \"https://whydahdev.cantara.no/crm/\",\n" +
+            "         \"redirectUrl\":       \"https://whydahdev.cantara.no/crm/\",\n" +
+            "         \"logoUrl\":           \"https://wiki.cantara.no/download/attachments/38962704/whydah\"\n" +
+            "     },\n" +
+            "     {\n" +
+            "         \"clientId\":          \"g6eRQgt78zK0QRVCJ.dATw--\",\n" +
+            "         \"applicationName\":   \"Whydah-UserAdminWebApp\",\n" +
+            "         \"applicationUrl\":    \"https://whydahdev.cantara.no/useradmin/\",\n" +
+            "         \"redirectUrl\":       \"https://whydahdev.cantara.no/useradmin/\",\n" +
+            "         \"logoUrl\":           \"https://wiki.cantara.no/download/attachments/38962704/whydah\"\n" +
+            "     },\n" +
+            "     {\n" +
+            "         \"clientId\":          \"A4x6mwo_egc8kJZ_zljAww--\",\n" +
+            "         \"applicationName\":   \"Whydah-StatisticsService\",\n" +
+            "         \"applicationUrl\":    \"https://whydahdev.cantara.no/reporter/\",\n" +
+            "         \"redirectUrl\":       \"https://whydahdev.cantara.no/reporter/\",\n" +
+            "         \"logoUrl\":           \"https://wiki.cantara.no/download/attachments/38962704/whydah\"\n" +
+            "     },\n" +
+            "     {\n" +
+            "         \"clientId\":          \"lE0xLYcEcUMvg6Dlu01_4A--\",\n" +
+            "         \"applicationName\":   \"m2Circle\",\n" +
+            "         \"applicationUrl\":    \"null\",\n        \"redirectUrl\":       \"null\",\n" +
+            "         \"logoUrl\":           \"https://www.theregister.co.uk/Design/graphics/icons/vulture_black_60_trans.png\"\n" +
+            "     },\n" +
+            "     {\n" +
+            "         \"clientId\":          \"4fcTkWnUW9gVRpw3oIGGGw--\",\n" +
+            "         \"applicationName\":   \"Whydah-TestWebApplication\",\n" +
+            "         \"applicationUrl\":    \"https://whydahdev.cantara.no/test\",\n" +
+            "         \"redirectUrl\":       \"https://whydahdev.cantara.no/test\",\n" +
+            "         \"logoUrl\":           \"https://wiki.cantara.no/download/attachments/38962704/whydah\"\n" +
+            "     } \n" +
+            "  ]\n" +
+            "\n" +
+            "}\n";
 }

@@ -28,6 +28,7 @@ public class HealthMapper {
         if (json == null || json.length() < 1) {
             return new Health().withStatus("DOWN");
         }
+        json = json.replace("", "");
 
         Health health = new Health();
         if (!tryCustomDeserializer) {
@@ -46,6 +47,7 @@ public class HealthMapper {
                 ObjectMapper mycustommapper = new ObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                         .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
                         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                        .enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature())
                         .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
                         .findAndRegisterModules();//.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
                 SimpleModule module = new SimpleModule();
