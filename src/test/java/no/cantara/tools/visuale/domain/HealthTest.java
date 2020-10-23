@@ -14,7 +14,9 @@ class HealthTest {
             .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
-            .findAndRegisterModules();//.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+            .enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature())
+            .findAndRegisterModules();
+    ;
 
     @Test
     public void testSerializeRealWorldHealth() throws Exception {

@@ -46,6 +46,10 @@ class HealthMapperTest {
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
 
+        health = HealthMapper.fromRealWorldJson(crazyJson);
+        assertTrue("OK".equalsIgnoreCase(health.getStatus()));
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
+
         health = HealthMapper.fromRealWorldJson(failing_in_the_wild_json_health);
         assertTrue("OK".equalsIgnoreCase(health.getStatus()));
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(health));
@@ -561,4 +565,6 @@ class HealthMapperTest {
             "  ]\n" +
             "\n" +
             "}\n";
+
+    String crazyJson = "{\"Status\": \"true\",\"name\": \"entraos-building-authorization-agent\",\"ip\": \"10.241.13.43\",\"operationMetrics\": {\"deleteOperations\":{\"deletions\":\"0\",\"lastSuccess\":\"2020-10-23 15:14:09\"}},\"version\": \"0.0.25-SNAPSHOT\",\"now\": \"2020-10-23T13:15:04.940Z\"}";
 }

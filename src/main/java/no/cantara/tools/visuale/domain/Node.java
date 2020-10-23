@@ -229,11 +229,13 @@ public class Node {
         Instant oldInstant = Instant.now().minus(8, ChronoUnit.DAYS);
         try {
             for (Health h : getHealth()) {
-                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-                Instant reqInstant = date.toInstant();
-                if (reqInstant.isAfter(oldInstant)) {
-                    oldInstant = reqInstant;
-                    returnHealth = h;
+                if (h != null && h.getNow() != null) {
+                    OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                    Instant reqInstant = date.toInstant();
+                    if (reqInstant.isAfter(oldInstant)) {
+                        oldInstant = reqInstant;
+                        returnHealth = h;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -247,11 +249,13 @@ public class Node {
         Instant oldInstant = Instant.now().minus(8, ChronoUnit.DAYS);
         try {
             for (Health h : getHealth()) {
-                OffsetDateTime date = OffsetDateTime.parse(h.getNow());
-                Instant reqInstant = date.toInstant();
-                if (reqInstant.isBefore(oldInstant)) {
-                    oldInstant = reqInstant;
-                    returnHealth = h;
+                if (h != null && h.getNow() != null) {
+                    OffsetDateTime date = OffsetDateTime.parse(h.getNow());
+                    Instant reqInstant = date.toInstant();
+                    if (reqInstant.isBefore(oldInstant)) {
+                        oldInstant = reqInstant;
+                        returnHealth = h;
+                    }
                 }
             }
         } catch (Exception e) {
