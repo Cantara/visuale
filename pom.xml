@@ -357,6 +357,24 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>install install-changed</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <arguments>
+                           install install-changed
+                        </arguments>
+                    </execution>
+                    <execution>
+                        <id>install dependencies if not already installed</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <arguments>
+                            run pre-run
+                        </arguments>
+                    </execution>
+                    <execution>
                         <id>npm run build -y</id>
                         <goals>
                             <goal>npm</goal>

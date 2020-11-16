@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "set NODE_ENV=dev && nuxt",
     "build": "npm install && nuxt build",
+    "pre-run": "install-changed",
     "start": "set NODE_ENV=dev && nuxt start",
     "generate": "npm rebuild node-sass && nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
@@ -18,6 +19,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/proxy": "^2.0.1",
     "benchmark": "^2.1.4",
+    "install-changed": "^1.1.0",
     "isotope-layout": "^3.0.6",
     "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
