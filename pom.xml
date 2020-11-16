@@ -351,6 +351,17 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>clean npm cache</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>
+                                cache clean --force
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>install node and npm</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
