@@ -4,9 +4,9 @@
 ![Visuale logo](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale.png)
 ## Visuale
 
-- A near real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continous Production software development processes. 
+- A near real-time dashboard visualisation tool designed for visibility and control for Real-World Micro-Service Continuous Production software development processes. 
 
-Visuale is not meant to be a replacement for traditional system monitooring tools like Grafana, but an addition/extention for the important needs for Cintinous Deployment/Continours production of micro-service solutions including: 
+Visuale is not meant to be a replacement for traditional system monitooring tools like Grafana, but an addition/extention for the important needs for Continuous Deployment/Continuous production of micro-service solutions including: 
 
 #### Some key unique selling points (USP)
 
