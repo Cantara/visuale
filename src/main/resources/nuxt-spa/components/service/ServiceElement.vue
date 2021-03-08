@@ -78,13 +78,13 @@
    // width:22.1rem;
   }
 
-  @media only screen and (max-width: 769px) {
+  @media only screen and (min-width: 426px) and (max-width: 769px) {
     .content {
        display:flex !important; 
     }
   }
   
-  .marker {
+   .marker {
     padding: 0;
     margin-top: -0.6em;
     text-align: center;
