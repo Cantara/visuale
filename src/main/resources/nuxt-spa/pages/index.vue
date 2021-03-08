@@ -84,10 +84,11 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
   
   .container {
     margin: 0 auto;
-    display: flex;
+    display: inline-flex;
     max-width: 100vw;
-    flex-flow: column wrap;
+    flex-flow: wrap;
     padding: 0 0.7em 0.7em;
+    height:auto !important;
   }
   h1 {
     padding: 0.35em 0.7em;
