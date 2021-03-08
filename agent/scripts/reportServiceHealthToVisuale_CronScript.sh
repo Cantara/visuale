@@ -1,18 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 
 source ./scripts/reportServiceHealthToVisuale_CronScript.properties
+
 for n in 1 2 3 4 5 6 7 8 9 10; do
-  if
-    JSON="$(wget -qO- $healthUrl)"
-    wget --method=PUT --body-data="${JSON}" $reportToUrl1
+  if JSON=$(curl --silent  ${healthUrl}) ;
   then
-    JSON="$(wget -qO- $healthUrl)"
-    wget --method=PUT --body-data="${JSON}" $reportToUrl2
+    echo "UP" ${JSON}  
+    curl  -i -X PUT -H "Content-Type: application/json"  "${reportToUrl1}" -d "${JSON}"  
+    curl  -i -X PUT -H "Content-Type: application/json"  "${reportToUrl2}" -d "${JSON}"  
+    #    wget --method=PUT --body-data="${JSON}" $reportToUrl2
   else
-    JSON=$(<Visuale_FAIL.json)
-    wget --method=PUT --body-data="${JSON}" $reportToUrl1
-    JSON=$(<Visuale_FAIL.json)
-    wget --method=PUT --body-data="${JSON}" $reportToUrl2
+    echo "Down"
+    JSON=$(<./scripts/Visuale_FAIL.json)
+    curl -i -X PUT -H "Content-Type: application/json" "${reportToUrl1}" -d "${JSON}"
+    curl -i -X PUT -H "Content-Type: application/json" "${reportToUrl2}" -d "${JSON}"
+    #    wget --method=PUT --body-data="${JSON}" $reportToUrl2
   fi
   sleep 4
 done
