@@ -5,7 +5,7 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>10.36.3-SNAPSHOT</version>
+    <version>10.36.1-SNAPSHOT</version>
 
     <repositories>
         <!-- Needed for parent    -->
@@ -346,7 +346,7 @@
                 <configuration>
                     <workingDirectory>${basedir}/src/main/resources/nuxt-spa</workingDirectory>
                     <installDirectory>target</installDirectory>
-                    <nodeVersion>latest</nodeVersion>
+                    <nodeVersion>v12.18.2</nodeVersion>
 <!--                    <npmVersion>6.14.5</npmVersion>-->
                 </configuration>
                 <executions>
