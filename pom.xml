@@ -342,7 +342,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.9.1</version>
+                <version>LATEST_VERSION</version>
                 <configuration>
                     <workingDirectory>${basedir}/src/main/resources/nuxt-spa</workingDirectory>
                     <installDirectory>target</installDirectory>
