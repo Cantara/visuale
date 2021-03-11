@@ -47,6 +47,12 @@
   }
 
 
+  @media only screen and (min-width: 320px) and (max-width: 374px) {
+    .node-block {
+      margin: 5px 0 13px 0 !important;
+    }
+  }
+
   .marker {
     padding: 0;
     margin-top: -0.55em;
