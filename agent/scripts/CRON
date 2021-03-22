@@ -1,1 +1,1 @@
-* * * * * sleep 4 &&  ~/pushLocalhostHealthInfo.sh
+* * * * * sleep 4 &&  ~/reportServiceHealthToVisuale.sh

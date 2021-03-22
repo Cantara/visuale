@@ -1,13 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
-source ./scripts/reportServiceHealthToVisuale_CronScript.properties
-
+source ./scripts/reportServiceHealthToVisuale.properties
 for n in 1 2 3 4 5 6 7 8 9 10; do
   if JSON=$(curl --silent  ${healthUrl}) ;
   then
-    echo "UP" ${JSON}  
-    curl  -i -X PUT -H "Content-Type: application/json"  "${reportToUrl1}" -d "${JSON}"  
-    curl  -i -X PUT -H "Content-Type: application/json"  "${reportToUrl2}" -d "${JSON}"  
+    echo "UP" ${JSON}
+    curl  -i -X PUT -H "Content-Type: application/json"  "${reportToUrl1}" -d "${JSON}"
+    curl  -i -X PUT -H "Content-Type: application/json"  "${reportToUrl2}" -d "${JSON}"
     #    wget --method=PUT --body-data="${JSON}" $reportToUrl2
   else
     echo "Down"
