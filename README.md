@@ -202,18 +202,35 @@ JSON="`wget -qO-  http://localhost:8080/health`";wget --method=PUT --body-data="
 # Observe the UI gets updated with a new visuale cluster...
 
 ```
+
 * Dashboard: http://localhost:8080/
 * DockerHub: https://hub.docker.com/r/cantara/visuale
-
 
 ##### Some simple agent scripts to push health to visuale
 
 * Look here:  https://github.com/Cantara/visuale/tree/master/agent/scripts
 
+Installation og cron/scripted agent:
+
+```
+wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/download_and_setup_visuale_reporting.sh
+chmod 755 ./download_and_setup_visuale_reporting.sh
+./download_and_setup_visuale_reporting.sh
+```
+
+* Edit ./scripts/reportServiceHealthToVisuale.properties to your needs
+* Set up cron-job to run the script
+
+```
+cd .
+ln -s scripts/CRON MY_VISUALE_AGENT_CRON
+crontab MY_VISUALE_AGENT_CRON
+```
 
 #### Visuale on mobile phones
 
-And if you thought Visuale was only for wall-mounted dashboards, you are wrong:). We know that time is urgent, so you can check the status off all your environments conveniently on your phone on your way to work.
+And if you thought Visuale was only for wall-mounted dashboards, you are wrong:). We know that time is urgent, so you
+can check the status off all your environments conveniently on your phone on your way to work.
 
 <img src="https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/visuale%20on%20mobile.jpg" width="400" alt="A shapshot of an early version of the visuale dashboard from a mobile phone">
 
