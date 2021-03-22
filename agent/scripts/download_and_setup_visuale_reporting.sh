@@ -1,8 +1,8 @@
 #!/bin/sh
 #  FROM
-#     wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/download_and_setup_visuale_reporting
-#     chmod 755 ./download_and_setup.sh
-#     ./download_and_setup.sh
+#     wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/download_and_setup_visuale_reporting.sh
+#     chmod 755 ./download_and_setup_visuale_reporting.sh
+#     ./download_and_setup_visuale_reporting.sh
 cd .
 mkdir scripts
 cd scripts
