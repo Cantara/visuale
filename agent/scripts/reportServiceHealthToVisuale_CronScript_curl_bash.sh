@@ -1,4 +1,7 @@
 #!/bin/bash
+#  FROM
+#     wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_curl_bash.sh
+#
 
 source ./scripts/reportServiceHealthToVisuale.properties
 
