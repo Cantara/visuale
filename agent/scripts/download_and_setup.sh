@@ -12,7 +12,7 @@ wget -o reportServiceHealthToVisuale.properties https://raw.githubusercontent.co
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_curl_bash.sh
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_wget_sh.sh
 ln -s reportServiceHealthToVisuale_CronScript_wget_sh.sh reportServiceHealthToVisuale.sh
-
+chmod 755 *.sh
 
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/CRON
 crontab CRON
