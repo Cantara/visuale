@@ -15,6 +15,6 @@ ln -s reportServiceHealthToVisuale_CronScript_wget_sh.sh reportServiceHealthToVi
 chmod 755 *.sh
 
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/CRON
-crontab CRON
+# crontab CRON
 
 echo "Installed push of health a a cron job.  See and configure reportServiceHealthToVisuale.properties and Visuale_SERVICE_FAIL.json to suit the installation"
