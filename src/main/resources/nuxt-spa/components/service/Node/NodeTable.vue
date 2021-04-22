@@ -4,7 +4,7 @@
           <tr v-for="(node,index) in service.nodes" :key="index">
             <td @click="nodeClicked(node)"> <NodeTrafficLight :node="node"/></td>
             <td @click="nodeClicked(node)">{{title(node) | truncateText(15)}}</td>
-            <td @click="nodeClicked(node)"><NodeHealthStatus v-bind:healthy="node.is_healthy"/></td>
+            <td @click="nodeClicked(node)"><NodeHealthStatus v-bind:healthy="node.is_healthy"/><NodeGoodCitizen :health="node.health"></NodeGoodCitizen> </td>
             <td @click="nodeClicked(node)"><NodeVersion v-bind:text-length="15" :health="node.health[0]"/></td>
             <td @click="nodeClicked(node)"><NodeUptime v-bind:shorten="true" :health="node.health[0]" /></td>
           </tr>
@@ -22,6 +22,7 @@
   import NodeDetailedInfo from "./NodeDetailedInfo";
   import NodeTrafficLight from "./NodeTrafficLight";
   import NodeUptime from "./NodeUptime";
+  import NodeGoodCitizen from "~/components/service/Node/NodeGoodCitizen";
   import Modal from "../../Modal";
   import NodeHealthStatus from "./NodeHealthStatus";
   import NodeVersion from "./NodeVersion";
@@ -33,6 +34,7 @@
         NodeDetailedInfo,
         NodeTrafficLight,
         NodeUptime,
+        NodeGoodCitizen,
         NodeHealthStatus,
         NodeVersion
       },

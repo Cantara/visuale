@@ -5,7 +5,7 @@
     </template>
     <template v-slot:content>
       <ul>
-        <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/></li>
+        <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/><NodeGoodCitizen :health="node.health"></NodeGoodCitizen></li>
         <li><span class="description">Ver: </span><NodeVersion v-bind:text-length="13" :health="node.health[0]"/></li>
         <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
       </ul>
@@ -26,6 +26,7 @@
   import NodeDetailedInfo from "./NodeDetailedInfo";
   import NodeHealthStatus from "./NodeHealthStatus";
   import NodeVersion from "./NodeVersion";
+  import NodeGoodCitizen from "~/components/service/Node/NodeGoodCitizen";
   export default {
     name: "Node",
     components:{
@@ -35,7 +36,8 @@
       NodeDetailedInfo,
       NodeBoxElement: NodeBoxElement,
       NodeHealthStatus,
-      NodeVersion
+      NodeVersion,
+      NodeGoodCitizen
     },
     data() {
       return {
