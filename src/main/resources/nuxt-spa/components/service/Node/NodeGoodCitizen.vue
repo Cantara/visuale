@@ -12,7 +12,7 @@ export default {
   name: "NodeGoodCitizen",
   computed:{
     isHelpingCitizen(){
-      return JSON.stringify(this.health).includes('_sla');
+      return JSON.stringify(this.health).includes('sla_');
     },
     faHandsHelping(){
       return faHandsHelping;
