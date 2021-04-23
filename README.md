@@ -18,6 +18,7 @@ Visuale is not meant to be a replacement for traditional system monitooring tool
 
 ![A shapshot of an early ersion of the visuale dashboard](https://raw.githubusercontent.com/Cantara/visuale/master/doc/images/Visuale-in-action.png)
 
+![An example showing optional UI features](https://github.com/Cantara/visuale/raw/master/doc/images/Visuale-extra-icons.png)
 
 ##### Legend
 * Battery Symbol 
