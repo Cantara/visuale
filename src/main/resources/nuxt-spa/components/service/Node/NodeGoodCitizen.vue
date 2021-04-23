@@ -1,6 +1,6 @@
 <template>
 <span v-if="isHelpingCitizen">
-     <font-awesome-icon :icon="faHandsHelping" style="color:#7B5BDE"/>
+     <font-awesome-icon :icon="faHandsHelping" style="color:#A9D2FD"/>
 </span>
 </template>
 
