@@ -26,6 +26,10 @@ Visuale is not meant to be a replacement for traditional system monitooring tool
   * If the node seems to have been running for long, meaning that its infrastructure and dependencies may be due for security patching chores
 * Traffic Light Symbol
   * the observed heartbeat state of the node, signalling which nodes which are not considered healthy
+* Light blue PacMan Symbols
+  * (optional) service type icons if set and visualization turned on.
+* Light blue handshake icon
+  * (optional) Goos Citizen symbol indicating that the service expose its own SLA Design Intention to guide clients on their expectations
 
 ###### Created by:
 * Marius Årnes - https://github.com/appartiff - Lead Frontend Developer
