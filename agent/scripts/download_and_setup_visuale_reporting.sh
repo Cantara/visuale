@@ -16,7 +16,7 @@ ln -s reportServiceHealthToVisuale_CronScript_wget_sh.sh reportServiceHealthToVi
 
 wget https://raw.githubusercontent.com/Cantara/visuale/master/scripts/download_and_restart_if_new.sh
 wget https://raw.githubusercontent.com/Cantara/visuale/master/scripts/semantic_update_service.sh
-wget -O semantic_update_service.properties_template https://github.com/Cantara/visuale/blob/master/scripts/semantic_update_service.properties
+wget -O semantic_update_service.properties_template https://raw.githubusercontent.com/Cantara/visuale/master/scripts/semantic_update_service.properties
 
 wget -O kill-service.sh_template https://raw.githubusercontent.com/Cantara/visuale/master/scripts/kill-service.sh
 wget -O start-service.sh https://raw.githubusercontent.com/Cantara/visuale/master/scripts/start-service.sh
