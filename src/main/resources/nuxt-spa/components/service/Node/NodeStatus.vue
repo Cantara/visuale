@@ -33,7 +33,7 @@
           return faPowerOff;
         },
         isPowerOffActive(){
-          return (this.minutesSince < 15)
+          return (this.minutesSince < 10)
         },
         health(){
           return this.node.health[0];
