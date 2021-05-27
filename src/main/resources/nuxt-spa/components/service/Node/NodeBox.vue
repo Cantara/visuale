@@ -20,7 +20,7 @@
 
 <script>
   import NodeBoxElement from "./NodeBox/NodeBoxElement";
-  import NodeTrafficLight from "./NodeTrafficLight";
+  import NodeTrafficLight from "./NodeStatus";
   import NodeUptime from "./NodeUptime";
   import Modal from "../../Modal";
   import NodeDetailedInfo from "./NodeDetailedInfo";

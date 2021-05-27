@@ -20,7 +20,7 @@
 <script>
   import NodeTableElement from "./NodeList/NodeTableElement";
   import NodeDetailedInfo from "./NodeDetailedInfo";
-  import NodeTrafficLight from "./NodeTrafficLight";
+  import NodeTrafficLight from "./NodeStatus";
   import NodeUptime from "./NodeUptime";
   import NodeGoodCitizen from "~/components/service/Node/NodeGoodCitizen";
   import Modal from "../../Modal";

@@ -1,9 +1,11 @@
 <template>
-  <span>{{getRunningSince}} <font-awesome-icon v-if="isGasPumpActive" class="warning"  :icon="faGasPump"/></span>
+  <span>{{getRunningSince}}
+    <font-awesome-icon v-if="isGasPumpActive" class="warning"  :icon="faGasPump"/>
+  </span>
 </template>
 
 <script>
-  import { faGasPump } from '@fortawesome/free-solid-svg-icons'
+  import { faGasPump,faPowerOff } from '@fortawesome/free-solid-svg-icons'
   import {isNullOrUndefined} from "../../../utils/typeUtils";
 
   export default {
@@ -47,7 +49,7 @@
       },
       isGasPumpActive(){
         return (this.minutesSince > 10080)
-      }
+      },
     },
     methods: {
       startTimer () {
