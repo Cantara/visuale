@@ -1,7 +1,7 @@
 {
   "Status": "FAIL",
-  "name": "Visuale Service Example",
-  "version": "2.12",
-  "now": "2020-05-04T08:51:39.662927Z",
-  "ip": "172.31.15.154"
+  "name": "#NAME#",
+  "version": "#VERSION#",
+  "now": "#NOW#",
+  "ip": "#IP#"
 }
