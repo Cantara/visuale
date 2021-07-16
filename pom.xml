@@ -5,7 +5,7 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>10.37.13-SNAPSHOT</version>
+    <version>11.0.0-SNAPSHOT</version>
 
     <repositories>
         <!-- Needed for parent    -->
@@ -61,17 +61,19 @@
     <properties>
         <mainClass>no.cantara.tools.visuale.Main</mainClass>
         <slf4j.version>1.7.31</slf4j.version>
-        <helidon.version>0.10.6</helidon.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <helidon.version>2.3.2</helidon.version>
+        <jackson.version>2.12.4</jackson.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
         <npm.executable>npm</npm.executable>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>no.cantara.config</groupId>
-            <artifactId>simple-microservice-config</artifactId>
-            <version>0.3</version>
+            <artifactId>property-config</artifactId>
+            <version>0.8.0</version>
         </dependency>
 
         <dependency>
@@ -79,41 +81,7 @@
             <artifactId>Hystrix-BaseCommands</artifactId>
             <version>0.1.15</version>
         </dependency>
-        <!--       &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.bundles/helidon-bundles-webserver &ndash;&gt;
-               <dependency>
-                   <groupId>io.helidon.bundles</groupId>
-                   <artifactId>helidon-bundles-webserver</artifactId>
-                   <version>2.0.1</version>
-               </dependency>
-               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.bundles/helidon-bundles-config &ndash;&gt;
-               <dependency>
-                   <groupId>io.helidon.bundles</groupId>
-                   <artifactId>helidon-bundles-config</artifactId>
-                   <version>2.0.1</version>
-               </dependency>
-               <dependency>
-                   <groupId>io.helidon.microprofile.bundles</groupId>
-                   <artifactId>helidon-microprofile</artifactId>
-                   <version>2.0.1</version>
-               </dependency>
-               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.common/helidon-common &ndash;&gt;
-               <dependency>
-                   <groupId>io.helidon.common</groupId>
-                   <artifactId>helidon-common</artifactId>
-                   <version>2.0.1</version>
-               </dependency>
-               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.media/helidon-media-common &ndash;&gt;
-               <dependency>
-                   <groupId>io.helidon.media</groupId>
-                   <artifactId>helidon-media-common</artifactId>
-                   <version>2.0.1</version>
-               </dependency>
-               &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.media/helidon-media-jsonp &ndash;&gt;
-               <dependency>
-                   <groupId>io.helidon.media</groupId>
-                   <artifactId>helidon-media-jsonp</artifactId>
-                   <version>2.0.1</version>
-               </dependency>-->
+
         <!--Config-->
         <dependency>
             <groupId>io.helidon.config</groupId>
@@ -129,75 +97,15 @@
         </dependency>
         <dependency>
             <groupId>io.helidon.webserver</groupId>
-            <artifactId>helidon-webserver-netty</artifactId>
+            <artifactId>helidon-webserver-static-content</artifactId>
             <version>${helidon.version}</version>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-codec-http</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-codec-http2</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-codec-http -->
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
-            <version>4.1.65.Final</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-codec-http2 -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http2</artifactId>
-            <version>4.1.65.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.helidon.webserver</groupId>
-            <artifactId>helidon-webserver-json</artifactId>
+            <groupId>io.helidon.media</groupId>
+            <artifactId>helidon-media-jackson</artifactId>
             <version>${helidon.version}</version>
         </dependency>
 
-        <!--Security-->
-        <dependency>
-            <groupId>io.helidon.security</groupId>
-            <artifactId>helidon-security</artifactId>
-            <version>${helidon.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.helidon.security</groupId>
-            <artifactId>helidon-security-provider-http-auth</artifactId>
-            <version>${helidon.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.helidon.security</groupId>
-            <artifactId>helidon-security-integration-webserver</artifactId>
-            <version>${helidon.version}</version>
-        </dependency>
-
-        <!--  &lt;!&ndash; https://mvnrepository.com/artifact/io.helidon.bundles/helidon-bundles-project &ndash;&gt;
-          <dependency>
-              <groupId>io.helidon.bundles</groupId>
-              <artifactId>helidon-bundles-project</artifactId>
-              <version>2.0.1</version>
-              <type>pom</type>
-          </dependency>-->
-
-        <!--
-                <dependency>
-                    <groupId>io.helidon.microprofile.bundles</groupId>
-                    <artifactId>helidon-microprofile</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.yaml</groupId>
-                            <artifactId>snakeyaml</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
@@ -222,23 +130,11 @@
             <version>2.1.1</version>
         </dependency>
 
-        <!--   <dependency>
-               <groupId>io.helidon.media.jsonb</groupId>
-               <artifactId>helidon-media-jsonb-server</artifactId>
-           </dependency>
-   -->
         <!-- https://mvnrepository.com/artifact/javax.activation/javax.activation-api -->
         <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>javax.activation-api</artifactId>
             <version>1.2.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.netty/netty-codec -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
-            <version>4.1.65.Final</version>
         </dependency>
 
         <dependency>
@@ -251,14 +147,14 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.12.3</version>
+            <version>${jackson.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.12.3</version>
+            <version>${jackson.version}</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <dependency>
             <groupId>org.yaml</groupId>

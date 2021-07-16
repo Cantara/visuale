@@ -1,6 +1,8 @@
 package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.cantara.config.ApplicationProperties;
+import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.Node;
@@ -11,6 +13,12 @@ import java.util.Map;
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
 class StatusResourceTest {
+
+    static {
+        ApplicationPropertiesTestHelper.enableMutableSingleton();
+        ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
+    }
+
     public static ObjectMapper mapper = new ObjectMapper();
     StatusService statusService = new StatusService();
 

@@ -1,28 +1,27 @@
 package no.cantara.tools.visuale.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
-import io.helidon.webserver.json.JsonSupport;
 import no.cantara.tools.visuale.Main;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.json.JsonObject;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Flow;
 
 public class StatusResource implements Service {
-    public static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
-    public static ObjectMapper mapper = new ObjectMapper().configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-    StatusService statusService = new StatusService();
+
+    private static final Logger logger = LoggerFactory.getLogger(StatusResource.class);
+
     private static final String ACCESS_TOKEN_PARAM_NAME = "accessToken";
+
+    final StatusService statusService = new StatusService();
 
     /**
      * A service registers itself by updating the routine rules.
@@ -31,20 +30,28 @@ public class StatusResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/status", JsonSupport.get(), this::showEnvironment)
-                .options("/status", JsonSupport.get(), this::showEnvironmentOptionHeaders)
-                .get("/api/status", JsonSupport.get(), this::showEnvironment)
-                .options("/api/status", JsonSupport.get(), this::showEnvironmentOptionHeaders)
-                .put("/status", JsonSupport.get(), this::updateHealthInfo)
-                .put("/api/status", JsonSupport.get(), this::updateHealthInfo)
-                .put("/status/{env}/{service}/{node}", JsonSupport.get(), this::updateFullHealthInfo)
-                .put("/api/status/{env}/{service}/{node}", JsonSupport.get(), this::updateFullHealthInfo);
+        rules.get("/status", this::showEnvironment)
+                .options("/status", this::showEnvironmentOptionHeaders)
+                .get("/api/status", this::showEnvironment)
+                .options("/api/status", this::showEnvironmentOptionHeaders)
+                .put("/status", this::updateHealthInfo)
+                .put("/api/status", this::updateHealthInfo)
+                .put("/status/{env}/{service}/{node}", this::updateFullHealthInfo)
+                .put("", this::sdomeMethod)
+                .put("/api/status/{env}/{service}/{node}", this::updateFullHealthInfo);
+    }
+
+    private void sdomeMethod(ServerRequest serverRequest, ServerResponse serverResponse) {
+        new Flow.Publisher<String>() {
+            @Override
+            public void subscribe(Flow.Subscriber<? super String> subscriber) {
+
+            }
+        };
+        serverResponse.status(404).send();
     }
 
 
-    /**
-     * @return {@link JsonObject}
-     */
     @SuppressWarnings("checkstyle:designforextension")
     public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
         if (Main.accessToken != null && Main.accessToken.length() > 0) {
@@ -62,21 +69,15 @@ public class StatusResource implements Service {
         response.status(200).send(msg);
     }
 
-    /**
-     * @return {@link JsonObject}
-     */
     @SuppressWarnings("checkstyle:designforextension")
     public synchronized void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
-     response.status(200).headers().add("Content-Type: application/json"
+        response.status(200).headers().add("Content-Type: application/json"
                 , "Access-Control-Allow-Origin: *"
                 , "Access-Control-Allow-Methods: GET, OPTIONS"
                 , "Access-Control-Allow-Headers: *"
                 , "Access-Control-Allow-Credentials: true");
     }
 
-    /**
-     * @return {@link Response}
-     */
     @SuppressWarnings("checkstyle:designforextension")
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
@@ -87,9 +88,6 @@ public class StatusResource implements Service {
     }
 
 
-    /**
-     * @return {@link Response}
-     */
     @SuppressWarnings("checkstyle:designforextension")
     public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
         // synchronized TODO revisit this  foundService = true;

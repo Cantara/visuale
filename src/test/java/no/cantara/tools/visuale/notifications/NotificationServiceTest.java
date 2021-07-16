@@ -1,10 +1,17 @@
 package no.cantara.tools.visuale.notifications;
 
+import no.cantara.config.ApplicationProperties;
+import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 public class NotificationServiceTest {
+
+    static {
+        ApplicationPropertiesTestHelper.enableMutableSingleton();
+        ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
+    }
 
     String ref = UUID.randomUUID().toString();
 

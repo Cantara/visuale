@@ -1,11 +1,10 @@
 package no.cantara.tools.visuale;
 
+import io.helidon.media.jackson.JacksonSupport;
 import io.helidon.webserver.Routing;
-import io.helidon.webserver.ServerConfiguration;
-import io.helidon.webserver.StaticContentSupport;
 import io.helidon.webserver.WebServer;
-import io.helidon.webserver.json.JsonSupport;
-import no.cantara.config.ServiceConfig;
+import io.helidon.webserver.staticcontent.StaticContentSupport;
+import no.cantara.config.ApplicationProperties;
 import no.cantara.tools.visuale.healthchecker.HealthCheckProber;
 import no.cantara.tools.visuale.status.StatusResource;
 import no.cantara.tools.visuale.status.StatusService;
@@ -49,15 +48,11 @@ public final class Main {
         // load logging configuration
         setupLogging();
 //        Config config = ConfigProvider.getConfig();
-        String port = ServiceConfig.getProperty("server.port");
-        int portNo = 8080;
-        try {
-            portNo = Integer.parseInt(port);
-        } catch (Exception e) {
-            log.error("Unable to find config property for server.port, found:{} - using fallback value ", port, portNo);
-        }
 
-        accessToken = ServiceConfig.getProperty("server.accessToken");
+        ApplicationProperties.builder().defaults().buildAndSetStaticSingleton();
+        int portNo = ApplicationProperties.getInstance().asInt("server.port", 8080);
+
+        accessToken = ApplicationProperties.getInstance().get("server.accessToken");
 
         WebServer ws = startServer(portNo, false);
     }
@@ -81,7 +76,6 @@ public final class Main {
         }
 
         Routing routing = Routing.builder()
-                .register(JsonSupport.get())
                 .register(healthResource)
                 .register(statusResource)
                 .register("/favicon.ico", StaticContentSupport.builder("/nuxt-spa/dist/favicon.ico")
@@ -95,18 +89,12 @@ public final class Main {
                         .build())
                 .build();
 
+        WebServer ws = WebServer.builder()
+                .port(port)
+                .addMediaSupport(JacksonSupport.create())
+                .routing(routing)
+                .build();
 
-        ServerConfiguration serverConfig = null;
-        if (port != 0) {
-            serverConfig = ServerConfiguration.builder().port(port)
-                    .build();
-
-        } else {
-            serverConfig = ServerConfiguration.builder()
-                    .build();
-
-        }
-        WebServer ws = WebServer.create(serverConfig, routing);
         // start the server
         //Server server = startServer();
         ws.start()

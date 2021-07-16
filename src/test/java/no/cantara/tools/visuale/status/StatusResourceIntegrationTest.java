@@ -2,6 +2,8 @@ package no.cantara.tools.visuale.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.webserver.WebServer;
+import no.cantara.config.ApplicationProperties;
+import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import no.cantara.tools.visuale.Main;
 import no.cantara.tools.visuale.domain.Health;
 import org.junit.jupiter.api.AfterAll;
@@ -20,6 +22,12 @@ import java.util.Arrays;
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
 public class StatusResourceIntegrationTest {
+
+    static {
+        ApplicationPropertiesTestHelper.enableMutableSingleton();
+        ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
+    }
+
     private static WebServer server;
     public static ObjectMapper mapper = new ObjectMapper();
 

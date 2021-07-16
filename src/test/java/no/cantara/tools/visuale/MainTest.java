@@ -1,6 +1,8 @@
 package no.cantara.tools.visuale;
 
 import io.helidon.webserver.WebServer;
+import no.cantara.config.ApplicationProperties;
+import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,6 +14,12 @@ import javax.ws.rs.core.Response;
 import java.util.Arrays;
 
 public class MainTest {
+
+    static {
+        ApplicationPropertiesTestHelper.enableMutableSingleton();
+        ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
+    }
+
     private static WebServer server;
 
     @BeforeAll

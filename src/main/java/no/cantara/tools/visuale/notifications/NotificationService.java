@@ -6,6 +6,7 @@ import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
+import no.cantara.config.ApplicationProperties;
 import no.cantara.tools.visuale.status.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,6 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static no.cantara.config.ServiceConfig.getProperty;
 
 public class NotificationService {
 
@@ -53,11 +52,11 @@ public class NotificationService {
     private static MethodsClient methodsClient = null;
 
     static {
-        String slackAlertingEnabled = getProperty(SLACK_ALERTING_ENABLED_KEY);
+        String slackAlertingEnabled = ApplicationProperties.getInstance().get(SLACK_ALERTING_ENABLED_KEY);
         alertingIsEnabled = Boolean.valueOf(slackAlertingEnabled);
-        slackToken = getProperty(SLACK_TOKEN_KEY);
-        slackAlarmChannel = getProperty(SLACK_ALARM_CHANNEL_KEY);
-        slackWarningChannel = getProperty(SLACK_WARNING_CHANNEL_KEY);
+        slackToken = ApplicationProperties.getInstance().get(SLACK_TOKEN_KEY);
+        slackAlarmChannel = ApplicationProperties.getInstance().get(SLACK_ALARM_CHANNEL_KEY);
+        slackWarningChannel = ApplicationProperties.getInstance().get(SLACK_WARNING_CHANNEL_KEY);
         slack = Slack.getInstance();
         setupClient();
 //       sendAlarm("test", "atull");

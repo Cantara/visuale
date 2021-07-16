@@ -4,11 +4,9 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
-import io.helidon.webserver.json.JsonSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.json.JsonObject;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -42,16 +40,14 @@ public class HealthResource implements Service {
      */
     @Override
     public void update(Routing.Rules rules) {
-        rules.get("/health", JsonSupport.get(), this::showEnvironment)
-                .get("/api/health", JsonSupport.get(), this::showEnvironment);
+        rules.get("/health", this::showEnvironment)
+                .get("/api/health", this::showEnvironment);
         runningSince = getRunningSince();
     }
 
 
     /**
      * Return a wordly greeting message.
-     *
-     * @return {@link JsonObject}
      */
     @SuppressWarnings("checkstyle:designforextension")
     public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {

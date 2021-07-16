@@ -1,5 +1,7 @@
 package no.cantara.tools.visuale.healthchecker;
 
+import no.cantara.config.ApplicationProperties;
+import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.status.StatusService;
@@ -9,6 +11,11 @@ import java.net.URI;
 import java.time.Instant;
 
 class HealthCheckProberTest {
+
+    static {
+        ApplicationPropertiesTestHelper.enableMutableSingleton();
+        ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
+    }
 
     @Test
     public void testHealthCheckProber() {
