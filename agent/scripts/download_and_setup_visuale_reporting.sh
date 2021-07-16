@@ -4,14 +4,14 @@
 #     chmod 755 ./download_and_setup_visuale_reporting.sh
 #     ./download_and_setup_visuale_reporting.sh
 cd .
-mkdir scripts
+mkdir -p scripts
 cd scripts
 
 wget -O reportServiceHealthToVisuale.properties_template https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale.properties
 wget -O Visuale_SERVICE_FAIL.json_template https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/Visuale_SERVICE_FAIL.json
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_curl_bash.sh
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_wget_sh.sh
-ln -s reportServiceHealthToVisuale_CronScript_wget_sh.sh reportServiceHealthToVisuale.sh
+ln -s reportServiceHealthToVisuale_CronScript_curl_bash.sh reportServiceHealthToVisuale.sh
 
 
 wget https://raw.githubusercontent.com/Cantara/visuale/master/scripts/download_and_restart_if_new.sh
