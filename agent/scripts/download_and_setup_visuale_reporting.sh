@@ -8,7 +8,7 @@ mkdir -p scripts
 cd scripts
 
 wget -O reportServiceHealthToVisuale.properties_template https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale.properties
-wget -O Visuale_SERVICE_FAIL.json_template https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/Visuale_SERVICE_FAIL.json
+wget -O Visuale_SERVICE_FAIL.json https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/Visuale_SERVICE_FAIL.json
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_curl_bash.sh
 wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_wget_sh.sh
 ln -s reportServiceHealthToVisuale_CronScript_curl_bash.sh reportServiceHealthToVisuale.sh
