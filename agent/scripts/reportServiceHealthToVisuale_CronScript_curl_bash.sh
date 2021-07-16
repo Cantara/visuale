@@ -15,7 +15,7 @@ artifactVersion=$(readlink -f ${artifactFile} | xargs basename -s .jar | cut -c$
 name=$(printf "%s" "$reportToUrl1" | perl -n -e'/https?:\/\/(?<host>[^\/]+)\/(api\/)?status\/(?<env>[^\/]+)\/(?<name>[^\/]+)\/(?<node>[^\/?]+).*/ && print "$+{name}"')
 
 # Extract private ip-address from the eth0 device
-# This can be replaced with static ip-adress put in json fail template or the ip variable here.
+# This can be replaced with static ip-address put in json fail template or the ip variable here.
 ip=$(ip -f inet address show dev eth0 | grep inet | awk '{print $2;}' | cut -d"/" -f1)
 
 for n in 1 2 3 4 5 6 7 8 9 10; do
