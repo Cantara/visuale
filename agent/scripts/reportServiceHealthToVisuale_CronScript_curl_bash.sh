@@ -19,7 +19,7 @@ name=$(printf "%s" "$reportToUrl1" | perl -n -e'/https?:\/\/(?<host>[^\/]+)\/(ap
 ip=$(ip -f inet address show dev eth0 | grep inet | awk '{print $2;}' | cut -d"/" -f1)
 
 for n in 1 2 3 4 5 6 7 8 9 10; do
-  if json=$(curl --silent $healthUrl) ;
+  if json=$(curl --silent "$healthUrl") ;
   then
     echo "UP"
   else
