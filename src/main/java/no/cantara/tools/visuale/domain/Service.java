@@ -195,13 +195,12 @@ public class Service {
 
     public void addNode(Node addnode) {
         if (this.nodes == null) {
-//            this.nodes = new TreeSet<>();
-            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+            this.nodes = new TreeSet<>(new MyNodeNameComp());
         }
         this.nodes.add(addnode);
     }
 
-    public class MyNodeNameComp implements Comparator<Node> {
+    public static class MyNodeNameComp implements Comparator<Node> {
 
         @Override
         public int compare(Node e1, Node e2) {
