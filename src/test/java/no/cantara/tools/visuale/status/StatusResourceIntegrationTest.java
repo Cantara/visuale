@@ -1,6 +1,5 @@
 package no.cantara.tools.visuale.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.webserver.WebServer;
 import no.cantara.config.ApplicationProperties;
 import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
@@ -18,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 
@@ -28,15 +28,22 @@ public class StatusResourceIntegrationTest {
         ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
     }
 
+    private static Main main;
     private static WebServer server;
-    public static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
     public static void startTheServer() throws Exception {
-        server = Main.startServer(0, true);
-        StatusService statusService = new StatusService();
+        main = new Main("");
+        server = main.startServer(0, true);
+        StatusService statusService = main.getStatusResource().getStatusService();
         statusService.queueFullEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
-        //Thread.sleep(5000);
+        server.start().await(5, TimeUnit.SECONDS);
+    }
+
+    @AfterAll
+    public static void shutdownTheServer() {
+        server.shutdown();
+        main.shutdown();
     }
 
     @Test()  // for some reason this fails in jenkins as of now
