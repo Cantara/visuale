@@ -53,7 +53,7 @@ public class StatusResource implements Service {
 
 
     @SuppressWarnings("checkstyle:designforextension")
-    public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
+    public void showEnvironment(final ServerRequest request, final ServerResponse response) {
         if (Main.accessToken != null && Main.accessToken.length() > 0) {
             Optional<String> AccessTokenParam = request.queryParams().first(ACCESS_TOKEN_PARAM_NAME);
             // if code is not in the request, this is a problem
@@ -70,7 +70,7 @@ public class StatusResource implements Service {
     }
 
     @SuppressWarnings("checkstyle:designforextension")
-    public synchronized void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
+    public void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
         response.status(200).headers().add("Content-Type: application/json"
                 , "Access-Control-Allow-Origin: *"
                 , "Access-Control-Allow-Methods: GET, OPTIONS"
@@ -111,7 +111,7 @@ public class StatusResource implements Service {
 //        String sTy = "";
 
         request.content().as(String.class)
-                .thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, sTa, sTy, nodeName))
+                .thenAccept(jo -> updateEnvironmentFromHealthInfoJson(jo, envName, serviceName, sTa, sTy, nodeName))
                 .thenAccept(jo -> response.status(204).send());
     }
 
@@ -119,7 +119,7 @@ public class StatusResource implements Service {
     private Health updateHealthInfoFromJson(String healthJsonString) {
         try {
             Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.toString().length() < 1) {
+            if (healthJsonString != null || healthJsonString.length() < 1) {
                 myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
                 statusService.updateHealthMap(myHealth);
             }
@@ -130,10 +130,10 @@ public class StatusResource implements Service {
         return null;
     }
 
-    private Health getHealthInfoFromJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
+    private Health updateEnvironmentFromHealthInfoJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
         try {
             Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.toString().length() < 1) {
+            if (healthJsonString != null || healthJsonString.length() < 1) {
                 myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
             }
             if (myHealth != null && myHealth.getRunningSince() != null && myHealth.getRunningSince().length() > 5) {
