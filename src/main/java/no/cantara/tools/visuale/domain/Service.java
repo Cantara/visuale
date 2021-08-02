@@ -201,22 +201,30 @@ public class Service {
     }
 
     public static class MyNodeNameComp implements Comparator<Node> {
-
         @Override
-        public int compare(Node e1, Node e2) {
-            if (e1.getName() != null && e2.getName() != null) {
-                if (e1.getIp() != null && e2.getIp() != null) {
-                    return e1.getIp().compareTo(e2.getIp()) + e1.getName().compareTo(e2.getName());
-                }
-                return e1.getName().compareTo(e2.getName());
+        public int compare(Node n1, Node n2) {
+            if (n1 == n2) {
+                return 0;
             }
-            if (e1.getIp() != null && e2.getIp() != null) {
-                if (e1.getName() != null && e2.getName() != null) {
-                    return e1.getName().compareTo(e2.getName());
+            if (!Objects.equals(n1.getName(), n2.getName())) {
+                if (n1.getName() == null) {
+                    return -1;
                 }
-                return e1.getIp().compareTo(e2.getIp());
+                if (n2.getName() == null) {
+                    return 1;
+                }
+                return n1.getName().compareTo(n2.getName());
             }
-            return 1;
+            if (!Objects.equals(n1.getIp(), n2.getIp())) {
+                if (n1.getIp() == null) {
+                    return -1;
+                }
+                if (n2.getIp() == null) {
+                    return 1;
+                }
+                return n1.getIp().compareTo(n2.getIp());
+            }
+            return 0;
         }
     }
 
