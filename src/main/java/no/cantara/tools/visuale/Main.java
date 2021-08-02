@@ -25,17 +25,20 @@ import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 public final class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
-    private static String applicationInstanceName = "visuale";
-    private static final Instant server_started = Instant.now();
-    public static String accessToken = null;
 
-    private static final StatusResource statusResource = new StatusResource();
-    private static final HealthResource healthResource = new HealthResource();
+    private final String accessToken;
+    private final String applicationInstanceName = "visuale";
+    private final Instant server_started = Instant.now();
+    private final StatusResource statusResource;
+    private final HealthResource healthResource;
 
     /**
      * Cannot be instantiated.
      */
-    private Main() {
+    public Main(String accessToken) {
+        this.accessToken = accessToken;
+        statusResource = new StatusResource(accessToken);
+        healthResource = new HealthResource();
     }
 
     /**
@@ -52,9 +55,11 @@ public final class Main {
         ApplicationProperties.builder().defaults().buildAndSetStaticSingleton();
         int portNo = ApplicationProperties.getInstance().asInt("server.port", 8080);
 
-        accessToken = ApplicationProperties.getInstance().get("server.accessToken");
+        String accessToken = ApplicationProperties.getInstance().get("server.accessToken");
 
-        WebServer ws = startServer(portNo, false);
+        Main main = new Main(accessToken);
+
+        WebServer ws = main.startServer(portNo, false);
     }
 
 
@@ -63,15 +68,15 @@ public final class Main {
      *
      * @return the created {@link WebServer} instance
      */
-    static public WebServer startServer(int port, boolean usingMockEnvironment) {
+    public WebServer startServer(int port, boolean usingMockEnvironment) {
 
         if (usingMockEnvironment) {
-            statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
+            statusResource.getStatusService().queueFullEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
             startHealthReportSimulator(statusResource.getStatusService(), null);
 
         } else {
             EnvironmentConfig environmentConfig = new EnvironmentConfig();
-            statusResource.getStatusService().initializeEnvironment(environmentConfig.getEnvironment());
+            statusResource.getStatusService().queue(environmentConfig.getEnvironment());
             startHealthReportSimulator(statusResource.getStatusService(), environmentConfig);
         }
 
@@ -126,10 +131,20 @@ public final class Main {
         }
     }
 
-    private static void startHealthReportSimulator(StatusService statusService, EnvironmentConfig environmentConfig) {
+    private void startHealthReportSimulator(StatusService statusService, EnvironmentConfig environmentConfig) {
         HealthCheckProber prober = new HealthCheckProber(statusService, environmentConfig);
         prober.startScheduler();
     }
 
+    public void shutdown() {
+        statusResource.getStatusService().stopEventLoop();
+    }
 
+    public StatusResource getStatusResource() {
+        return statusResource;
+    }
+
+    public HealthResource getHealthResource() {
+        return healthResource;
+    }
 }

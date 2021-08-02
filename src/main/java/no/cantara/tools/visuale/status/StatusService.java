@@ -1,23 +1,32 @@
 package no.cantara.tools.visuale.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import no.cantara.tools.visuale.HealthResource;
-import no.cantara.tools.visuale.domain.*;
+import no.cantara.tools.visuale.domain.Environment;
+import no.cantara.tools.visuale.domain.Health;
+import no.cantara.tools.visuale.domain.Node;
+import no.cantara.tools.visuale.domain.Service;
+import no.cantara.tools.visuale.domain.ServiceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
-public class StatusService {
+public class StatusService implements Runnable {
 
     public static ObjectMapper mapper = new ObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
@@ -27,127 +36,217 @@ public class StatusService {
 
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
-    private static int envCount = 0;
+    public static final AtomicReference<String> DASHBOARD_ENVIRONMENT_NAME_REF = new AtomicReference<>("unknown-environment");
 
-    private Map<String, Node> healthResultsQueue = new ConcurrentHashMap<>();
-    private Map<String, EnvironmentUpdateHolder> environmentUpdateQueue = new ConcurrentHashMap<>();
-    private Set<Health> healthQueue = new CopyOnWriteArraySet<>();
-    private Environment environment = new Environment();
+    private final Thread eventConsumerThread;
+    private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
 
-    public static String DASHBOARD_ENVIRONMENT_NAME = HealthResource.applicationInstanceName;
-
-    private String environmentAsString;
+    private final AtomicReference<String> environmentAsString = new AtomicReference<>();
 
     private final boolean STRICT_ENVIRONMENT = false;
-    ScheduledExecutorService ses2 = Executors.newScheduledThreadPool(1);
+
+    private final AtomicBoolean shouldRun = new AtomicBoolean(true);
+
+    // An internal cache used only by the event-consumer-thread, so no synchronization is necessary
+    private final Map<String, Node> nodeByLookupKey = new LinkedHashMap<>();
+
+    // Internal environment used only b y the event-consumer-thread
+    private Environment environmentCache = new Environment();
 
 
     public StatusService() {
-        updateEnvironmentAsStringExecution();
-        startSyncThread();
+        this.eventConsumerThread = new Thread(this, "status-event-consumer");
+        this.eventConsumerThread.start();
     }
 
-    public void initializeEnvironment(Environment initenv) {
-        this.environment = initenv;
-        DASHBOARD_ENVIRONMENT_NAME = environment.getName();
-        updateEnvironmentAsStringExecution();
+    public void stopEventLoop() {
+        shouldRun.set(false);
+        queueInternal(new ControlEventData());
     }
 
-    public void initializeEnvironment(String envJson, String environment_name) {
-        environment = new Environment().withName(environment_name);
-        DASHBOARD_ENVIRONMENT_NAME = environment.getName();
+    /**
+     * Wait for the events
+     *
+     * @param timeout
+     * @param unit
+     */
+    public void waitForEvents(long timeout, TimeUnit unit) {
+        ControlEventData control = new ControlEventData();
+        queueInternal(control);
+        control.join(timeout, unit);
+    }
+
+    private void queueInternal(Object object) {
+        eventQueue.add(new Event(Instant.now(), object));
+    }
+
+    public void queue(Health updatedHealth) {
+        queueInternal(updatedHealth);
+    }
+
+    public void queue(Environment environment) {
+        queueInternal(environment);
+    }
+
+    public void queue(EnvironmentUpdateHolder environmentUpdateHolder) {
+        queueInternal(environmentUpdateHolder);
+    }
+
+    public void queueEnvironmentUpdate(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
+        EnvironmentUpdateHolder environmentUpdateHolder = new EnvironmentUpdateHolder(envName, serviceName, serviceTag, serviceType, nodeName, health);
+        queue(environmentUpdateHolder);
+    }
+
+    public void queueFullEnvironment(String envJson, String environment_name) {
+        Environment environment = new Environment().withName(environment_name);
         try {
             environment = mapper.readValue(envJson, Environment.class);
-            for (no.cantara.tools.visuale.domain.Service service : environment.getServices()) {
-                for (Node node : service.getNodes()) {
-                    if (node.getName() == null || node.getName().length() < 2) {
-                        node.setName(service.getName());
-                    }
-                    healthResultsQueue.put(node.getLookupKey(), node);
-                }
-                if (service.getServiceType() == null) {
-                    service.setServiceType(ServiceType.ServiceCategorization.CS.name());
-                }
-            }
         } catch (Exception e) {
             logger.error("Unable to initialise dashboard environment", e);
         }
         environment.setName(environment_name);
-        updateEnvironmentAsStringExecution();
+        queue(environment);
     }
 
-    public int updateHealthMap(Health updatedHealth) {
-        if (updatedHealth.isEmpty()) {
-            return healthResultsQueue.size();
-        }
-        logger.trace("Received health update: {}", updatedHealth);
-        healthQueue.add(updatedHealth);
-        if (healthQueue.size() > 5) {
-            updateEnvironmentAsStringExecution();
-        }
-        return healthResultsQueue.size();
+    public String getEnvironmentAsString() {
+        return environmentAsString.get();
     }
 
-    private synchronized void processEnvironmentQueue() {
-        for (String updatedEnvironmentTimestamp : environmentUpdateQueue.keySet()) {
-            EnvironmentUpdateHolder environmentUpdateHolder = environmentUpdateQueue.remove(updatedEnvironmentTimestamp);
-            if (environmentUpdateHolder != null) {
-                updateEnvironmentExecution(
-                        environmentUpdateHolder.envName,
-                        environmentUpdateHolder.serviceName,
-                        environmentUpdateHolder.serviceTag,
-                        environmentUpdateHolder.serviceType,
-                        environmentUpdateHolder.nodeName,
-                        environmentUpdateHolder.health);
-            }
+    private void updateEnvironmentString() throws JsonProcessingException {
+        String updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environmentCache);
+        if (hasValue(updatedEnvironmentString)) {
+            environmentAsString.set(updatedEnvironmentString);
         }
     }
 
-    private synchronized void processHealthQueue() {
-        for (Health updatedHealth : healthQueue) {
-            healthQueue.remove(updatedHealth);
-            //logger.trace("Received health update: {}", updatedHealth);
+    @Override
+    public void run() {
+        /*
+         * Loops over events, waiting if necessary until an event becomes available. The externally visible environment
+         * json string will only be serialized on every X events when there is a backlog in the queue. Once the queue is
+         * empty the environment string is always updated immediately.
+         */
+        final int X = 25;
+        while (shouldRun.get()) {
             try {
-                Node node = healthResultsQueue.get(updatedHealth.getLookupKey());
-                if (node == null) {
-                    logger.debug("Added new service from health update: {}", updatedHealth);
-                    String name = updatedHealth.getName();
-                    if (name == null || name.length() < 2) {
-                        name = "Unknown - " + UUID.randomUUID().toString();
+                Event event = eventQueue.poll(2, TimeUnit.SECONDS);
+                boolean environmentNeedsUpdate = false;
+                for (int i = 1; event != null && shouldRun.get(); i++) {
+                    environmentNeedsUpdate |= processEventInternal(event);
+                    if (environmentNeedsUpdate && (i % X == 0)) {
+                        updateEnvironmentString();
+                        environmentNeedsUpdate = false;
                     }
-                    node = new Node().withName(name).withIp(updatedHealth.getIp()).withVersion(updatedHealth.getVersion()).withHealth(updatedHealth);
-
-                    no.cantara.tools.visuale.domain.Service s =
-                            new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
-                    environment.addService(s);
-                    healthResultsQueue.put(node.getLookupKey(), node);
-                } else {
-                    //logger.trace("Updated service from health update: {}", updatedHealth);
-                    node.addHealth(updatedHealth);
-                    if (hasValue(updatedHealth.getIp())) {
-                        node.setIp(updatedHealth.getIp());
-                    }
+                    event = eventQueue.poll();
                 }
-            } catch (Exception e) {
-                logger.error("Received un-mappable health.", e);
+
+                if (environmentNeedsUpdate) {
+                    updateEnvironmentString();
+                }
+
+            } catch (Throwable t) {
+                logger.error("", t);
+            }
+        }
+        logger.info("Event-loop stopped");
+    }
+
+    private boolean processEventInternal(Event event) {
+        boolean environmentUpdated = false;
+        try {
+            switch (event.getEventType()) {
+                case CONTROL:
+                    // rare event, typically used for debugging and testing
+                    updateEnvironmentString(); // Update environment-string visible BEFORE signalling the control object
+                    ControlEventData control = event.control();
+                    control.signal();
+                    break;
+                case ENVIRONMENT:
+                    Environment environment = event.environment();
+                    environmentCache = environment;
+                    refreshNodeCache(environment);
+                    environmentUpdated = true;
+                    break;
+                case ENVIRONMENT_UPDATE_HOLDER:
+                    EnvironmentUpdateHolder environmentUpdateHolder = event.environmentUpdateHolder();
+                    updateEnvironmentExecution(
+                            environmentUpdateHolder.envName,
+                            environmentUpdateHolder.serviceName,
+                            environmentUpdateHolder.serviceTag,
+                            environmentUpdateHolder.serviceType,
+                            environmentUpdateHolder.nodeName,
+                            environmentUpdateHolder.health);
+                    environmentUpdated = true;
+                    break;
+                case HEALTH:
+                    Health health = event.health();
+                    processHealth(health);
+                    environmentUpdated = true;
+                    break;
+                case SERVICE:
+                case NODE:
+                    logger.warn("Received unsupported event: " + event.getEventType().name());
+                    break;
+            }
+
+        } catch (Exception e) {
+            logger.error("Unable to update environmentAsString:", e);
+        }
+
+        return environmentUpdated;
+    }
+
+    private void refreshNodeCache(Environment environment) {
+        nodeByLookupKey.clear();
+        for (Service service : environment.getServices()) {
+            for (Node node : service.getNodes()) {
+                if (node.getName() == null || node.getName().length() < 2) {
+                    node.setName(service.getName());
+                }
+                nodeByLookupKey.put(node.getLookupKey(), node);
+            }
+            if (service.getServiceType() == null) {
+                service.setServiceType(ServiceType.ServiceCategorization.CS.name());
             }
         }
     }
 
-    public boolean updateEnvironment(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
-        EnvironmentUpdateHolder environmentUpdateHolder = new EnvironmentUpdateHolder(envName, serviceName, serviceTag, serviceType, nodeName, health);
-        environmentUpdateQueue.put(Instant.now().toString(), environmentUpdateHolder);
-        return true;
+    private void processHealth(Health updatedHealth) {
+        logger.trace("Received health update: {}", updatedHealth);
+        try {
+            Node node = nodeByLookupKey.get(updatedHealth.getLookupKey());
+            if (node == null) {
+                logger.debug("Added new service from health update: {}", updatedHealth);
+                String name = updatedHealth.getName();
+                if (name == null || name.length() < 2) {
+                    name = "Unknown - " + UUID.randomUUID();
+                }
+                node = new Node().withName(name).withIp(updatedHealth.getIp()).withVersion(updatedHealth.getVersion()).withHealth(updatedHealth);
+
+                no.cantara.tools.visuale.domain.Service s =
+                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
+                environmentCache.addService(s);
+                nodeByLookupKey.put(node.getLookupKey(), node);
+            } else {
+                //logger.trace("Updated service from health update: {}", updatedHealth);
+                node.addHealth(updatedHealth);
+                if (hasValue(updatedHealth.getIp())) {
+                    node.setIp(updatedHealth.getIp());
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Received un-mappable health.", e);
+        }
     }
 
-    private synchronized boolean updateEnvironmentExecution(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
+    private boolean updateEnvironmentExecution(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
         boolean foundNode = false;
         boolean foundService = false;
         boolean foundEnvironment = false;
 
-        if (!STRICT_ENVIRONMENT || environment.getName().equalsIgnoreCase(envName)) {
+        if (!STRICT_ENVIRONMENT || environmentCache.getName().equalsIgnoreCase(envName)) {
             foundEnvironment = true;
-            Set<Service> serviceSet = environment.getServices();
+            Set<Service> serviceSet = environmentCache.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                 if (service.getName().equalsIgnoreCase(serviceName)) {  // We found a candidate
                     // TODO revisit this  foundService = true;
@@ -157,6 +256,7 @@ public class StatusService {
                         //  We have a tag and it is different, thus skip parsing nodes
                         if (hasValue(serviceType)) {
                             service.setServiceType(serviceType);
+                            // TODO return true missing here?
                         }
                     } else {
                         Set<Node> nodeSet = service.getNodes();
@@ -177,7 +277,7 @@ public class StatusService {
                                         addnode.setVersion(health.getVersion());
                                     }
                                     service.addNode(addnode);
-                                    updateEnvironmentAsStringQueue();
+                                    nodeByLookupKey.put(addnode.getLookupKey(), addnode);
                                     return true;
                                 } else if (latest == null) {
                                     Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
@@ -188,11 +288,10 @@ public class StatusService {
                                         addnode.setVersion(health.getVersion());
                                     }
                                     service.addNode(addnode);
-                                    updateEnvironmentAsStringQueue();
+                                    nodeByLookupKey.put(addnode.getLookupKey(), addnode);
                                     return true;
                                 } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
                                     node.addHealth(health);
-                                    updateEnvironmentAsStringQueue();
                                     return true;
                                 }
 //                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
@@ -215,7 +314,6 @@ public class StatusService {
                                     service.setServiceType(serviceType);
                                 }
 
-                                updateEnvironmentAsStringQueue();
                                 return true;
                             }
                         }
@@ -228,8 +326,8 @@ public class StatusService {
                 no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
                         .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType)
                         .withNode(node);
-                environment.addService(service);
-                updateEnvironmentAsStringQueue();
+                environmentCache.addService(service);
+                nodeByLookupKey.put(node.getLookupKey(), node);
                 return true;
             }
             if (!foundNode) {
@@ -239,70 +337,16 @@ public class StatusService {
                                 && service.getServiceTag().equalsIgnoreCase(serviceTag)) {
                             Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                             service.addNode(node);
+                            nodeByLookupKey.put(node.getLookupKey(), node);
                             if (hasValue(serviceType)) {
                                 service.setServiceType(serviceType);
                             }
-                            updateEnvironmentAsStringQueue();
                             return true;
                         }
                     }
                 }
             }
-            //   CompletionStage<String> jsonObject = request.content().as(String.class).thenApply(this::updateHealthMap2);
         }
         return foundEnvironment;
-    }
-
-
-    public Map<String, Node> getHealthStatusMap() {
-        return healthResultsQueue;
-    }
-
-    public int getHealthStatusMapSize() {
-        return healthResultsQueue.size();
-    }
-
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
-
-    public Environment getEnvironment() {
-        return environment;
-    }
-
-    private synchronized void updateEnvironmentAsStringQueue() {
-        updateEnvironmentAsStringExecution();
-        if (envCount < 10) {
-            envCount++;
-        } else {
-            envCount = 0;
-
-        }
-    }
-
-    private synchronized void updateEnvironmentAsStringExecution() {
-        String updatedEnvironmentString = null;
-        try {
-            processHealthQueue();
-            processEnvironmentQueue();
-            updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment);
-        } catch (Exception e) {
-            logger.error("Unable to update environmentAsString:", e);
-        }
-        if (hasValue(updatedEnvironmentString)) {
-            environmentAsString = updatedEnvironmentString;
-        }
-    }
-
-    public String getEnvironmentAsString() {
-        return environmentAsString;
-    }
-
-    private void startSyncThread() {
-        Runnable task2 = () -> {
-            updateEnvironmentAsStringExecution();
-        };
-        // init Delay = 5, repeat the task every 60 second
-        ScheduledFuture<?> scheduledFuture2 = ses2.scheduleAtFixedRate(task2, 3, 1, TimeUnit.SECONDS);
     }
 }

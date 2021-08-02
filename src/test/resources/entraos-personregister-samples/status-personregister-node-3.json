@@ -1,0 +1,21 @@
+{
+  "Name": "personregister-api",
+  "Ip": "172.31.10.209",
+  "Version": "0.15.4-SNAPSHOT",
+  "Now": "2021-08-02T08:40:50.578782Z",
+  "Running since": "2021-08-01T10:45:08.610812Z",
+  "Status": "true",
+  "Base url": "https://api-devtest.entraos.io",
+  "EntraSSO url": "https://entrasso-devtest.entraos.io/",
+  "OAuth2 url": "https://entrasso-devtest.entraos.io/oauth2",
+  "SLA Intention": "{\"slaPathExempts\":{},\"sla_ResponseTimeMs\":150,\"sla_MTTR\":99.99,\"sla_MTTF\":99.99,\"sla_RequestsPerMinute\":3000,\"sla_hasHighAvailabilitySupport\":true,\"description\":\"These parameters are the intended design-goals for the service running in an intended production environment. This mean that you should read the values as a developer intention, and not as a contract fact and that mileage may vary depending of deployment factors. Big deviations are likely not intended and should be reported to the responsible party.\"}",
+  "Database": "jdbc:postgresql://entraos-devtest-person.cktnh6otuvcm.eu-central-1.rds.amazonaws.com/personregister",
+  "Registered persons (hazelcast)": 237,
+  "Registered persons (db)": 238,
+  "New persons (hz)": 0,
+  "Indexed persons (lucene)": 237,
+  "Hazelcast cluster members": 3,
+  "Hazelcast local member": "172.31.10.209",
+  "Hazelcast cluster member details": "[172.31.10.209, 172.31.11.15, 172.31.11.25]",
+  "Lucene version": "8.9.0"
+}

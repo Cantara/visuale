@@ -1,10 +1,20 @@
 
 package no.cantara.tools.visuale.domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import no.cantara.tools.visuale.notifications.NotificationService;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
@@ -68,6 +78,13 @@ public class Service {
             }
 
         }
+        /*
+         *  TODO This is horrible! We should not "hide" slack notifications inside a method that from it's description
+         *   will return the healthy-nodes. NotificationService is implemented using synchronized methods, which means
+         *   that call to methods there will potentially block for a long time! Blocking methods (especially long
+         *   blocking methods) should not be called from a Helidon IO thread as this could effective block other
+         *   unrelated web-requests.
+         */
         if (healthy_nodes < 1) {
             NotificationService.sendAlarm(getName(), "Alarm - No healthy service nodes");
         } else if (healthy_nodes < 2) {
@@ -96,7 +113,7 @@ public class Service {
     }
 
     public Service withNode(Node node) {
-       addNode(node);
+        addNode(node);
         return this;
     }
 
@@ -178,29 +195,36 @@ public class Service {
 
     public void addNode(Node addnode) {
         if (this.nodes == null) {
-//            this.nodes = new TreeSet<>();
-            this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+            this.nodes = new TreeSet<>(new MyNodeNameComp());
         }
         this.nodes.add(addnode);
     }
 
-    public class MyNodeNameComp implements Comparator<Node> {
-
+    public static class MyNodeNameComp implements Comparator<Node> {
         @Override
-        public int compare(Node e1, Node e2) {
-            if (e1.getName() != null && e2.getName() != null) {
-                if (e1.getIp() != null && e2.getIp() != null) {
-                    return e1.getIp().compareTo(e2.getIp()) + e1.getName().compareTo(e2.getName());
-                }
-                return e1.getName().compareTo(e2.getName());
+        public int compare(Node n1, Node n2) {
+            if (n1 == n2) {
+                return 0;
             }
-            if (e1.getIp() != null && e2.getIp() != null) {
-                if (e1.getName() != null && e2.getName() != null) {
-                    return e1.getName().compareTo(e2.getName());
+            if (!Objects.equals(n1.getName(), n2.getName())) {
+                if (n1.getName() == null) {
+                    return -1;
                 }
-                return e1.getIp().compareTo(e2.getIp());
+                if (n2.getName() == null) {
+                    return 1;
+                }
+                return n1.getName().compareTo(n2.getName());
             }
-            return 1;
+            if (!Objects.equals(n1.getIp(), n2.getIp())) {
+                if (n1.getIp() == null) {
+                    return -1;
+                }
+                if (n2.getIp() == null) {
+                    return 1;
+                }
+                return n1.getIp().compareTo(n2.getIp());
+            }
+            return 0;
         }
     }
 

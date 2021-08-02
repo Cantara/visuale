@@ -12,6 +12,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class MainTest {
 
@@ -20,12 +21,20 @@ public class MainTest {
         ApplicationProperties.builder().testDefaults().buildAndSetStaticSingleton();
     }
 
+    private static Main main;
     private static WebServer server;
 
     @BeforeAll
     public static void startTheServer() throws Exception {
-        server = Main.startServer(0, true);
-        //Thread.sleep(5000);
+        main = new Main("");
+        server = main.startServer(0, true);
+        server.start().await(5, TimeUnit.SECONDS);
+    }
+
+    @AfterAll
+    public static void shutdownTheServer() {
+        server.shutdown();
+        main.shutdown();
     }
 
     @Test()  // for some reason this fails in jenkins as of now

@@ -4,7 +4,6 @@ import io.helidon.webserver.Routing;
 import io.helidon.webserver.ServerRequest;
 import io.helidon.webserver.ServerResponse;
 import io.helidon.webserver.Service;
-import no.cantara.tools.visuale.Main;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Flow;
 
 public class StatusResource implements Service {
 
@@ -22,6 +20,12 @@ public class StatusResource implements Service {
     private static final String ACCESS_TOKEN_PARAM_NAME = "accessToken";
 
     final StatusService statusService = new StatusService();
+
+    final String accessToken;
+
+    public StatusResource(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
     /**
      * A service registers itself by updating the routine rules.
@@ -37,28 +41,16 @@ public class StatusResource implements Service {
                 .put("/status", this::updateHealthInfo)
                 .put("/api/status", this::updateHealthInfo)
                 .put("/status/{env}/{service}/{node}", this::updateFullHealthInfo)
-                .put("", this::sdomeMethod)
                 .put("/api/status/{env}/{service}/{node}", this::updateFullHealthInfo);
     }
 
-    private void sdomeMethod(ServerRequest serverRequest, ServerResponse serverResponse) {
-        new Flow.Publisher<String>() {
-            @Override
-            public void subscribe(Flow.Subscriber<? super String> subscriber) {
-
-            }
-        };
-        serverResponse.status(404).send();
-    }
-
-
     @SuppressWarnings("checkstyle:designforextension")
-    public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
-        if (Main.accessToken != null && Main.accessToken.length() > 0) {
+    public void showEnvironment(final ServerRequest request, final ServerResponse response) {
+        if (accessToken != null && accessToken.length() > 0) {
             Optional<String> AccessTokenParam = request.queryParams().first(ACCESS_TOKEN_PARAM_NAME);
             // if code is not in the request, this is a problem
             try {
-                if (!Main.accessToken.equalsIgnoreCase(AccessTokenParam.get())) {
+                if (!accessToken.equalsIgnoreCase(AccessTokenParam.get())) {
                     response.status(404).send("{\"reason\":\"unauthorized\"}");
                 }
             } catch (Exception e) {
@@ -70,7 +62,7 @@ public class StatusResource implements Service {
     }
 
     @SuppressWarnings("checkstyle:designforextension")
-    public synchronized void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
+    public void showEnvironmentOptionHeaders(final ServerRequest request, final ServerResponse response) {
         response.status(200).headers().add("Content-Type: application/json"
                 , "Access-Control-Allow-Origin: *"
                 , "Access-Control-Allow-Methods: GET, OPTIONS"
@@ -87,10 +79,23 @@ public class StatusResource implements Service {
 
     }
 
+    private Health updateHealthInfoFromJson(String healthJsonString) {
+        try {
+            Health myHealth = null;
+            if (healthJsonString != null || healthJsonString.length() < 1) {
+                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
+                statusService.queue(myHealth);
+            }
+            return myHealth;
+        } catch (Exception e) {
+            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
+        }
+        return null;
+    }
 
     @SuppressWarnings("checkstyle:designforextension")
     public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
-        // synchronized TODO revisit this  foundService = true;
+        // TODO revisit this  foundService = true;
 
         logger.debug("updateFullHealthInfo");
         String envName = request.path().param("env");
@@ -111,33 +116,18 @@ public class StatusResource implements Service {
 //        String sTy = "";
 
         request.content().as(String.class)
-                .thenAccept(jo -> getHealthInfoFromJson(jo, envName, serviceName, sTa, sTy, nodeName))
+                .thenAccept(jo -> updateEnvironmentFromHealthInfoJson(jo, envName, serviceName, sTa, sTy, nodeName))
                 .thenAccept(jo -> response.status(204).send());
     }
 
-
-    private Health updateHealthInfoFromJson(String healthJsonString) {
+    private Health updateEnvironmentFromHealthInfoJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
         try {
             Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.toString().length() < 1) {
-                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
-                statusService.updateHealthMap(myHealth);
-            }
-            return myHealth;
-        } catch (Exception e) {
-            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
-        }
-        return null;
-    }
-
-    private Health getHealthInfoFromJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
-        try {
-            Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.toString().length() < 1) {
+            if (healthJsonString != null || healthJsonString.length() < 1) {
                 myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
             }
             if (myHealth != null && myHealth.getRunningSince() != null && myHealth.getRunningSince().length() > 5) {
-                statusService.updateEnvironment(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
+                statusService.queueEnvironmentUpdate(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
             }
             return myHealth;
         } catch (Exception e) {
