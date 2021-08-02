@@ -35,7 +35,7 @@ public class StatusResourceIntegrationTest {
     public static void startTheServer() throws Exception {
         server = Main.startServer(0, true);
         StatusService statusService = new StatusService();
-        statusService.initializeEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
+        statusService.queueFullEnvironment(MOCK_ENVORONMENT, "JUnitTest Env");
         //Thread.sleep(5000);
     }
 

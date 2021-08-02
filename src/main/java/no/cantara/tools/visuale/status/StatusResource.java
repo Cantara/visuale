@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Flow;
 
 public class StatusResource implements Service {
 
@@ -37,20 +36,8 @@ public class StatusResource implements Service {
                 .put("/status", this::updateHealthInfo)
                 .put("/api/status", this::updateHealthInfo)
                 .put("/status/{env}/{service}/{node}", this::updateFullHealthInfo)
-                .put("", this::sdomeMethod)
                 .put("/api/status/{env}/{service}/{node}", this::updateFullHealthInfo);
     }
-
-    private void sdomeMethod(ServerRequest serverRequest, ServerResponse serverResponse) {
-        new Flow.Publisher<String>() {
-            @Override
-            public void subscribe(Flow.Subscriber<? super String> subscriber) {
-
-            }
-        };
-        serverResponse.status(404).send();
-    }
-
 
     @SuppressWarnings("checkstyle:designforextension")
     public void showEnvironment(final ServerRequest request, final ServerResponse response) {
@@ -87,6 +74,19 @@ public class StatusResource implements Service {
 
     }
 
+    private Health updateHealthInfoFromJson(String healthJsonString) {
+        try {
+            Health myHealth = null;
+            if (healthJsonString != null || healthJsonString.length() < 1) {
+                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
+                statusService.queue(myHealth);
+            }
+            return myHealth;
+        } catch (Exception e) {
+            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
+        }
+        return null;
+    }
 
     @SuppressWarnings("checkstyle:designforextension")
     public void updateFullHealthInfo(final ServerRequest request, final ServerResponse response) {
@@ -115,21 +115,6 @@ public class StatusResource implements Service {
                 .thenAccept(jo -> response.status(204).send());
     }
 
-
-    private Health updateHealthInfoFromJson(String healthJsonString) {
-        try {
-            Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.length() < 1) {
-                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
-                statusService.updateHealthMap(myHealth);
-            }
-            return myHealth;
-        } catch (Exception e) {
-            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
-        }
-        return null;
-    }
-
     private Health updateEnvironmentFromHealthInfoJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
         try {
             Health myHealth = null;
@@ -137,7 +122,7 @@ public class StatusResource implements Service {
                 myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
             }
             if (myHealth != null && myHealth.getRunningSince() != null && myHealth.getRunningSince().length() > 5) {
-                statusService.updateEnvironment(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
+                statusService.queueEnvironmentUpdate(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
             }
             return myHealth;
         } catch (Exception e) {

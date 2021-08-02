@@ -66,12 +66,12 @@ public final class Main {
     static public WebServer startServer(int port, boolean usingMockEnvironment) {
 
         if (usingMockEnvironment) {
-            statusResource.getStatusService().initializeEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
+            statusResource.getStatusService().queueFullEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
             startHealthReportSimulator(statusResource.getStatusService(), null);
 
         } else {
             EnvironmentConfig environmentConfig = new EnvironmentConfig();
-            statusResource.getStatusService().initializeEnvironment(environmentConfig.getEnvironment());
+            statusResource.getStatusService().queue(environmentConfig.getEnvironment());
             startHealthReportSimulator(statusResource.getStatusService(), environmentConfig);
         }
 

@@ -226,7 +226,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
-                    .text(SLACK_ALERT_EMOJI + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service:" + service + " is down. \n       - " + message)
+                    .text(SLACK_ALERT_EMOJI + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service:" + service + " is down. \n       - " + message)
                     .build();
 
             try {
@@ -248,7 +248,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service: " + service + " is back in service. " + timestampText)
                     .build();
 
             try {
@@ -270,7 +270,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_WARNING_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is having trouble. \n       - " + message)
+                    .text(SLACK_WARNING_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service: " + service + " is having trouble. \n       - " + message)
                     .build();
 
             try {
@@ -292,7 +292,7 @@ public class NotificationService {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME + " - service: " + service + " is back in service. " + timestampText)
+                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service: " + service + " is back in service. " + timestampText)
                     .build();
 
             try {

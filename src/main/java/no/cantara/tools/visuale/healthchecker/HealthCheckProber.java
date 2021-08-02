@@ -13,8 +13,17 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class HealthCheckProber {
 
@@ -99,7 +108,7 @@ public class HealthCheckProber {
                     Health health = HealthMapper.fromRealWorldJson(json);
                     String service = environmentPathMap.get(u).getServiceName();
                     String node = environmentPathMap.get(u).getNodeName();
-                    statusService.updateEnvironment("env", service, "", "", node, health);
+                    statusService.queueEnvironmentUpdate("env", service, "", "", node, health);
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now
