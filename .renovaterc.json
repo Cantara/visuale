@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "separateMajorMinor": true,
+  "separateMinorPatch": true,
+  "prConcurrentLimit": 10
+}
