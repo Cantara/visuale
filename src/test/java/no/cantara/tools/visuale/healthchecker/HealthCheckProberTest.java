@@ -2,6 +2,7 @@ package no.cantara.tools.visuale.healthchecker;
 
 import no.cantara.config.ApplicationProperties;
 import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
+import no.cantara.tools.visuale.HealthResource;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.status.StatusService;
@@ -19,8 +20,9 @@ class HealthCheckProberTest {
 
     @Test
     public void testHealthCheckProber() {
+        HealthResource h = new HealthResource();
         StatusService s = new StatusService();
-        HealthCheckProber p = new HealthCheckProber(s, null);
+        HealthCheckProber p = new HealthCheckProber(h, s, null);
         p.checkHealth();
         System.out.println("OK healthchecks:" + p.getOkHealthCheckMapSize());
         System.out.println("Error healthchecks:" + p.getErroredHealthCheckMapSize());

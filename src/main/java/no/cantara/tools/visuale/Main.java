@@ -72,12 +72,12 @@ public final class Main {
 
         if (usingMockEnvironment) {
             statusResource.getStatusService().queueFullEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
-            startHealthReportSimulator(statusResource.getStatusService(), null);
+            startHealthReportSimulator(healthResource, statusResource.getStatusService(), null);
 
         } else {
             EnvironmentConfig environmentConfig = new EnvironmentConfig();
             statusResource.getStatusService().queue(environmentConfig.getEnvironment());
-            startHealthReportSimulator(statusResource.getStatusService(), environmentConfig);
+            startHealthReportSimulator(healthResource, statusResource.getStatusService(), environmentConfig);
         }
 
         Routing routing = Routing.builder()
@@ -131,8 +131,8 @@ public final class Main {
         }
     }
 
-    private void startHealthReportSimulator(StatusService statusService, EnvironmentConfig environmentConfig) {
-        HealthCheckProber prober = new HealthCheckProber(statusService, environmentConfig);
+    private void startHealthReportSimulator(HealthResource healthResource, StatusService statusService, EnvironmentConfig environmentConfig) {
+        HealthCheckProber prober = new HealthCheckProber(healthResource, statusService, environmentConfig);
         prober.startScheduler();
     }
 

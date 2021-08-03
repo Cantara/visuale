@@ -21,17 +21,22 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
-
 public class HealthResource implements Service {
     public static final Logger log = LoggerFactory.getLogger(HealthResource.class);
     public static final String applicationInstanceName = "visuale";
-    private boolean ok = true;
-    private static Set<URI> okPollingURLs = new CopyOnWriteArraySet<>();
-    private static Set<URI> failedPollingURLs = new CopyOnWriteArraySet<>();
-    private static String runningSince;
-    private String myVersion;
-    private String myIp;
+
+    private final boolean ok = true;
+    private final Set<URI> okPollingURLs = new CopyOnWriteArraySet<>();
+    private final Set<URI> failedPollingURLs = new CopyOnWriteArraySet<>();
+    private final String runningSince;
+    private final String myVersion;
+    private final String myIp;
+
+    public HealthResource() {
+        runningSince = getRunningSince();
+        myVersion = getVersion();
+        myIp = getMyIPAddresssString();
+    }
 
     /**
      * A service registers itself by updating the routine rules.
@@ -42,7 +47,6 @@ public class HealthResource implements Service {
     public void update(Routing.Rules rules) {
         rules.get("/health", this::showEnvironment)
                 .get("/api/health", this::showEnvironment);
-        runningSince = getRunningSince();
     }
 
 
@@ -50,20 +54,13 @@ public class HealthResource implements Service {
      * Return a wordly greeting message.
      */
     @SuppressWarnings("checkstyle:designforextension")
-    public synchronized void showEnvironment(final ServerRequest request, final ServerResponse response) {
+    public void showEnvironment(final ServerRequest request, final ServerResponse response) {
         String msg = getHealthTextJson();
         response.status(200).send(msg);
     }
 
 
     public String getHealthTextJson() {
-        if (!hasValue(myVersion)) {
-            myVersion = getVersion();
-        }
-        if (!hasValue(myIp)) {
-            myIp = getMyIPAddresssString();
-        }
-
         return "{\n" +
                 "  \"Status\": \"" + ok + "\",\n" +
                 "  \"name\": \"" + applicationInstanceName + "\",\n" +
@@ -73,7 +70,6 @@ public class HealthResource implements Service {
                 "  \"failedPollingURLs\": \"" + Arrays.asList(failedPollingURLs) + "\",\n" +
                 "  \"now\": \"" + Instant.now() + "\",\n" +
                 "  \"running since\": \"" + runningSince + "\"\n\n" +
-
                 "}\n";
     }
 
@@ -82,7 +78,7 @@ public class HealthResource implements Service {
         return Instant.now().minus(uptimeInMillis, ChronoUnit.MILLIS).toString();
     }
 
-    private static String getVersion() {
+    private String getVersion() {
         Properties mavenProperties = new Properties();
         String resourcePath = "/META-INF/maven/no.cantara.tools/" + applicationInstanceName + "/pom.properties";
         URL mavenVersionResource = HealthResource.class.getResource(resourcePath);
@@ -97,9 +93,9 @@ public class HealthResource implements Service {
         return "(DEV VERSION)" + " [" + applicationInstanceName + " - " + getMyIPAddresssString() + "]";
     }
 
-    public static String getMyIPAddresssesString() {
+    public String getMyIPAddresssesString() {
 
-        String ipAdresses = "";
+        String ipAdresses;
 
         try {
             ipAdresses = InetAddress.getLocalHost().getHostAddress();
@@ -120,17 +116,18 @@ public class HealthResource implements Service {
         return ipAdresses;
     }
 
-    public static String getMyIPAddresssString() {
-
+    public String getMyIPAddresssString() {
         String fullString = getMyIPAddresssesString();
         return fullString.substring(0, fullString.indexOf(" "));
     }
 
-    public static void setOkPollingURLs(Set<URI> okPollingURLs) {
-        HealthResource.okPollingURLs = okPollingURLs;
+    public void setOkPollingURLs(Set<URI> okPollingURLs) {
+        this.okPollingURLs.clear();
+        this.okPollingURLs.addAll(okPollingURLs);
     }
 
-    public static void setFailedPollingURLs(Set<URI> failedPollingURLs) {
-        HealthResource.failedPollingURLs = failedPollingURLs;
+    public void setFailedPollingURLs(Set<URI> failedPollingURLs) {
+        this.failedPollingURLs.clear();
+        this.failedPollingURLs.addAll(failedPollingURLs);
     }
 }

@@ -14,10 +14,10 @@ import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,14 +28,16 @@ import java.util.concurrent.TimeUnit;
 public class HealthCheckProber {
 
     public static final Logger logger = LoggerFactory.getLogger(HealthCheckProber.class);
-    private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 2;
-    private static boolean scheduler_running = false;
 
-    private static Set<URI> healthCheckURLSet = new CopyOnWriteArraySet<>();
-    Map<URI, ConfNode> environmentPathMap = new HashMap<>();
-    private static Set<URI> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
-    private static StatusService statusService;
-    private static ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+    private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 10;
+
+    private final Set<URI> healthCheckURLSet = new CopyOnWriteArraySet<>();
+    private final Map<URI, ConfNode> environmentPathMap = new ConcurrentHashMap<>();
+    private final Set<URI> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
+    private final StatusService statusService;
+    private final ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+
+    private final HealthResource healthResource;
 
     public int getOkHealthCheckMapSize() {
         return healthCheckURLSet.size();
@@ -45,25 +47,18 @@ public class HealthCheckProber {
         return badHealthCheckURLSet.size();
     }
 
-    public HealthCheckProber(StatusService statusService, EnvironmentConfig environmentConfig) {
+    public HealthCheckProber(HealthResource healthResource, StatusService statusService, EnvironmentConfig environmentConfig) {
+        this.healthResource = healthResource;
         this.statusService = statusService;
         readConfig(environmentConfig);
-        HealthResource.setOkPollingURLs(healthCheckURLSet);
-        HealthResource.setFailedPollingURLs(badHealthCheckURLSet);
-
+        healthResource.setOkPollingURLs(healthCheckURLSet);
+        healthResource.setFailedPollingURLs(badHealthCheckURLSet);
     }
 
     public void startScheduler() {
-        if (healthCheckURLSet.size() > 0 && !scheduler_running) {
-            scheduler_running = true;
-            Runnable task1 = () -> {
-                checkHealth();
-            };
-            // init Delay = 5, repeat the task every 60 second
-            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(task1, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
-
+        if (healthCheckURLSet.size() > 0) {
+            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(this::checkHealth, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
         }
-
     }
 
     private void readConfig(EnvironmentConfig environmentConfig) {
@@ -129,10 +124,10 @@ public class HealthCheckProber {
         if (random > 90) {
             logger.info("==> Decided to re-add the bad URLs for a retry.  Added {} urls", badHealthCheckURLSet.size());
             healthCheckURLSet.addAll(badHealthCheckURLSet);
-            badHealthCheckURLSet = new CopyOnWriteArraySet();
+            badHealthCheckURLSet.clear();
         }
-        HealthResource.setOkPollingURLs(healthCheckURLSet);
-        HealthResource.setFailedPollingURLs(badHealthCheckURLSet);
+        healthResource.setOkPollingURLs(healthCheckURLSet);
+        healthResource.setFailedPollingURLs(badHealthCheckURLSet);
 
     }
 }
