@@ -15,7 +15,7 @@
     "analyze": "nuxt build --analyze"
   },
   "dependencies": {
-    "@nuxtjs/axios": "5.12.2",
+    "@nuxtjs/axios": "5.12.5",
     "@nuxtjs/dotenv": "1.4.1",
     "@nuxtjs/proxy": "2.0.1",
     "benchmark": "2.1.4",
