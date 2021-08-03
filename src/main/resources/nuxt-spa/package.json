@@ -30,7 +30,7 @@
     "vue-frag": "1.1.5"
   },
   "devDependencies": {
-    "@babel/preset-env": "7.12.1",
+    "@babel/preset-env": "7.12.17",
     "@fortawesome/free-brands-svg-icons": "5.15.3",
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@nuxtjs/eslint-config": "3.1.0",
