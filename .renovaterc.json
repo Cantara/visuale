@@ -5,11 +5,20 @@
   "packageRules": [
     {
       "matchManagers": ["npm"],
-      "updateTypes": [
-        "minor",
-        "patch"
-      ],
+      "updateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "automerge": true
+    },
+    {
+      "packagePatterns": ["eslint"],
+      "groupName": "eslint"
+    },
+    {
+      "packagePatterns": ["nuxt"],
+      "groupName": "nuxt"
     }
   ],
   "separateMajorMinor": true,
