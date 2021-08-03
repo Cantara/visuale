@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "set NODE_ENV=dev && nuxt",
-    "build": "npm install && nuxt build",
+    "build": "nuxt build",
     "pre-run": "install-changed",
     "start": "set NODE_ENV=dev && nuxt start",
     "generate": "npm rebuild node-sass && nuxt generate",
@@ -22,7 +22,7 @@
     "install-changed": "1.1.0",
     "isotope-layout": "3.0.6",
     "lodash": "4.17.21",
-    "nuxt": "2.14.7",
+    "nuxt": "2.14.12",
     "postcss-hexrgba": "2.0.1",
     "postcss-nested": "4.2.3",
     "postcss-responsive-type": "1.0.0",
@@ -45,6 +45,6 @@
     "postcss-loader": "3.0.0",
     "sass-loader": "10.2.0",
     "vue-svg-loader": "0.16.0",
-    "vue-template-compiler": "2.6.12"
+    "vue-template-compiler": "2.6.14"
   }
 }
