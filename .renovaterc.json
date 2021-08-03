@@ -1,6 +1,16 @@
 {
+  "extends": ["config:base"],
   "enabled": true,
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "updateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    }
+  ],
   "separateMajorMinor": true,
-  "separateMinorPatch": true,
-  "prConcurrentLimit": 10
+  "separateMinorPatch": true
 }
