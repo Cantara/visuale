@@ -17,8 +17,16 @@
       "groupName": "eslint"
     },
     {
-      "packagePatterns": ["nuxt"],
-      "groupName": "nuxt"
+      "matchSourceUrlPrefixes": [
+        "https://github.com/nuxt/nuxt.js"],
+      "groupName": "nuxtjs monorepo",
+      "automerge": true
+    },
+    {
+      "matchSourceUrlPrefixes": [
+        "https://github.com/vuejs/vue"],
+      "groupName": "vue monorepo",
+      "automerge": true
     }
   ],
   "separateMajorMinor": true,
