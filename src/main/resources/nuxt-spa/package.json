@@ -30,13 +30,13 @@
     "vue-frag": "^1.1.5"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-env": "7.12.1",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@nuxtjs/eslint-config": "^3.1.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/fontawesome": "^1.1.2",
-    "babel-eslint": "^10.1.0",
+    "babel-eslint": "10.1.0",
     "babel-jest": "^26.6.3",
     "eslint": "^7.13.0",
     "eslint-plugin-nuxt": "^2.0.0",
