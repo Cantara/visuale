@@ -16,7 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
- * This instance
+ * This instance is not thread-safe. Either use a single thread for all calls to this service,
+ * or synchronize externally.
  */
 public class NotificationService {
 
@@ -31,17 +32,16 @@ public class NotificationService {
     public final Map<String, String> alarmMap = new ConcurrentHashMap<>();
     private boolean initialBootWarning = true;
     private boolean initialBootAlarm = true;
-
     private boolean loadedStateFromFile = false;
 
     private final SlackNotificationClient notificationClient;
 
     public NotificationService(Supplier<String> environmentNameSupplier) {
-//       sendAlarm("test", "atull");
-//        sendWarning("test", "wtull");
-//        clearService("test");
-
         notificationClient = new SlackNotificationClient(environmentNameSupplier);
+    }
+
+    public SlackNotificationClient getNotificationClient() {
+        return notificationClient;
     }
 
     public boolean sendWarning(String service, String warningMessage) {

@@ -137,7 +137,7 @@ public final class Main {
     }
 
     public void shutdown() {
-        statusResource.getStatusService().stopEventLoop();
+        statusResource.getStatusService().shutdown();
     }
 
     public StatusResource getStatusResource() {

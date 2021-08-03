@@ -10,9 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-public class SlackNotificationClient {
+public class SlackNotificationClient implements Runnable {
 
     public static final Logger logger = LoggerFactory.getLogger(SlackNotificationClient.class);
 
@@ -36,6 +41,10 @@ public class SlackNotificationClient {
 
     private final Supplier<String> environmentNameSupplier;
 
+    private final Thread slackSenderThread;
+    private final BlockingQueue<SlackMessageEvent> eventQueue = new LinkedBlockingQueue<>();
+    private final AtomicBoolean shouldRun = new AtomicBoolean(true);
+
     public SlackNotificationClient(Supplier<String> environmentNameSupplier) {
         this.environmentNameSupplier = environmentNameSupplier;
         alertingIsEnabled = ApplicationProperties.getInstance().asBoolean(SLACK_ALERTING_ENABLED_KEY);
@@ -48,9 +57,82 @@ public class SlackNotificationClient {
         } else {
             methodsClient = null;
         }
+        slackSenderThread = new Thread(this, "slack-notification-client");
+        slackSenderThread.start();
     }
 
-    void notifySlackAlarm(String service, String message) {
+    @Override
+    public void run() {
+        final int MIN_INTERVAL_BETWEEN_SENDS_MS = 500;
+        long lastSent = 0;
+        while (shouldRun.get()) {
+            try {
+                SlackMessageEvent event = eventQueue.poll(2, TimeUnit.SECONDS);
+
+                if (event != null && event.slackSender != null) {
+
+                    /*
+                     * Throttle Slack sending by ensuring that there is at least MIN_INTERVAL_BETWEEN_SENDS_MS
+                     * milliseconds between sends.
+                     */
+                    long now = System.currentTimeMillis();
+                    long millisSinceLastSent = Math.max(0, now - lastSent); // avoid negative duration due to clock sync
+                    if (millisSinceLastSent < MIN_INTERVAL_BETWEEN_SENDS_MS) {
+                        Thread.sleep(MIN_INTERVAL_BETWEEN_SENDS_MS - millisSinceLastSent);
+                    }
+
+                    // take note of time before sending message for more accurate throttling
+                    lastSent = System.currentTimeMillis();
+
+                    // send message to slack
+                    event.slackSender.accept(event.service, event.message);
+                }
+
+            } catch (Throwable t) {
+                logger.error("", t);
+            }
+        }
+        logger.info("Slack event-loop stopped");
+    }
+
+    private void queue(String service, String message, BiConsumer<String, String> consumer) {
+        eventQueue.add(new SlackMessageEvent(service, message, consumer));
+    }
+
+    public void shutdown() {
+        shouldRun.set(false);
+        eventQueue.add(new SlackMessageEvent(null, null, null));
+    }
+
+    private static class SlackMessageEvent {
+        final String service;
+        final String message;
+        final BiConsumer<String, String> slackSender;
+
+        private SlackMessageEvent(String service, String message, BiConsumer<String, String> slackSender) {
+            this.service = service;
+            this.message = message;
+            this.slackSender = slackSender;
+        }
+    }
+
+    public void notifySlackAlarm(String service, String message) {
+        queue(service, message, this::doNotifySlackAlarm);
+    }
+
+    public void clearSlackAlarm(String service, String message) {
+        queue(service, message, this::doClearSlackAlarm);
+    }
+
+    public void notifySlackWarning(String service, String message) {
+        queue(service, message, this::doNotifySlackWarning);
+    }
+
+    public void clearSlackWarning(String service, String message) {
+        queue(service, message, this::doClearSlackWarning);
+    }
+
+    private void doNotifySlackAlarm(String service, String message) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
@@ -72,7 +154,7 @@ public class SlackNotificationClient {
         }
     }
 
-    void clearSlackAlarm(String service, String timestampText) {
+    private void doClearSlackAlarm(String service, String timestampText) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
@@ -94,7 +176,7 @@ public class SlackNotificationClient {
         }
     }
 
-    void notifySlackWarning(String service, String message) {
+    private void doNotifySlackWarning(String service, String message) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
@@ -116,7 +198,7 @@ public class SlackNotificationClient {
         }
     }
 
-    void clearSlackWarning(String service, String timestampText) {
+    private void doClearSlackWarning(String service, String timestampText) {
         if (alertingIsEnabled) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)

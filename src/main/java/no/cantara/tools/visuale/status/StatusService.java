@@ -62,9 +62,10 @@ public class StatusService implements Runnable {
         this.notificationService = new NotificationService(environmentNameRef::get);
     }
 
-    public void stopEventLoop() {
+    public void shutdown() {
         shouldRun.set(false);
         queueInternal(new ControlEventData());
+        notificationService.getNotificationClient().shutdown();
     }
 
     /**
@@ -166,7 +167,7 @@ public class StatusService implements Runnable {
                 logger.error("", t);
             }
         }
-        logger.info("Event-loop stopped");
+        logger.info("Status event-loop stopped");
     }
 
     private boolean processEventInternal(Event event) {
