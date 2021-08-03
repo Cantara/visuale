@@ -60,7 +60,7 @@
 
     <properties>
         <mainClass>no.cantara.tools.visuale.Main</mainClass>
-        <slf4j.version>1.7.31</slf4j.version>
+        <slf4j.version>1.7.32</slf4j.version>
         <helidon.version>2.3.2</helidon.version>
         <jackson.version>2.12.4</jackson.version>
         <maven.compiler.source>11</maven.compiler.source>
