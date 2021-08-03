@@ -10,6 +10,7 @@ import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.Node;
 import no.cantara.tools.visuale.domain.Service;
 import no.cantara.tools.visuale.domain.ServiceType;
+import no.cantara.tools.visuale.notifications.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +37,6 @@ public class StatusService implements Runnable {
 
     public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
 
-    public static final AtomicReference<String> DASHBOARD_ENVIRONMENT_NAME_REF = new AtomicReference<>("unknown-environment");
-
     private final Thread eventConsumerThread;
     private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
 
@@ -53,10 +52,14 @@ public class StatusService implements Runnable {
     // Internal environment used only b y the event-consumer-thread
     private Environment environmentCache = new Environment();
 
+    private final AtomicReference<String> environmentNameRef = new AtomicReference<>("unknown-environment");
+
+    private final NotificationService notificationService;
 
     public StatusService() {
         this.eventConsumerThread = new Thread(this, "status-event-consumer");
         this.eventConsumerThread.start();
+        this.notificationService = new NotificationService(environmentNameRef::get);
     }
 
     public void stopEventLoop() {
@@ -112,10 +115,25 @@ public class StatusService implements Runnable {
         return environmentAsString.get();
     }
 
-    private void updateEnvironmentString() throws JsonProcessingException {
+    private void publishEnvironmentChanges() throws JsonProcessingException {
         String updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environmentCache);
         if (hasValue(updatedEnvironmentString)) {
             environmentAsString.set(updatedEnvironmentString);
+        }
+
+        sendNotifications();
+    }
+
+    private void sendNotifications() {
+        for (Service service : environmentCache.getServices()) {
+            int healthy_nodes = service.getHealthyNodes();
+            if (healthy_nodes < 1) {
+                notificationService.sendAlarm(service.getName(), "Alarm - No healthy service nodes");
+            } else if (healthy_nodes < 2) {
+                notificationService.sendWarning(service.getName(), "Warning - Less than two healthy service nodes, healthy nodes now: [" + healthy_nodes + "]");
+            } else {
+                notificationService.clearService(service.getName());
+            }
         }
     }
 
@@ -124,24 +142,24 @@ public class StatusService implements Runnable {
         /*
          * Loops over events, waiting if necessary until an event becomes available. The externally visible environment
          * json string will only be serialized on every X events when there is a backlog in the queue. Once the queue is
-         * empty the environment string is always updated immediately.
+         * empty the environment changes are always published immediately.
          */
         final int X = 25;
         while (shouldRun.get()) {
             try {
                 Event event = eventQueue.poll(2, TimeUnit.SECONDS);
-                boolean environmentNeedsUpdate = false;
+                boolean environmentHasChanged = false;
                 for (int i = 1; event != null && shouldRun.get(); i++) {
-                    environmentNeedsUpdate |= processEventInternal(event);
-                    if (environmentNeedsUpdate && (i % X == 0)) {
-                        updateEnvironmentString();
-                        environmentNeedsUpdate = false;
+                    environmentHasChanged |= processEventInternal(event);
+                    if (environmentHasChanged && (i % X == 0)) {
+                        publishEnvironmentChanges();
+                        environmentHasChanged = false;
                     }
                     event = eventQueue.poll();
                 }
 
-                if (environmentNeedsUpdate) {
-                    updateEnvironmentString();
+                if (environmentHasChanged) {
+                    publishEnvironmentChanges();
                 }
 
             } catch (Throwable t) {
@@ -157,13 +175,14 @@ public class StatusService implements Runnable {
             switch (event.getEventType()) {
                 case CONTROL:
                     // rare event, typically used for debugging and testing
-                    updateEnvironmentString(); // Update environment-string visible BEFORE signalling the control object
+                    publishEnvironmentChanges(); // publish changes BEFORE signalling the control object
                     ControlEventData control = event.control();
                     control.signal();
                     break;
                 case ENVIRONMENT:
                     Environment environment = event.environment();
                     environmentCache = environment;
+                    environmentNameRef.set(environment.getName());
                     refreshNodeCache(environment);
                     environmentUpdated = true;
                     break;

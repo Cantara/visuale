@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import no.cantara.tools.visuale.notifications.NotificationService;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -76,21 +75,6 @@ public class Service {
             if (n.isHealthy()) {
                 healthy_nodes++;
             }
-
-        }
-        /*
-         *  TODO This is horrible! We should not "hide" slack notifications inside a method that from it's description
-         *   will return the healthy-nodes. NotificationService is implemented using synchronized methods, which means
-         *   that call to methods there will potentially block for a long time! Blocking methods (especially long
-         *   blocking methods) should not be called from a Helidon IO thread as this could effective block other
-         *   unrelated web-requests.
-         */
-        if (healthy_nodes < 1) {
-            NotificationService.sendAlarm(getName(), "Alarm - No healthy service nodes");
-        } else if (healthy_nodes < 2) {
-            NotificationService.sendWarning(getName(), "Warning - Less than two healthy service nodes, healthy nodes now: [" + healthy_nodes + "]");
-        } else {
-            NotificationService.clearService(getName());
         }
         return healthy_nodes;
     }

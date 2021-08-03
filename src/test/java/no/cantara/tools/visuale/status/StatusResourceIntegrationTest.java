@@ -153,7 +153,7 @@ public class StatusResourceIntegrationTest {
             assertEquals(204, jsonObject.getStatus(), "PUT health status code");
         }
 
-        statusService.waitForEvents(5, TimeUnit.HOURS);
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
 
         {
             Response jsonObject = client

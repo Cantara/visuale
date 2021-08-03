@@ -17,11 +17,12 @@ public class NotificationServiceTest {
 
     @Test
     public void testSendAlert() {
-        NotificationService.sendAlarm("service-alarm-test-" + ref, "debug-alarm-test-message");
+        NotificationService notificationService = new NotificationService(() -> "junit-test-environment");
+        notificationService.sendAlarm("service-alarm-test-" + ref, "debug-alarm-test-message");
 
 
-        NotificationService.sendWarning("service-warning-test-" + ref, "debug-warning-test-message");
-        NotificationService.clearService("service-alarm-test-" + ref);
-        NotificationService.clearService("service-warning-test-" + ref);
+        notificationService.sendWarning("service-warning-test-" + ref, "debug-warning-test-message");
+        notificationService.clearService("service-alarm-test-" + ref);
+        notificationService.clearService("service-warning-test-" + ref);
     }
 }

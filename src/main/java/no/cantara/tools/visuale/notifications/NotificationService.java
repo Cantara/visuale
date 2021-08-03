@@ -1,19 +1,11 @@
 package no.cantara.tools.visuale.notifications;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.slack.api.Slack;
-import com.slack.api.methods.MethodsClient;
-import com.slack.api.methods.SlackApiException;
-import com.slack.api.methods.request.chat.ChatPostMessageRequest;
-import com.slack.api.methods.response.chat.ChatPostMessageResponse;
-import no.cantara.config.ApplicationProperties;
-import no.cantara.tools.visuale.status.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -21,51 +13,38 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
+/**
+ * This instance
+ */
 public class NotificationService {
 
     public static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
     public static ObjectMapper mapper = new ObjectMapper().configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 
-    private static final String alarmFilename = "./logs/service-notification-alarms.log";
-    private static final String warningFilename = "./logs/service-notification-warnings.log";
-    private static final String notificationStateFilename = "./logs/service-notification-mapname.json";
+    private final String alarmFilename = "./logs/service-notification-alarms.log";
+    private final String warningFilename = "./logs/service-notification-warnings.log";
+    private final String notificationStateFilename = "./logs/service-notification-mapname.json";
 
-    public static Map<String, String> warningMap = new ConcurrentHashMap();
-    public static Map<String, String> alarmMap = new ConcurrentHashMap<>();
-    private static boolean initialBootWarning = true;
-    private static boolean initialBootAlarm = true;
+    public final Map<String, String> warningMap = new ConcurrentHashMap();
+    public final Map<String, String> alarmMap = new ConcurrentHashMap<>();
+    private boolean initialBootWarning = true;
+    private boolean initialBootAlarm = true;
 
-    private static boolean loadedStateFromFile = false;
-    public static final String SLACK_ALERT_EMOJI = ":no_entry:";
-    public static final String SLACK_WARNING_EMOJI = ":warning:";
-    public static final String SLACK_REVIVED_EMOJI = ":green_heart:";
-    private static final String SLACK_ALERTING_ENABLED_KEY = "slack_alerting_enabled";
-    private static final String SLACK_TOKEN_KEY = "slack_token";
-    private static final String SLACK_ALARM_CHANNEL_KEY = "slack_alarm_channel";
-    private static final String SLACK_WARNING_CHANNEL_KEY = "slack_warning_channel";
-    private static final boolean alertingIsEnabled;
-    private static final String slackToken;
-    private static final Slack slack;
-    private static final String slackAlarmChannel;
-    private static final String slackWarningChannel;
-    private static MethodsClient methodsClient = null;
+    private boolean loadedStateFromFile = false;
 
-    static {
-        String slackAlertingEnabled = ApplicationProperties.getInstance().get(SLACK_ALERTING_ENABLED_KEY);
-        alertingIsEnabled = Boolean.valueOf(slackAlertingEnabled);
-        slackToken = ApplicationProperties.getInstance().get(SLACK_TOKEN_KEY);
-        slackAlarmChannel = ApplicationProperties.getInstance().get(SLACK_ALARM_CHANNEL_KEY);
-        slackWarningChannel = ApplicationProperties.getInstance().get(SLACK_WARNING_CHANNEL_KEY);
-        slack = Slack.getInstance();
-        setupClient();
+    private final SlackNotificationClient notificationClient;
+
+    public NotificationService(Supplier<String> environmentNameSupplier) {
 //       sendAlarm("test", "atull");
 //        sendWarning("test", "wtull");
 //        clearService("test");
 
+        notificationClient = new SlackNotificationClient(environmentNameSupplier);
     }
 
-    public static synchronized boolean sendWarning(String service, String warningMessage) {
+    public boolean sendWarning(String service, String warningMessage) {
         if (!loadedStateFromFile) {
             restoreNotificationStateMaps();
             loadedStateFromFile = true;
@@ -75,17 +54,17 @@ public class NotificationService {
             warningMap.put(service, warningMessage);
             warningMessage = warningMessage + timestampText;
             appendWarningToFile(service, warningMessage, false);
-            notifySlackWarning(service, warningMessage);
-            // Check if we are recovering form an alarm situation, if so we chear the alarm
+            notificationClient.notifySlackWarning(service, warningMessage);
+            // Check if we are recovering form an alarm situation, if so we clear the alarm
             if (alarmMap.get(service) != null) {
-                clearSlackAlarm(service, timestampText);
+                notificationClient.clearSlackAlarm(service, timestampText);
             }
             storeNotificationStateMaps();
         }
         return true;
     }
 
-    public static synchronized boolean sendAlarm(String service, String alarmMessage) {
+    public boolean sendAlarm(String service, String alarmMessage) {
         if (!loadedStateFromFile) {
             restoreNotificationStateMaps();
             loadedStateFromFile = true;
@@ -95,28 +74,28 @@ public class NotificationService {
             alarmMap.put(service, alarmMessage);
             alarmMessage = alarmMessage + timestampText;
             appendAlarmToFile(service, alarmMessage, false);
-            notifySlackAlarm(service, alarmMessage);
+            notificationClient.notifySlackAlarm(service, alarmMessage);
             storeNotificationStateMaps();
         }
         return true;
     }
 
-    public static synchronized boolean clearService(String service) {
+    public boolean clearService(String service) {
         String timestampText = " - Timestamp: " + Instant.now().toString();
         if (alarmMap.get(service) != null) {
             alarmMap.remove(service);
             appendAlarmToFile(service, "", true);
-            clearSlackAlarm(service, timestampText);
+            notificationClient.clearSlackAlarm(service, timestampText);
         }
         if (warningMap.get(service) != null) {
             warningMap.remove(service);
             appendWarningToFile(service, "", true);
-            clearSlackWarning(service, timestampText);
+            notificationClient.clearSlackWarning(service, timestampText);
         }
         return true;
     }
 
-    private static synchronized void appendAlarmToFile(String service, String amessage, boolean cleared) {
+    private void appendAlarmToFile(String service, String amessage, boolean cleared) {
         try {
             FileWriter fileWriter;
             if (initialBootAlarm && !cleared) {
@@ -138,7 +117,7 @@ public class NotificationService {
         }
     }
 
-    private static synchronized void appendWarningToFile(String service, String mwessage, boolean cleared) {
+    private void appendWarningToFile(String service, String mwessage, boolean cleared) {
         try {
             FileWriter fileWriter;
             if (initialBootWarning && !cleared) {
@@ -161,7 +140,7 @@ public class NotificationService {
         }
     }
 
-    private synchronized static void storeNotificationStateMaps() {
+    private void storeNotificationStateMaps() {
         if (warningMap.size() > 0) {
             String warningMapFilename = notificationStateFilename.replace("mapname", "warning");
             try {
@@ -187,7 +166,7 @@ public class NotificationService {
         }
     }
 
-    private static boolean restoreNotificationStateMaps() {
+    private boolean restoreNotificationStateMaps() {
         if (loadedStateFromFile) {
             return true;
         }
@@ -200,7 +179,8 @@ public class NotificationService {
 
             String content = new String(Files.readAllBytes(Paths.get(warningMapFileName)), StandardCharsets.UTF_8);
             if (content != null && content.length() > 4) {
-                warningMap = mapper.readValue(content, Map.class);
+                warningMap.clear();
+                warningMap.putAll(mapper.readValue(content, Map.class));
             }
         } catch (Exception e) {
             logger.error("Unable to restore warning state", e);
@@ -213,7 +193,8 @@ public class NotificationService {
             file.createNewFile();
             String content = new String(Files.readAllBytes(Paths.get(alarmMapFileName)), StandardCharsets.UTF_8);
             if (content != null && content.length() > 4) {
-                alarmMap = mapper.readValue(content, Map.class);
+                alarmMap.clear();
+                alarmMap.putAll(mapper.readValue(content, Map.class));
             }
         } catch (Exception e) {
             logger.error("Unable to restore alarm state", e);
@@ -222,97 +203,4 @@ public class NotificationService {
         return true;
     }
 
-    private static void notifySlackAlarm(String service, String message) {
-        if (alertingIsEnabled) {
-            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                    .channel(slackAlarmChannel)
-                    .text(SLACK_ALERT_EMOJI + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service:" + service + " is down. \n       - " + message)
-                    .build();
-
-            try {
-                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
-                if (response != null && !response.isOk()) {
-                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", message, slackAlarmChannel, response);
-                } else {
-                    logger.trace("Slack Response: {}", response);
-                }
-            } catch (IOException e) {
-                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
-            } catch (SlackApiException e) {
-                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
-            }
-        }
-    }
-
-    private static void clearSlackAlarm(String service, String timestampText) {
-        if (alertingIsEnabled) {
-            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                    .channel(slackAlarmChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service: " + service + " is back in service. " + timestampText)
-                    .build();
-
-            try {
-                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
-                if (response != null && !response.isOk()) {
-                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", service, slackAlarmChannel, response);
-                } else {
-                    logger.trace("Slack Response: {}", response);
-                }
-            } catch (IOException e) {
-                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", service, slackAlarmChannel, e.getMessage());
-            } catch (SlackApiException e) {
-                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", service, slackAlarmChannel, e.getMessage());
-            }
-        }
-    }
-
-    private static void notifySlackWarning(String service, String message) {
-        if (alertingIsEnabled) {
-            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                    .channel(slackWarningChannel)
-                    .text(SLACK_WARNING_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service: " + service + " is having trouble. \n       - " + message)
-                    .build();
-
-            try {
-                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
-                if (response != null && !response.isOk()) {
-                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", message, slackWarningChannel, response);
-                } else {
-                    logger.trace("Slack Response: {}", response);
-                }
-            } catch (IOException e) {
-                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", message, slackWarningChannel, e.getMessage());
-            } catch (SlackApiException e) {
-                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackWarningChannel, e.getMessage());
-            }
-        }
-    }
-
-    private static void clearSlackWarning(String service, String timestampText) {
-        if (alertingIsEnabled) {
-            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                    .channel(slackWarningChannel)
-                    .text(SLACK_REVIVED_EMOJI + " " + StatusService.DASHBOARD_ENVIRONMENT_NAME_REF.get() + " - service: " + service + " is back in service. " + timestampText)
-                    .build();
-
-            try {
-                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
-                if (response != null && !response.isOk()) {
-                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", service, slackWarningChannel, response);
-                } else {
-                    logger.trace("Slack Response: {}", response);
-                }
-            } catch (IOException e) {
-                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", service, slackWarningChannel, e.getMessage());
-            } catch (SlackApiException e) {
-                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", service, slackWarningChannel, e.getMessage());
-            }
-        }
-    }
-
-    private static void setupClient() {
-        if (alertingIsEnabled) {
-            methodsClient = slack.methods(slackToken);
-        }
-    }
 }
