@@ -1,6 +1,6 @@
 #!/bin/sh
 #  FROM
-#     wget https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/update_to_latest_scripts.sh
+#     wget -O update_to_latest_scripts.sh https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/update_to_latest_scripts.sh
 #     chmod 755 ./update_to_latest_scripts.sh
 #     ./update_to_latest_scripts.sh
 #
