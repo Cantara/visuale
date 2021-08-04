@@ -19,7 +19,7 @@ ln -sf reportServiceHealthToVisuale_CronScript_curl_bash.sh reportServiceHealthT
 wget -O download_and_restart_if_new.sh https://raw.githubusercontent.com/Cantara/visuale/master/scripts/download_and_restart_if_new.sh
 wget -O semantic_update_service.sh https://raw.githubusercontent.com/Cantara/visuale/master/scripts/semantic_update_service.sh
 
-wget -O kill-service.sh_template https://raw.githubusercontent.com/Cantara/visuale/master/scripts/kill-service.sh
+wget -O kill-service.sh https://raw.githubusercontent.com/Cantara/visuale/master/scripts/kill-service.sh
 
 chmod 755 *.sh
 
