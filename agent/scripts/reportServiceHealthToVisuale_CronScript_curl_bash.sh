@@ -19,6 +19,7 @@ name=$(printf "%s" "$reportToUrl1" | perl -n -e'/https?:\/\/(?<host>[^\/]+)\/(ap
 ip=$(ip -f inet address show dev eth0 | grep inet | awk '{print $2;}' | cut -d"/" -f1)
 
 for n in 1 2 3 4 5 6 7 8 9 10; do
+  # Attempt to get health status from application
   if json=$(curl --silent "$healthUrl") ;
   then
     echo "UP"
@@ -30,8 +31,10 @@ for n in 1 2 3 4 5 6 7 8 9 10; do
     json=$(cat Visuale_SERVICE_FAIL.json | sed -e "s/#NAME#/${name}/" | sed -e "s/#VERSION#/${artifactVersion}/" | sed -e "s/#NOW#/${now}/" | sed -e "s/#IP#/${ip}/")
   fi
 
-  printf "%s" "$json" | curl --silent -X PUT -H "Content-Type: application/json" -X PUT --data-binary @- "$reportToUrl1"
-  printf "%s" "$json" | curl --silent -X PUT -H "Content-Type: application/json" -X PUT --data-binary @- "$reportToUrl2"
+  # Report to all urls set in properties file
+  for r in $reportToUrl1 $reportToUrl2 $reportToUrl3 $reportToUrl4 $reportToUrl5
+    printf "%s" "$json" | curl --silent -X PUT -H "Content-Type: application/json" -X PUT --data-binary @- "$r"
+  done
 
   sleep 4
 done
