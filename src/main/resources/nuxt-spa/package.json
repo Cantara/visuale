@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "@babel/preset-env": "7.14.9",
-    "@fortawesome/free-brands-svg-icons": "5.15.3",
-    "@fortawesome/free-solid-svg-icons": "5.15.3",
+    "@fortawesome/free-brands-svg-icons": "5.15.4",
+    "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@nuxtjs/eslint-config": "6.0.1",
     "@nuxtjs/eslint-module": "3.0.2",
     "@nuxtjs/fontawesome": "1.1.2",
