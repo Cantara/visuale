@@ -16,6 +16,7 @@ mkdir -p scripts
 cd scripts
 
 wget -qO Visuale_SERVICE_FAIL.json https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/Visuale_SERVICE_FAIL.json
+rm reportServiceHealthToVisuale.sh
 wget -qO reportServiceHealthToVisuale.sh https://raw.githubusercontent.com/Cantara/visuale/master/agent/scripts/reportServiceHealthToVisuale_CronScript_curl_bash.sh
 
 wget -qO download_and_restart_if_new.sh https://raw.githubusercontent.com/Cantara/visuale/master/scripts/download_and_restart_if_new.sh
