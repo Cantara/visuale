@@ -43,7 +43,7 @@ USERNAME=
 PASSWORD=
 
 # Allow for property override, to simplify deployment and configuration
-source ./scripts/semantic_update_service.properties
+source $(dirname $BASH_SOURCE)/semantic_update_service.properties
 
 CURL_AUTH= #-u$USERNAME:$PASSWORD
 
