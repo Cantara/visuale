@@ -16,9 +16,9 @@ artifactVersion=$(readlink -f ${artifactFile} | xargs basename -s .jar | cut -c$
 # This can be replaced with static name put in json template or the name variable here.
 name=$(urldecode $(printf "%s" "$reportToUrl1" | perl -n -e'/https?:\/\/(?<host>[^\/]+)\/(api\/)?status\/(?<env>[^\/]+)\/(?<name>[^\/]+)\/(?<node>[^\/?]+).*/ && print "$+{name}"'))
 
-# Extract private ip-address from the eth0 device
 # This can be replaced with static ip-address put in json fail template or the ip variable here.
-ip=$(/usr/sbin/ip -f inet address show dev eth0 | grep inet | awk '{print $2;}' | cut -d"/" -f1)
+#ip=$(/usr/sbin/ip -f inet address show dev eth0 | grep inet | awk '{print $2;}' | cut -d"/" -f1)
+ip=$(hostname -i)
 
 for n in 1 2 3 4 5 6 7 8 9 10; do
   # Attempt to get health status from application
