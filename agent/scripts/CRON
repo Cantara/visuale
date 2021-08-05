@@ -1,1 +1,2 @@
-* * * * * sleep 4 &&  ~/reportServiceHealthToVisuale.sh
+* * * * * ./scripts/download_and_restart_if_new.sh > /dev/null
+* * * * * ./scripts/reportServiceHealthToVisuale.sh > /dev/null
