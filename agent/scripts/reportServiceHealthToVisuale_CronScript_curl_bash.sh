@@ -35,7 +35,7 @@ for n in 1 2 3 4 5 6 7 8 9 10; do
 
   # Report to all urls set in properties file
   for r in $reportToUrl1 $reportToUrl2 $reportToUrl3 $reportToUrl4 $reportToUrl5; do
-    printf "%s" "$json" | curl --silent -X PUT -H "Content-Type: application/json" -X PUT --data-binary @- "$r"
+    printf "%s" "$json" | curl --silent -H "Content-Type: application/json" -X PUT --data-binary @- "$r"
   done
 
   sleep 4
