@@ -180,6 +180,63 @@ public class StatusResourceIntegrationTest {
         }
     }
 
+    @Test()
+    public void thatNodeWithMisreportingIpIsRestoredAfterHealthIsOkAgain() throws IOException {
+
+        StatusService statusService = main.getStatusResource().getStatusService();
+
+        statusService.queueFullEnvironment("{}", "EntraOS-DEVTEST");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+
+        String okBeforeJson = readResourceAsString("entrasso-lwa-samples/status-entrasso-lwa-1-ok-before.json");
+        String misbehavingJson = readResourceAsString("entrasso-lwa-samples/status-entrasso-lwa-1-misbehaving.json");
+        String okAfterJson = readResourceAsString("entrasso-lwa-samples/status-entrasso-lwa-1-ok-after.json");
+
+        Client client = ClientBuilder.newClient();
+
+        putHealth(okBeforeJson, client, "/status/prod/LWA/lwa-node01", "EntraSSO", "H2A");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+        verifyStatus(client);
+        putHealth(misbehavingJson, client, "/status/prod/LWA/lwa-node01", "EntraSSO", "H2A");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+        verifyStatus(client);
+        putHealth(okAfterJson, client, "/status/prod/LWA/lwa-node01", "EntraSSO", "H2A");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+        verifyStatus(client);
+    }
+
+    private void putHealth(String healthJson, Client client, String path, String serviceTag, String serviceType) {
+        Response jsonObject = client
+                .target(getConnectionString(path))
+                .queryParam("service_tag", serviceTag)
+                .queryParam("service_type", serviceType)
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(healthJson, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(204, jsonObject.getStatus(), "PUT health status code");
+    }
+
+    private void verifyStatus(Client client) throws com.fasterxml.jackson.core.JsonProcessingException {
+        Response jsonObject = client
+                .target(getConnectionString("/status"))
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        assertEquals(200, jsonObject.getStatus(), "GET health status code");
+        String json = jsonObject.readEntity(String.class);
+        assertTrue(json.length() > 5);
+
+        Environment environment = StatusService.mapper.readValue(json, Environment.class);
+        Set<Service> services = environment.getServices();
+        assertEquals(1, services.size());
+        Service service = services.iterator().next();
+        assertEquals("LWA", service.getName());
+        Set<Node> nodes = service.getNodes();
+        assertEquals(1, nodes.size());
+        Node node = nodes.iterator().next();
+        assertTrue(node.getName().equals("lwa-node01"));
+    }
+
     @NotNull
     private String readResourceAsString(String path) throws IOException {
         try (InputStream inputStream = ClassLoader.getSystemResourceAsStream(path)) {

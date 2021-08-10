@@ -1,0 +1,13 @@
+{
+  "Status": "N/A",
+  "now": "2021-08-10T08:52:51.679488Z",
+  "running since": "2021-08-10T08:52:20.471757Z",
+  "ip": "0.0.0.0",
+  "original_health": "{\"isHealthy\": \"false\"}",
+  "additionalProperties": {
+    "ishealthy": "false"
+  },
+  "receivedNow": "2021-08-10T08:52:51.679502Z",
+  "empty": false,
+  "ishealthy": "false"
+}

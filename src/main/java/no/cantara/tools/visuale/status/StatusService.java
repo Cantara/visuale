@@ -288,7 +288,11 @@ public class StatusService implements Runnable {
                             if (node.getName().equalsIgnoreCase(nodeName)) {
                                 Health latest = node.getLatestHealth();
                                 Health earliest = node.getEarliestHealth();
-                                if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
+                                if ((hasValue(health.getIp()) && health.getIp().equals("0.0.0.0"))
+                                        || (hasValue(node.getIp()) && node.getIp().equals("0.0.0.0"))) {
+                                    node.addHealth(health);
+                                    return true;
+                                } else if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
                                     Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
                                     if (hasValue(health.getIp())) {
                                         addnode.setIp(health.getIp());

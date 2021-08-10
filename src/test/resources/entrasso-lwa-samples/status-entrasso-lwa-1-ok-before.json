@@ -1,0 +1,31 @@
+{
+  "Status": "OK",
+  "name": "EntraOS SSO App-1 - 172.31.46.",
+  "version": "0.17.1 [EntraOS SSO",
+  "now": "2021-08-10T08:52:16.088937Z",
+  "running since": "2021-08-09T14:11:01.501092Z",
+  "ip": "172.31.46.84",
+  "original_health": "{  \"Status\": \"true\",  \"Version\": \"0.17.1 [EntraOS SSO App-1 - 172.31.46.84  fe80:0:0:0:831:9fff:fe61:c542%eth0  172.31.46.84  0:0:0:0:0:0:0:1%lo  127.0.0.1]\",  \"DEFCON\": \"DEFCON5\",  \"hasApplicationToken\": \"true\",  \"hasValidApplicationToken\": \"false\",  \"hasApplicationsMetadata\": \"true\",  \"now\": \"2021-08-10T08:52:16.088937Z\",  \"running since\": \"2021-08-09T14:10:59.881948Z\",  \"EntraSSO IAM-domains\": \"[areo.io, entraoshotmail.onmicrosoft.com, appfarm.io, entra.no, rebel.no, totto.org]\",  \"securitytokenservice_health\": \"https://sso.entraos.io/tokenservice/health\" ,  \"useradminservice_health\": \"https://sso.entraos.io/useradminservice/health\" ,  \"statisticsservice_health\": \"https://sso.entraos.io/reporter/health\" ,  \"crmservice_health\": \"https://sso.entraos.io/crmservice/health\" }",
+  "additionalProperties": {
+    "securitytokenservice_health": "https://sso.entraos.io/tokenservice/health",
+    "hasapplicationsmetadata": "true",
+    "statisticsservice_health": "https://sso.entraos.io/reporter/health",
+    "entrasso iam-domains": "[areo.io, entraoshotmail.onmicrosoft.com, appfarm.io, entra.no, rebel.no, totto.org]",
+    "useradminservice_health": "https://sso.entraos.io/useradminservice/health",
+    "crmservice_health": "https://sso.entraos.io/crmservice/health",
+    "hasapplicationtoken": "true",
+    "hasvalidapplicationtoken": "false",
+    "defcon": "DEFCON5"
+  },
+  "receivedNow": "2021-08-10T08:52:16.274114Z",
+  "empty": false,
+  "securitytokenservice_health": "https://sso.entraos.io/tokenservice/health",
+  "hasapplicationsmetadata": "true",
+  "statisticsservice_health": "https://sso.entraos.io/reporter/health",
+  "entrasso iam-domains": "[areo.io, entraoshotmail.onmicrosoft.com, appfarm.io, entra.no, rebel.no, totto.org]",
+  "useradminservice_health": "https://sso.entraos.io/useradminservice/health",
+  "crmservice_health": "https://sso.entraos.io/crmservice/health",
+  "hasapplicationtoken": "true",
+  "hasvalidapplicationtoken": "false",
+  "defcon": "DEFCON5"
+}
