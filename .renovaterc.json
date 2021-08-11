@@ -1,8 +1,13 @@
 {
   "extends": ["config:base"],
   "enabled": true,
-  "prHourlyLimit": 4,
+  "prHourlyLimit": 0,
   "packageRules": [
+    {
+      "matchManagers": ["npm","maven"],
+      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
     {
       "matchManagers": ["npm"],
       "updateTypes": ["minor", "patch", "pin", "digest"],
@@ -26,6 +31,13 @@
       "matchSourceUrlPrefixes": [
         "https://github.com/vuejs/vue"],
       "groupName": "vue monorepo",
+      "automerge": true
+    },
+    {
+      "matchSourceUrlPrefixes": [
+        "https://github.com/junit-team/junit5"
+      ],
+      "groupName": "junit5 monorepo",
       "automerge": true
     }
   ],
