@@ -41,6 +41,7 @@ export default {
   */
   buildModules: [
     '@nuxtjs/fontawesome',
+
   ],
   /*
   ** Nuxt.js modules
