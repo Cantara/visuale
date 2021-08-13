@@ -216,6 +216,14 @@ public class StatusService implements Runnable {
         return environmentUpdated;
     }
 
+    private String getNodeLookupKey(Service service, Node node) {
+        String key = (service.getServiceTag() != null ? service.getServiceTag().toLowerCase() : "")
+                + ":" + service.getName().toLowerCase()
+                + ":" + node.getName()
+                + ":" + node.getIp();
+        return key;
+    }
+
     private void refreshNodeCache(Environment environment) {
         nodeByLookupKey.clear();
         for (Service service : environment.getServices()) {
@@ -223,7 +231,7 @@ public class StatusService implements Runnable {
                 if (node.getName() == null || node.getName().length() < 2) {
                     node.setName(service.getName());
                 }
-                nodeByLookupKey.put(node.getLookupKey(), node);
+                nodeByLookupKey.put(getNodeLookupKey(service, node), node);
             }
             if (service.getServiceType() == null) {
                 service.setServiceType(ServiceType.ServiceCategorization.CS.name());
@@ -246,7 +254,7 @@ public class StatusService implements Runnable {
                 no.cantara.tools.visuale.domain.Service s =
                         new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
                 environmentCache.addService(s);
-                nodeByLookupKey.put(node.getLookupKey(), node);
+                nodeByLookupKey.put(getNodeLookupKey(s, node), node);
             } else {
                 //logger.trace("Updated service from health update: {}", updatedHealth);
                 node.addHealth(updatedHealth);
@@ -260,117 +268,80 @@ public class StatusService implements Runnable {
     }
 
     private boolean updateEnvironmentExecution(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
-        boolean foundNode = false;
-        boolean foundService = false;
-        boolean foundEnvironment = false;
-
         if (!STRICT_ENVIRONMENT || environmentCache.getName().equalsIgnoreCase(envName)) {
-            foundEnvironment = true;
+            // environment found
             Set<Service> serviceSet = environmentCache.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
-                if (service.getName().equalsIgnoreCase(serviceName)) {  // We found a candidate
-                    // TODO revisit this  foundService = true;
-                    if (hasValue(serviceTag) // we have a tag
-                            && service.getServiceTag() != null  // we do not want any NPEs
-                            && !service.getServiceTag().equalsIgnoreCase(serviceTag)) {  // And we need a service object for each tag
-                        //  We have a tag and it is different, thus skip parsing nodes
-                        if (hasValue(serviceType)) {
-                            service.setServiceType(serviceType);
-                            // TODO return true missing here?
+                if (serviceMatches(serviceName, serviceTag, service)) {
+                    // service found
+                    if (hasValue(serviceType)) {
+                        service.setServiceType(serviceType);
+                    }
+                    for (Node node : service.getNodes()) {
+                        if (node.getName().equalsIgnoreCase(nodeName)
+                                && hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
+                            // node matches name and ip
+                            node.addHealth(health);
+                            return true;
                         }
-                    } else {
-                        Set<Node> nodeSet = service.getNodes();
-                        foundService = true;
-                        if (hasValue(serviceType)) {
-                            service.setServiceType(serviceType);
-                        }
-                        for (Node node : nodeSet) {
-                            if (node.getName().equalsIgnoreCase(nodeName)) {
-                                Health latest = node.getLatestHealth();
-                                Health earliest = node.getEarliestHealth();
-                                if ((hasValue(health.getIp()) && health.getIp().equals("0.0.0.0"))
-                                        || (hasValue(node.getIp()) && node.getIp().equals("0.0.0.0"))) {
-                                    node.addHealth(health);
-                                    return true;
-                                } else if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
-                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                                    if (hasValue(health.getIp())) {
-                                        addnode.setIp(health.getIp());
-                                    }
-                                    if (hasValue(health.getVersion())) {
-                                        addnode.setVersion(health.getVersion());
-                                    }
-                                    service.addNode(addnode);
-                                    nodeByLookupKey.put(addnode.getLookupKey(), addnode);
-                                    return true;
-                                } else if (latest == null) {
-                                    Node addnode = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                                    if (hasValue(health.getIp())) {
-                                        addnode.setIp(health.getIp());
-                                    }
-                                    if (hasValue(health.getVersion())) {
-                                        addnode.setVersion(health.getVersion());
-                                    }
-                                    service.addNode(addnode);
-                                    nodeByLookupKey.put(addnode.getLookupKey(), addnode);
-                                    return true;
-                                } else if (latest.getRunningSince().equalsIgnoreCase(health.getRunningSince())) {
-                                    node.addHealth(health);
-                                    return true;
-                                }
-//                              if (hasValue(node.getH.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
-//                          if (hasValue(health.getIp()) && hasValue(node.getIp()) && !health.getIp().equalsIgnoreCase(node.getIp())) {
-
-                                foundNode = true;
-//                                OffsetDateTime date = OffsetDateTime.parse(health.getNow());
-//                                if (date.isAfter(OffsetDateTime.from(Instant.now().minus(3, ChronoUnit.MINUTES)))) {
-//                                    health.setRunningSince(earliest.getRunningSince());
-//                                }
-
+                    }
+                    // node name or ip does not match
+                    for (Node node : service.getNodes()) {
+                        if (node.getName().equalsIgnoreCase(nodeName)) {
+                            // node matches name, so ip must be different
+                            if (hasValue(node.getIp()) && node.getIp().equals("0.0.0.0")) {
+                                // existing node has ip 0.0.0.0, update ip and use node
+                                node.setIp(health.getIp());
                                 node.addHealth(health);
-                                if (hasValue(health.getIp())) {
-                                    node.setIp(health.getIp());
-                                }
-                                if (hasValue(health.getVersion())) {
-                                    node.setVersion(health.getVersion());
-                                }
-                                if (hasValue(serviceType)) {
-                                    service.setServiceType(serviceType);
-                                }
-
+                                return true;
+                            }
+                            if (hasValue(health.getIp()) && health.getIp().equals("0.0.0.0")) {
+                                // incoming node has ip 0.0.0.0, so use this first found node with name match
+                                node.setIp(health.getIp()); // update node ip
+                                node.addHealth(health);
                                 return true;
                             }
                         }
                     }
-                }
-            }
-            if (!foundService) {
-                Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
 
-                no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
-                        .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType)
-                        .withNode(node);
-                environmentCache.addService(service);
-                nodeByLookupKey.put(node.getLookupKey(), node);
-                return true;
-            }
-            if (!foundNode) {
-                for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
-                    if (service.getName().equalsIgnoreCase(serviceName)) {
-                        if (service.getServiceTag() != null  // we do not want any NPEs
-                                && service.getServiceTag().equalsIgnoreCase(serviceTag)) {
-                            Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                            service.addNode(node);
-                            nodeByLookupKey.put(node.getLookupKey(), node);
-                            if (hasValue(serviceType)) {
-                                service.setServiceType(serviceType);
-                            }
-                            return true;
-                        }
-                    }
+                    // Service matches, but node not found. Create and add node to service
+                    Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+                    addNodeToService(service, node);
+                    return true;
                 }
             }
+
+            // Service not found
+            no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
+                    .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType);
+            environmentCache.addService(service);
+            Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
+            addNodeToService(service, node);
+
+            return true;
         }
-        return foundEnvironment;
+
+        return false; // no update performed
     }
+
+    /*
+     * true if the given serviceName and serviceTag matches that of the given service.
+     */
+    private boolean serviceMatches(String serviceName, String serviceTag, Service service) {
+        if (!service.getName().equalsIgnoreCase(serviceName)) {
+            return false; // service-name is different
+        }
+        if (service.getServiceTag() == null) {
+            return serviceTag == null;
+        }
+        return service.getServiceTag().equalsIgnoreCase(serviceTag);
+    }
+
+    private void addNodeToService(Service service, Node node) {
+        boolean nodeAddedToService = service.addNode(node);
+        if (nodeAddedToService) {
+            nodeByLookupKey.put(getNodeLookupKey(service, node), node);
+        }
+    }
+
 }

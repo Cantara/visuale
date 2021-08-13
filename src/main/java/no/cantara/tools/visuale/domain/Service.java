@@ -177,11 +177,11 @@ public class Service {
         return this;
     }
 
-    public void addNode(Node addnode) {
+    public boolean addNode(Node addnode) {
         if (this.nodes == null) {
             this.nodes = new TreeSet<>(new MyNodeNameComp());
         }
-        this.nodes.add(addnode);
+        return this.nodes.add(addnode);
     }
 
     public static class MyNodeNameComp implements Comparator<Node> {

@@ -40,11 +40,13 @@ public class StatusResourceIntegrationTest {
 
     private static Main main;
     private static WebServer server;
+    private static String contextPath;
 
     @BeforeAll
     public static void startTheServer() throws Exception {
         main = new Main("");
-        server = main.startServer(0, false);
+        contextPath = Main.getConfiguredContextPath();
+        server = main.startServer(0, contextPath, false);
         server.start().await(5, TimeUnit.SECONDS);
     }
 
@@ -202,7 +204,8 @@ public class StatusResourceIntegrationTest {
         verifyStatus(client);
         putHealth(okAfterJson, client, "/status/prod/LWA/lwa-node01", "EntraSSO", "H2A");
         statusService.waitForEvents(5, TimeUnit.SECONDS);
-        verifyStatus(client);
+        String json = verifyStatus(client);
+        System.out.printf("JSON AFTER: %s%n", json);
     }
 
     private void putHealth(String healthJson, Client client, String path, String serviceTag, String serviceType) {
@@ -216,7 +219,7 @@ public class StatusResourceIntegrationTest {
         assertEquals(204, jsonObject.getStatus(), "PUT health status code");
     }
 
-    private void verifyStatus(Client client) throws com.fasterxml.jackson.core.JsonProcessingException {
+    private String verifyStatus(Client client) throws com.fasterxml.jackson.core.JsonProcessingException {
         Response jsonObject = client
                 .target(getConnectionString("/status"))
                 .request()
@@ -235,6 +238,7 @@ public class StatusResourceIntegrationTest {
         assertEquals(1, nodes.size());
         Node node = nodes.iterator().next();
         assertTrue(node.getName().equals("lwa-node01"));
+        return json;
     }
 
     @NotNull
@@ -245,7 +249,7 @@ public class StatusResourceIntegrationTest {
     }
 
     private String getConnectionString(String path) {
-        return "http://localhost:" + server.port() + path;
+        return "http://localhost:" + server.port() + contextPath + path;
     }
 }
 

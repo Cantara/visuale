@@ -23,11 +23,13 @@ public class MainTest {
 
     private static Main main;
     private static WebServer server;
+    private static String contextPath;
 
     @BeforeAll
     public static void startTheServer() throws Exception {
         main = new Main("");
-        server = main.startServer(0, true);
+        contextPath = Main.getConfiguredContextPath();
+        server = main.startServer(0, contextPath, true);
         server.start().await(5, TimeUnit.SECONDS);
     }
 
@@ -76,6 +78,6 @@ public class MainTest {
     }
 
     private String getConnectionString(String path) {
-        return "http://localhost:" + server.port() + path;
+        return "http://localhost:" + server.port() + contextPath + path;
     }
 }

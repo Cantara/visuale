@@ -1,7 +1,12 @@
 
 package no.cantara.tools.visuale.domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +50,6 @@ public class Node {
     private int calculatedDrift = 0;
     @JsonIgnore
     private String calculatedRunningSince;
-
-
-    @JsonIgnore
-    public String getLookupKey() {
-        String key = getName().replace(" ", "") + "+" + getVersion() + ":" + getIp();
-        return key;
-    }
 
 
     @JsonProperty("name")

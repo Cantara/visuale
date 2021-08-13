@@ -59,16 +59,21 @@ public final class Main {
 
         Main main = new Main(accessToken);
 
-        WebServer ws = main.startServer(portNo, false);
+        WebServer ws = main.startServer(portNo, getConfiguredContextPath(), false);
     }
 
+    public static String getConfiguredContextPath() {
+        String serverContextPath = ApplicationProperties.getInstance().get("server.context-path", "");
+        String contextPath = serverContextPath.endsWith("/") ? serverContextPath.substring(0, serverContextPath.length() - 1) : serverContextPath;
+        return contextPath;
+    }
 
     /**
      * Start the server.
      *
      * @return the created {@link WebServer} instance
      */
-    public WebServer startServer(int port, boolean usingMockEnvironment) {
+    public WebServer startServer(int port, String contextPath, boolean usingMockEnvironment) {
 
         if (usingMockEnvironment) {
             statusResource.getStatusService().queueFullEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
@@ -81,15 +86,15 @@ public final class Main {
         }
 
         Routing routing = Routing.builder()
-                .register(healthResource)
-                .register(statusResource)
-                .register("/favicon.ico", StaticContentSupport.builder("/nuxt-spa/dist/favicon.ico")
+                .register(contextPath, healthResource)
+                .register(contextPath, statusResource)
+                .register(contextPath + "/favicon.ico", StaticContentSupport.builder("/nuxt-spa/dist/favicon.ico")
                         .build())
-                .register("/nuxt-spa", StaticContentSupport.builder("/nuxt-spa")
+                .register(contextPath + "/nuxt-spa", StaticContentSupport.builder("/nuxt-spa")
                         .build())
-                .register("/_nuxt", StaticContentSupport.builder("/nuxt-spa/dist/_nuxt")
+                .register(contextPath + "/_nuxt", StaticContentSupport.builder("/nuxt-spa/dist/_nuxt")
                         .build())
-                .register("/", StaticContentSupport.builder("/nuxt-spa/dist")
+                .register(contextPath + "/", StaticContentSupport.builder("/nuxt-spa/dist")
                         .welcomeFileName("index.html")
                         .build())
                 .build();
@@ -105,12 +110,12 @@ public final class Main {
         ws.start()
                 .thenApply(webServer -> {
                             if (accessToken == null || accessToken.length() < 1) {
-                                String endpoint = "http://localhost:" + webServer.port();
+                                String endpoint = "http://localhost:" + webServer.port() + contextPath;
                                 System.out.println("- Visit Dashboard at: " + endpoint + "/?ui_extension=groupByTag&servicetype=true");
                                 System.out.println(" - Health checks available on: " + endpoint + "/health");
                                 System.out.println(" - Environment status available on:  " + endpoint + "/status/");
                             } else {
-                                String endpoint = "http://localhost:" + webServer.port();
+                                String endpoint = "http://localhost:" + webServer.port() + contextPath;
                                 System.out.println(" Visit Dashboard at: " + endpoint + "/?accessToken=" + accessToken + "&ui_extension=groupByTag&servicetype=true");
                                 System.out.println(" - Health checks available on: " + endpoint + "/health");
                                 System.out.println(" - Environment status available on:  " + endpoint + "/status/?accessToken=" + accessToken);
