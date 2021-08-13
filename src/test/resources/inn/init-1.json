@@ -1,0 +1,75 @@
+{
+  "name" : "INN Dashboard",
+  "services" : [ {
+    "name" : "LoginWebApp",
+    "service_tag" : "SSO",
+    "service_type" : "H2A",
+    "healthy_nodes" : 2,
+    "need_codebase_chores" : false,
+    "nodes" : [ {
+      "name" : "node1",
+      "ip" : "172.31.7.199",
+      "version" : "3.33.0",
+      "last_seen" : "2021-08-13T10:39:37.496Z",
+      "is_healthy" : true,
+      "is_unstable" : false,
+      "is_secure" : true,
+      "health" : [ {
+        "Status" : "OK",
+        "name" : "",
+        "version" : "3.33.0",
+        "now" : "2021-08-13T10:39:37.496Z",
+        "running since" : "2021-08-13T10:25:09.354128Z",
+        "ip" : "172.31.7.199",
+        "original_health" : "{  \"Status\": \"true\",  \"name\": \"\",  \"version\": \"3.33.0\",  \"now\": \"2021-08-13T10:39:37.496Z\",  \"ip\": \"172.31.7.199\"}",
+        "additionalProperties" : { },
+        "receivedNow" : "2021-08-13T10:39:37.524228Z",
+        "empty" : false
+      } ],
+      "latestHealth" : {
+        "Status" : "OK",
+        "name" : "",
+        "version" : "3.33.0",
+        "now" : "2021-08-13T10:39:37.496Z",
+        "running since" : "2021-08-13T10:25:09.354128Z",
+        "ip" : "172.31.7.199",
+        "original_health" : "{  \"Status\": \"true\",  \"name\": \"\",  \"version\": \"3.33.0\",  \"now\": \"2021-08-13T10:39:37.496Z\",  \"ip\": \"172.31.7.199\"}",
+        "additionalProperties" : { },
+        "receivedNow" : "2021-08-13T10:39:37.524228Z",
+        "empty" : false
+      }
+    }, {
+      "name" : "node4",
+      "ip" : "172.31.43.251",
+      "version" : "3.33.0",
+      "last_seen" : "2021-08-13T10:39:38.317Z",
+      "is_healthy" : true,
+      "is_unstable" : false,
+      "is_secure" : true,
+      "health" : [ {
+        "Status" : "OK",
+        "name" : "",
+        "version" : "3.33.0",
+        "now" : "2021-08-13T10:39:38.317Z",
+        "running since" : "2021-08-13T10:25:05.859783Z",
+        "ip" : "172.31.43.251",
+        "original_health" : "{  \"Status\": \"true\",  \"name\": \"\",  \"version\": \"3.33.0\",  \"now\": \"2021-08-13T10:39:38.317Z\",  \"ip\": \"172.31.43.251\"}",
+        "additionalProperties" : { },
+        "receivedNow" : "2021-08-13T10:39:38.346100Z",
+        "empty" : false
+      } ],
+      "latestHealth" : {
+        "Status" : "OK",
+        "name" : "",
+        "version" : "3.33.0",
+        "now" : "2021-08-13T10:39:38.317Z",
+        "running since" : "2021-08-13T10:25:05.859783Z",
+        "ip" : "172.31.43.251",
+        "original_health" : "{  \"Status\": \"true\",  \"name\": \"\",  \"version\": \"3.33.0\",  \"now\": \"2021-08-13T10:39:38.317Z\",  \"ip\": \"172.31.43.251\"}",
+        "additionalProperties" : { },
+        "receivedNow" : "2021-08-13T10:39:38.346100Z",
+        "empty" : false
+      }
+    } ]
+  } ]
+}

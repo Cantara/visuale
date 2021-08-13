@@ -8,7 +8,6 @@ import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.Node;
 import no.cantara.tools.visuale.domain.Service;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -241,7 +240,6 @@ public class StatusResourceIntegrationTest {
         return json;
     }
 
-    @NotNull
     private String readResourceAsString(String path) throws IOException {
         try (InputStream inputStream = ClassLoader.getSystemResourceAsStream(path)) {
             return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);

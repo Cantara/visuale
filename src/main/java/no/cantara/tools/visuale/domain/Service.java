@@ -87,7 +87,7 @@ public class Service {
 
     @JsonProperty("nodes")
     public void setNodes(Set<Node> nodesV) {
-        this.nodes = new TreeSet<Node>(new MyNodeNameComp());
+        this.nodes = new TreeSet<Node>(new NodeComparator());
         nodes.addAll(nodesV);
     }
 
@@ -179,12 +179,12 @@ public class Service {
 
     public boolean addNode(Node addnode) {
         if (this.nodes == null) {
-            this.nodes = new TreeSet<>(new MyNodeNameComp());
+            this.nodes = new TreeSet<>(new NodeComparator());
         }
         return this.nodes.add(addnode);
     }
 
-    public static class MyNodeNameComp implements Comparator<Node> {
+    public static class NodeComparator implements Comparator<Node> {
         @Override
         public int compare(Node n1, Node n2) {
             if (n1 == n2) {

@@ -14,7 +14,10 @@ import no.cantara.tools.visuale.notifications.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -314,9 +317,9 @@ public class StatusService implements Runnable {
             // Service not found
             no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
                     .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType);
-            environmentCache.addService(service);
             Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
             addNodeToService(service, node);
+            environmentCache.addService(service);
 
             return true;
         }

@@ -1,11 +1,17 @@
 
 package no.cantara.tools.visuale.domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -19,7 +25,7 @@ public class Environment {
     @JsonProperty("name")
     private String name;
     @JsonProperty("services")
-    private Set<Service> services = new CopyOnWriteArraySet<>(); // new HashSet<>(); //new TreeSet<Service>(new MyServiceNameComp());
+    private Set<Service> services = new CopyOnWriteArraySet<Service>(); // new HashSet<>(); //new TreeSet<Service>(new ServiceComparator());
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -54,13 +60,6 @@ public class Environment {
             this.services = new CopyOnWriteArraySet<>(); // new HashSet<>();
 //            this.services = new TreeSet<Service>(new MyServiceNameComp());
         }
-        for (Service existingservice : services) {
-            if (existingservice.getName().equalsIgnoreCase(service.getName())) {
-                for (Node node : service.getNodes()) {
-                    existingservice.addNode(node);
-                }
-            }
-        }
         this.services.add(service);
     }
 
@@ -94,14 +93,31 @@ public class Environment {
                 '}';
     }
 
-    public class MyServiceNameComp implements Comparator<Service> {
-
+    public static class ServiceComparator implements Comparator<Service> {
         @Override
-        public int compare(Service e1, Service e2) {
-            if (e1.getName() != null && e2.getName() != null) {
-                return e1.getName().compareTo(e2.getName());
+        public int compare(Service s1, Service s2) {
+            if (s1 == s2) {
+                return 0;
             }
-            return 1;
+            if (!Objects.equals(s1.getName(), s2.getName())) {
+                if (s1.getName() == null) {
+                    return -1;
+                }
+                if (s2.getName() == null) {
+                    return 1;
+                }
+                return s1.getName().compareTo(s2.getName());
+            }
+            if (!Objects.equals(s1.getServiceTag(), s2.getServiceTag())) {
+                if (s1.getServiceTag() == null) {
+                    return -1;
+                }
+                if (s2.getServiceTag() == null) {
+                    return 1;
+                }
+                return s1.getServiceTag().compareTo(s2.getServiceTag());
+            }
+            return 0;
         }
     }
 }
