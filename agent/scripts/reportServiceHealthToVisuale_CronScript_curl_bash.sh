@@ -20,7 +20,11 @@ name=$(urldecode $(printf "%s" "$reportToUrl1" | perl -n -e'/https?:\/\/(?<host>
 #ip=$(/usr/sbin/ip -f inet address show dev eth0 | grep inet | awk '{print $2;}' | cut -d"/" -f1)
 ip=$(hostname -i)
 
-for n in 1 2 3 4 5 6 7 8 9 10; do
+runtime="1 minute"
+endtime=$(date -ud "$runtime" +%s)
+
+while [[ $(date -u +%s) -le $endtime ]]
+do
   # Attempt to get health status from application
   if json=$(curl --silent "$healthUrl") ;
   then
