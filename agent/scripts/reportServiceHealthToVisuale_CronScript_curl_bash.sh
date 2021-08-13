@@ -26,7 +26,7 @@ endtime=$(date -ud "$runtime" +%s)
 while [[ $(date -u +%s) -le $endtime ]]
 do
   # Attempt to get health status from application
-  if json=$(curl --silent "$healthUrl") ;
+  if json=$(curl --silent -m 10 "$healthUrl") ;
   then
     echo "UP"
   else
@@ -39,7 +39,7 @@ do
 
   # Report to all urls set in properties file
   for r in $reportToUrl1 $reportToUrl2 $reportToUrl3 $reportToUrl4 $reportToUrl5; do
-    printf "%s" "$json" | curl --silent -H "Content-Type: application/json" -X PUT --data-binary @- "$r"
+    printf "%s" "$json" | curl --silent -m 10 -H "Content-Type: application/json" -X PUT --data-binary @- "$r"
   done
 
   sleep 4
