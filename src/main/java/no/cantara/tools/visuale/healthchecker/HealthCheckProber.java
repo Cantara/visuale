@@ -101,9 +101,12 @@ public class HealthCheckProber {
                 String json = new CommandGetHealthJson(u).execute();
                 if (json != null && !json.toLowerCase().contains("html")) {
                     Health health = HealthMapper.fromRealWorldJson(json);
-                    String service = environmentPathMap.get(u).getServiceName();
-                    String node = environmentPathMap.get(u).getNodeName();
-                    statusService.queueEnvironmentUpdate("env", service, "", "", node, health);
+                    ConfNode confNode = environmentPathMap.get(u);
+                    String serviceName = confNode.getServiceName();
+                    String serviceTag = confNode.getServiceTag();
+                    String serviceType = confNode.getServiceType();
+                    String nodeName = confNode.getNodeName();
+                    statusService.queueEnvironmentUpdate("env", serviceName, serviceTag, serviceType, nodeName, health);
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now
