@@ -42,7 +42,7 @@
 
 
   .node-block {
-    border: 1px solid $color--border;
+    border: 1px solid $color--nested-sub-border;
     border-radius: 10px;
   }
 

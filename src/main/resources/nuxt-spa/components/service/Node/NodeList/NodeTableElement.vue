@@ -72,7 +72,7 @@ td,th {
 }
   td {
     padding: 0.2em;
-    border: 1px solid $color--border;
+    border: 1px solid $color--nested-border;
     font-weight:400;
     color:white!important;
   }

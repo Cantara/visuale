@@ -10,7 +10,9 @@ $color--background: #232A3D;
 $color--background-lighter: lighten($color--background, 10% );
 $color--background-darker: darken($color--background, 10% );
 
-$color--border: #d7dae6;
+$color--border: #4E5E8A ;
+$color--nested-border:#738AC9;
+$color--nested-sub-border:#ABC1FF;
 
 $color--description:#D0D0D0;
 $color--description-lighter: lighten($color--description, 10%);

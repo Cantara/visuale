@@ -74,7 +74,7 @@
 
   .service-block {
     margin: 0.35em;
-    border: 1px solid $color--border;
+    border: 1px solid $color--nested-border;
    // width:22.1rem;
   }
 

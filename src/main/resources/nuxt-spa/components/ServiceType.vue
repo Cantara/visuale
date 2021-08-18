@@ -32,9 +32,9 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .icon{
-    fill:#A9D2FD;
+    fill:$color--nested-sub-border;
     height:1em;
   }
   .service-type {
