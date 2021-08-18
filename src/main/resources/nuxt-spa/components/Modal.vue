@@ -52,7 +52,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
+
 
   #modal {
     left: 50%;

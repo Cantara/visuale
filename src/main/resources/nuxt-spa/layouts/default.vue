@@ -32,7 +32,7 @@
   }
 </script>
 <style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
+
   .background {
     background-color: $color--background;
   }

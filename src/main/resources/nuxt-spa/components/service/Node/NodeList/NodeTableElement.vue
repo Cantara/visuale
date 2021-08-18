@@ -38,7 +38,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
+
 
   .node-block{
     width: 22rem;

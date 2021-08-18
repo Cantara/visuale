@@ -37,7 +37,7 @@
 </script>
 
 <style lang="scss">
-  @import '~/assets/styles/variables/_variables.scss';
+
 pre{
   text-align: left;
   overflow-x: scroll;

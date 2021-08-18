@@ -27,7 +27,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
+
 
   .service-tag-block {
     margin: 0.5em;

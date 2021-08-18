@@ -3,9 +3,15 @@ import webpack from 'webpack'
 export default {
   ssr:false,
   target:'static',
+  // router: {
+  //   base: '/appsss/'
+  // },
   /*
   ** Headers of the page
   */
+  router: {
+    middleware: 'query-parameters'
+  },
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -41,7 +47,7 @@ export default {
   */
   buildModules: [
     '@nuxtjs/fontawesome',
-
+    "@nuxtjs/style-resources",
   ],
   /*
   ** Nuxt.js modules
@@ -49,10 +55,15 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+
   ],
 
-
+  styleResources: {
+    scss: [
+      "~assets/styles/variables/_variables.scss",
+    ]
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

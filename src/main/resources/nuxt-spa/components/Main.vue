@@ -44,25 +44,12 @@ export default {
       setServiceType: 'setServiceType'
     })
   },
-  created() {
-    let params = this.$route.query;
-    for (const key of Object.keys(params)) {
-      const keyValue = params[key];
-      if (keyValue !== null && keyValue.length > 0) {
-        if (key.toLowerCase() === 'accesstoken')
-          this.setToken(keyValue);
-        if (key.toLowerCase() === 'ui_extension')
-          this.setStrategy(keyValue);
-        if (key.toLowerCase() === 'servicetype')
-          this.setServiceType(keyValue === 'true');
-      }
-    }
-  }
+
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/styles/variables/_variables.scss';
+
 
 @media only screen and (min-width: 991px) {
   #dashboard {

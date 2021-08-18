@@ -43,7 +43,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
+
 div {
   display: inline;
   font-size:1.2rem;

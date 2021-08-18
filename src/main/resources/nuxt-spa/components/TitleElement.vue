@@ -19,7 +19,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~/assets/styles/variables/_variables.scss';
+
   .title {
     display: flex;
     width:100%;
