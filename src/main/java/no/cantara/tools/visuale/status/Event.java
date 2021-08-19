@@ -20,16 +20,10 @@ public class Event {
         this.registered = registered;
         if (eventObject instanceof ControlEventData) {
             this.eventType = EventType.CONTROL;
-        } else if (eventObject instanceof Health) {
-            this.eventType = EventType.HEALTH;
         } else if (eventObject instanceof Environment) {
             this.eventType = EventType.ENVIRONMENT;
-        } else if (eventObject instanceof EnvironmentUpdateHolder) {
-            this.eventType = EventType.ENVIRONMENT_UPDATE_HOLDER;
-        } else if (eventObject instanceof Node) {
+        } else if (eventObject instanceof NodeHealthData) {
             this.eventType = EventType.NODE;
-        } else if (eventObject instanceof Service) {
-            this.eventType = EventType.SERVICE;
         } else {
             throw new IllegalArgumentException("eventObject must be an instance one of the domain classes");
         }
@@ -60,8 +54,8 @@ public class Event {
         return (Environment) eventObject;
     }
 
-    public EnvironmentUpdateHolder environmentUpdateHolder() {
-        return (EnvironmentUpdateHolder) eventObject;
+    public NodeHealthData environmentUpdateHolder() {
+        return (NodeHealthData) eventObject;
     }
 
     public Service service() {

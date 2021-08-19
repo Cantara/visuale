@@ -5,6 +5,7 @@ import no.cantara.config.ApplicationProperties;
 import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
+import no.cantara.tools.visuale.domain.ServiceType;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -30,11 +31,13 @@ class StatusResourceTest {
 
         for (int n = 10; n < 20; n++) {
             Health h = new Health().withIp("10.45.54." + n).withVersion("1.3." + n).withStatus("OK");
-            statusService.queue(h);
+            statusService.queueNodeHealth("", "TestService", "UNIT-TEST",
+                    ServiceType.ServiceCategorization.ACS.name(), h.getName(), h);
         }
         for (int n = 10; n < 20; n++) {
             Health h = new Health().withIp("20.45.54." + n).withVersion("1.5." + n).withStatus("OK");
-            statusService.queue(h);
+            statusService.queueNodeHealth("", "TestService", "UNIT-TEST",
+                    ServiceType.ServiceCategorization.ACS.name(), h.getName(), h);
         }
         statusService.waitForEvents(10, TimeUnit.SECONDS);
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environment));

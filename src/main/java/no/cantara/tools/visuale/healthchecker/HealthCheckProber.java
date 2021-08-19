@@ -106,7 +106,7 @@ public class HealthCheckProber {
                     String serviceTag = confNode.getServiceTag();
                     String serviceType = confNode.getServiceType();
                     String nodeName = confNode.getNodeName();
-                    statusService.queueEnvironmentUpdate("env", serviceName, serviceTag, serviceType, nodeName, health);
+                    statusService.queueNodeHealth("env", serviceName, serviceTag, serviceType, nodeName, health);
                 } else {
                     logger.error("   ==> 1 Unable to parse json from {} ", u);
                     // We reduce noise on wrong urls by removing them right now

@@ -1,7 +1,12 @@
 
 package no.cantara.tools.visuale.domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -39,6 +44,13 @@ public class Health {
     private String ip;
     @JsonProperty("original_health")
     private String originalHealth;
+
+    @JsonProperty("service_name")
+    private String serviceName;
+    @JsonProperty("service_tag")
+    private String serviceTag;
+    @JsonProperty("service_type")
+    private String serviceType;
 
     //@JsonIgnore
     @JsonProperty("additionalProperties")
@@ -197,6 +209,36 @@ public class Health {
     public Health withVersion(String version) {
         this.version = version;
         return this;
+    }
+
+    @JsonProperty("service_name")
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    @JsonProperty("service_name")
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    @JsonProperty("service_tag")
+    public String getServiceTag() {
+        return serviceTag;
+    }
+
+    @JsonProperty("service_tag")
+    public void setServiceTag(String serviceTag) {
+        this.serviceTag = serviceTag;
+    }
+
+    @JsonProperty("service_type")
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    @JsonProperty("service_type")
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public boolean isEmpty() {

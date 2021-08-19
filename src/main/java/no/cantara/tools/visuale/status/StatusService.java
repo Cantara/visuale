@@ -9,19 +9,14 @@ import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
 import no.cantara.tools.visuale.domain.Node;
 import no.cantara.tools.visuale.domain.Service;
-import no.cantara.tools.visuale.domain.ServiceType;
 import no.cantara.tools.visuale.notifications.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
 import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -49,9 +44,6 @@ public class StatusService implements Runnable {
 
     private final AtomicBoolean shouldRun = new AtomicBoolean(true);
 
-    // An internal cache used only by the event-consumer-thread, so no synchronization is necessary
-    private final Map<String, Node> nodeByLookupKey = new LinkedHashMap<>();
-
     // Internal environment used only b y the event-consumer-thread
     private Environment environmentCache = new Environment();
 
@@ -63,6 +55,10 @@ public class StatusService implements Runnable {
         this.eventConsumerThread = new Thread(this, "status-event-consumer");
         this.eventConsumerThread.start();
         this.notificationService = new NotificationService(environmentNameRef::get);
+    }
+
+    public String getEnvironmentName() {
+        return environmentNameRef.get();
     }
 
     public void shutdown() {
@@ -87,20 +83,16 @@ public class StatusService implements Runnable {
         eventQueue.add(new Event(Instant.now(), object));
     }
 
-    public void queue(Health updatedHealth) {
-        queueInternal(updatedHealth);
-    }
-
     public void queue(Environment environment) {
         queueInternal(environment);
     }
 
-    public void queue(EnvironmentUpdateHolder environmentUpdateHolder) {
+    public void queue(NodeHealthData environmentUpdateHolder) {
         queueInternal(environmentUpdateHolder);
     }
 
-    public void queueEnvironmentUpdate(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
-        EnvironmentUpdateHolder environmentUpdateHolder = new EnvironmentUpdateHolder(envName, serviceName, serviceTag, serviceType, nodeName, health);
+    public void queueNodeHealth(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
+        NodeHealthData environmentUpdateHolder = new NodeHealthData(envName, serviceName, serviceTag, serviceType, nodeName, health);
         queue(environmentUpdateHolder);
     }
 
@@ -187,12 +179,11 @@ public class StatusService implements Runnable {
                     Environment environment = event.environment();
                     environmentCache = environment;
                     environmentNameRef.set(environment.getName());
-                    refreshNodeCache(environment);
                     environmentUpdated = true;
                     break;
-                case ENVIRONMENT_UPDATE_HOLDER:
-                    EnvironmentUpdateHolder environmentUpdateHolder = event.environmentUpdateHolder();
-                    updateEnvironmentExecution(
+                case NODE:
+                    NodeHealthData environmentUpdateHolder = event.environmentUpdateHolder();
+                    updateNode(
                             environmentUpdateHolder.envName,
                             environmentUpdateHolder.serviceName,
                             environmentUpdateHolder.serviceTag,
@@ -200,15 +191,6 @@ public class StatusService implements Runnable {
                             environmentUpdateHolder.nodeName,
                             environmentUpdateHolder.health);
                     environmentUpdated = true;
-                    break;
-                case HEALTH:
-                    Health health = event.health();
-                    processHealth(health);
-                    environmentUpdated = true;
-                    break;
-                case SERVICE:
-                case NODE:
-                    logger.warn("Received unsupported event: " + event.getEventType().name());
                     break;
             }
 
@@ -219,97 +201,66 @@ public class StatusService implements Runnable {
         return environmentUpdated;
     }
 
-    private String getNodeLookupKey(Service service, Node node) {
-        String key = (service.getServiceTag() != null ? service.getServiceTag().toLowerCase() : "")
-                + ":" + service.getName().toLowerCase()
-                + ":" + node.getName()
-                + ":" + node.getIp();
-        return key;
-    }
-
-    private void refreshNodeCache(Environment environment) {
-        nodeByLookupKey.clear();
-        for (Service service : environment.getServices()) {
-            for (Node node : service.getNodes()) {
-                if (node.getName() == null || node.getName().length() < 2) {
-                    node.setName(service.getName());
-                }
-                nodeByLookupKey.put(getNodeLookupKey(service, node), node);
-            }
-            if (service.getServiceType() == null) {
-                service.setServiceType(ServiceType.ServiceCategorization.CS.name());
-            }
-        }
-    }
-
-    private void processHealth(Health updatedHealth) {
-        logger.trace("Received health update: {}", updatedHealth);
-        try {
-            Node node = nodeByLookupKey.get(updatedHealth.getLookupKey());
-            if (node == null) {
-                logger.debug("Added new service from health update: {}", updatedHealth);
-                String name = updatedHealth.getName();
-                if (name == null || name.length() < 2) {
-                    name = "Unknown - " + UUID.randomUUID();
-                }
-                node = new Node().withName(name).withIp(updatedHealth.getIp()).withVersion(updatedHealth.getVersion()).withHealth(updatedHealth);
-
-                no.cantara.tools.visuale.domain.Service s =
-                        new no.cantara.tools.visuale.domain.Service().withNode(node).withName(name);
-                environmentCache.addService(s);
-                nodeByLookupKey.put(getNodeLookupKey(s, node), node);
-            } else {
-                //logger.trace("Updated service from health update: {}", updatedHealth);
-                node.addHealth(updatedHealth);
-                if (hasValue(updatedHealth.getIp())) {
-                    node.setIp(updatedHealth.getIp());
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Received un-mappable health.", e);
-        }
-    }
-
-    private boolean updateEnvironmentExecution(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
+    private boolean updateNode(String envName, String serviceName, String serviceTag, String serviceType, String nodeName, Health health) {
         if (!STRICT_ENVIRONMENT || environmentCache.getName().equalsIgnoreCase(envName)) {
             // environment found
             Set<Service> serviceSet = environmentCache.getServices();
             for (no.cantara.tools.visuale.domain.Service service : serviceSet) {
                 if (serviceMatches(serviceName, serviceTag, service)) {
                     // service found
+
                     if (hasValue(serviceType)) {
                         service.setServiceType(serviceType);
                     }
-                    for (Node node : service.getNodes()) {
-                        if (node.getName().equalsIgnoreCase(nodeName)
-                                && hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
-                            // node matches name and ip
-                            node.addHealth(health);
-                            return true;
-                        }
-                    }
-                    // node name or ip does not match
+
+                    List<Node> nodesWithMatchingName = new ArrayList<>(1);
                     for (Node node : service.getNodes()) {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
-                            // node matches name, so ip must be different
-                            if (hasValue(node.getIp()) && node.getIp().equals("0.0.0.0")) {
-                                // existing node has ip 0.0.0.0, update ip and use node
+                            nodesWithMatchingName.add(node);
+                        }
+                    }
+
+                    if (nodesWithMatchingName.size() > 0) {
+                        // at least one node match on name
+
+                        for (Node node : nodesWithMatchingName) {
+                            if (hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
+                                // node matches name and ip
+                                node.addHealth(health);
+                                return true;
+                            }
+                        }
+
+                        // no nodes match on ip
+
+                        for (Node node : nodesWithMatchingName) {
+                            if (!hasValue(node.getIp()) || node.getIp().equals("0.0.0.0")) {
+                                // existing node has ip empty or 0.0.0.0, update ip and use node
                                 node.setIp(health.getIp());
                                 node.addHealth(health);
                                 return true;
                             }
-                            if (hasValue(health.getIp()) && health.getIp().equals("0.0.0.0")) {
-                                // incoming node has ip 0.0.0.0, so use this first found node with name match
-                                node.setIp(health.getIp()); // update node ip
+                        }
+
+                        if (!hasValue(health.getIp()) || health.getIp().equals("0.0.0.0")) {
+                            // incoming node has ip empty or 0.0.0.0, so use this first found node with name match
+                            for (Node node : nodesWithMatchingName) {
                                 node.addHealth(health);
                                 return true;
                             }
                         }
+
+                        // Node-name conflict detected, there exists a node within service that match on node-name but ip-address is different.
+                        // We will allow this to cause another node with same name to be created, but log a warning in Visuale.
+                        Node conflictingNode = nodesWithMatchingName.get(0);
+                        logger.warn("Conflicting node-name in Service '{}:{}'. Node '{}:{}' conflicts with node '{}:{}'",
+                                service.getServiceTag(), service.getName(), nodeName, health.getIp(),
+                                conflictingNode.getName(), conflictingNode.getIp());
                     }
 
-                    // Service matches, but node not found. Create and add node to service
+                    // Service matches, but no matching node found. Create node and add to service
                     Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-                    addNodeToService(service, node);
+                    service.addNode(node);
                     return true;
                 }
             }
@@ -318,7 +269,7 @@ public class StatusService implements Runnable {
             no.cantara.tools.visuale.domain.Service service = new no.cantara.tools.visuale.domain.Service()
                     .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType);
             Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
-            addNodeToService(service, node);
+            service.addNode(node);
             environmentCache.addService(service);
 
             return true;
@@ -339,12 +290,4 @@ public class StatusService implements Runnable {
         }
         return service.getServiceTag().equalsIgnoreCase(serviceTag);
     }
-
-    private void addNodeToService(Service service, Node node) {
-        boolean nodeAddedToService = service.addNode(node);
-        if (nodeAddedToService) {
-            nodeByLookupKey.put(getNodeLookupKey(service, node), node);
-        }
-    }
-
 }

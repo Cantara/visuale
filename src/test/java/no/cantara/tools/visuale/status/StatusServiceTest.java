@@ -25,12 +25,12 @@ class StatusServiceTest {
     public void testenvServiceNodehealthMatching() {
         Health h = new Health().withNow(Instant.now().toString()).withIp("10.10.10.10").withName("test");
         StatusService s = new StatusService();
-        s.queueEnvironmentUpdate("env", "service", "tag1", "", "n1", h);
-        s.queueEnvironmentUpdate("env", "service", "tag2", "", "n1", h);
-        s.queueEnvironmentUpdate("env", "service", "", "", "n2", h);
-        s.queueEnvironmentUpdate("env", "service", "", "", "n3", h);
-        s.queueEnvironmentUpdate("env", "service", "", "", "n4", h);
-        s.queueEnvironmentUpdate("env", "service", "", "", "n5", h);
+        s.queueNodeHealth("env", "service", "tag1", "", "n1", h);
+        s.queueNodeHealth("env", "service", "tag2", "", "n1", h);
+        s.queueNodeHealth("env", "service", "", "", "n2", h);
+        s.queueNodeHealth("env", "service", "", "", "n3", h);
+        s.queueNodeHealth("env", "service", "", "", "n4", h);
+        s.queueNodeHealth("env", "service", "", "", "n5", h);
         s.waitForEvents(5, TimeUnit.SECONDS);
         System.out.println(s.getEnvironmentAsString());
     }
@@ -42,7 +42,7 @@ class StatusServiceTest {
         statusService.queueFullEnvironment(init1Json, "INN Dashboard");
         String health1Json = readResourceAsString("inn/inn-lwa-health-1.json");
         Health health1 = new ObjectMapper().readValue(health1Json, Health.class);
-        statusService.queueEnvironmentUpdate("prod", "LoginWebApp", "SSO-Test", "H2A", "node2", health1);
+        statusService.queueNodeHealth("prod", "LoginWebApp", "SSO-Test", "H2A", "node2", health1);
         statusService.waitForEvents(5, TimeUnit.SECONDS);
         System.out.printf("%s%n", statusService.getEnvironmentAsString());
     }

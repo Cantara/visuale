@@ -9,9 +9,12 @@ import no.cantara.tools.visuale.domain.HealthMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static no.cantara.tools.visuale.utils.StringUtils.hasValue;
 
 public class StatusResource implements Service {
 
@@ -73,24 +76,75 @@ public class StatusResource implements Service {
     @SuppressWarnings("checkstyle:designforextension")
     public void updateHealthInfo(final ServerRequest request, final ServerResponse response) {
         logger.debug("updateHealthInfo");
-        request.content().as(String.class)
-                .thenAccept(jo -> updateHealthInfoFromJson(jo))
-                .thenAccept(jo -> response.status(204).send());
 
+        Map<String, List<String>> queryMap = request.queryParams().toMap();
+        String serviceTag = "";
+        if (queryMap.get("service_tag") != null) {
+            serviceTag = queryMap.get("service_tag").get(0);
+        }
+        final String sTa = serviceTag;
+        String serviceType = "";
+        if (queryMap.get("service_type") != null) {
+            serviceType = queryMap.get("service_type").get(0);
+        }
+        final String sTy = serviceType;
+        String serviceName = "";
+        if (queryMap.get("service_name") != null) {
+            serviceName = queryMap.get("service_name").get(0);
+        }
+        final String sNa = serviceName;
+
+        request.content().as(String.class)
+                .thenApply(this::jsonToHealth)
+                .thenAccept(health -> {
+                    if (health == null) {
+                        response.status(400).send("Missing json health in body.");
+                        return;
+                    }
+                    if (hasValue(sNa)) {
+                        health.setServiceName(sNa);
+                    }
+                    if (hasValue(sTy)) {
+                        health.setServiceType(sTy);
+                    }
+                    if (hasValue(sTa)) {
+                        health.setServiceTag(sTa);
+                    }
+                    List<String> missingFields = new ArrayList<>();
+                    if (!hasValue(health.getServiceName())) {
+                        missingFields.add("service_name");
+                    }
+                    if (!hasValue(health.getServiceTag())) {
+                        missingFields.add("service_tag");
+                    }
+                    if (!hasValue(health.getServiceType())) {
+                        missingFields.add("service_type");
+                    }
+                    if (!hasValue(health.getName())) {
+                        missingFields.add("name");
+                    }
+                    if (missingFields.size() > 0) {
+                        response.status(400).send("Health is missing fields: " + String.join(",", missingFields));
+                        return;
+                    }
+
+                    statusService.queue(new NodeHealthData(statusService.getEnvironmentName(), health.getServiceName(),
+                            health.getServiceTag(), health.getServiceType(), health.getName(), health));
+
+                    response.status(204).send();
+
+                })
+                .exceptionallyAccept(t -> {
+                    response.status(400).send("Unable to deserialize body as valid health json");
+                });
     }
 
-    private Health updateHealthInfoFromJson(String healthJsonString) {
-        try {
-            Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.length() < 1) {
-                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
-                statusService.queue(myHealth);
-            }
-            return myHealth;
-        } catch (Exception e) {
-            logger.error("Unable to patse and update health info for payload: {}, {}", healthJsonString, e);
+    private Health jsonToHealth(String healthJsonString) {
+        Health myHealth = null;
+        if (healthJsonString != null || healthJsonString.length() < 1) {
+            myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
         }
-        return null;
+        return myHealth;
     }
 
     @SuppressWarnings("checkstyle:designforextension")
@@ -116,24 +170,13 @@ public class StatusResource implements Service {
 //        String sTy = "";
 
         request.content().as(String.class)
-                .thenAccept(jo -> updateEnvironmentFromHealthInfoJson(jo, envName, serviceName, sTa, sTy, nodeName))
-                .thenAccept(jo -> response.status(204).send());
-    }
-
-    private Health updateEnvironmentFromHealthInfoJson(String healthJsonString, String envName, String serviceName, String serviceTag, String serviceType, String nodeName) {
-        try {
-            Health myHealth = null;
-            if (healthJsonString != null || healthJsonString.length() < 1) {
-                myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
-            }
-            if (myHealth != null && myHealth.getRunningSince() != null && myHealth.getRunningSince().length() > 5) {
-                statusService.queueEnvironmentUpdate(envName, serviceName, serviceTag, serviceType, nodeName, myHealth);
-            }
-            return myHealth;
-        } catch (Exception e) {
-            logger.error("Unable to parse and update health info for payload: {}, {}", healthJsonString, e);
-        }
-        return null;
+                .thenApply(this::jsonToHealth)
+                .thenAccept(health -> {
+                    if (health != null && health.getRunningSince() != null && health.getRunningSince().length() > 5) {
+                        statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
+                    }
+                })
+                .thenAccept(v -> response.status(204).send());
     }
 
     public StatusService getStatusService() {
