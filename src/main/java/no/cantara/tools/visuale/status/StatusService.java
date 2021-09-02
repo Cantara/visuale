@@ -213,6 +213,7 @@ public class StatusService implements Runnable {
                         service.setServiceType(serviceType);
                     }
 
+
                     List<Node> nodesWithMatchingName = new ArrayList<>(1);
                     for (Node node : service.getNodes()) {
                         if (node.getName().equalsIgnoreCase(nodeName)) {
@@ -226,6 +227,9 @@ public class StatusService implements Runnable {
                         for (Node node : nodesWithMatchingName) {
                             if (hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
                                 // node matches name and ip
+                                if (!node.getVersion().equalsIgnoreCase(health.getVersion())) {
+                                    node.setVersion(health.getVersion());
+                                }
                                 node.addHealth(health);
                                 return true;
                             }
