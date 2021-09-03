@@ -1,7 +1,6 @@
 package no.cantara.tools.visuale.domain;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -9,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -28,7 +27,7 @@ public class HealthDeserializer extends StdDeserializer<Health> {
     }
 
     @Override
-    public Health deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Health deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         JsonNode jsonnode = jp.getCodec().readTree(jp);
         Iterator<String> fieldNames = jsonnode.fieldNames();
         Map<String, String> jsonFlattenedMap = getFlattenedJsonMap(jsonnode, fieldNames);
@@ -37,16 +36,16 @@ public class HealthDeserializer extends StdDeserializer<Health> {
             statusValue = "";
         }
 
-        if ("true".equalsIgnoreCase(statusValue.toLowerCase())) {
+        if ("true".equalsIgnoreCase(statusValue)) {
             statusValue = "OK";
         }
-        if ("HEALTHY".equalsIgnoreCase(statusValue.toLowerCase())) {
+        if ("HEALTHY".equalsIgnoreCase(statusValue)) {
             statusValue = "OK";
         }
-        if ("OK".equalsIgnoreCase(statusValue.toLowerCase())) {
+        if ("OK".equalsIgnoreCase(statusValue)) {
             statusValue = "OK";
         }
-        if ("UP".equalsIgnoreCase(statusValue.toLowerCase())) {
+        if ("UP".equalsIgnoreCase(statusValue)) {
             statusValue = "OK";
         }
 
@@ -97,7 +96,7 @@ public class HealthDeserializer extends StdDeserializer<Health> {
             }
         }
 
-        Map<String, String> additionalProperties = new HashMap<String, String>();
+        Map<String, String> additionalProperties = new LinkedHashMap<>();
         for (String key : jsonFlattenedMap.keySet()) {
             additionalProperties.put(key, jsonFlattenedMap.get(key));
         }
@@ -110,7 +109,7 @@ public class HealthDeserializer extends StdDeserializer<Health> {
     }
 
     private Map<String, String> getFlattenedJsonMap(JsonNode jsonnode, Iterator<String> fieldNames) {
-        Map<String, String> jsonFlattenedMap = new HashMap<>();
+        Map<String, String> jsonFlattenedMap = new LinkedHashMap<>();
         try {
             while (fieldNames.hasNext()) {
                 String fieldName = fieldNames.next();

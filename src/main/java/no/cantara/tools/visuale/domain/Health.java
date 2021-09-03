@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -166,17 +165,10 @@ public class Health {
 
     @JsonProperty("running since")
     public void setRunningSince(String runningSince) {
-        if (runningSince == null || runningSince.length() < 10) {
-            runningSince = Instant.now().plus(15, ChronoUnit.MINUTES).toString();
-        }
-
         this.runningSince = runningSince;
     }
 
     public Health withRunningSince(String runningSince) {
-        if (runningSince == null || runningSince.length() < 10) {
-            runningSince = Instant.now().plus(15, ChronoUnit.MINUTES).toString();
-        }
         this.runningSince = runningSince;
         return this;
     }

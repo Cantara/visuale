@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -45,7 +45,7 @@ public class Node {
     @JsonProperty("health")
     private Set<Health> health = new CopyOnWriteArraySet<>();
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new LinkedHashMap<>();
     @JsonIgnore
     private int calculatedDrift = 0;
     @JsonIgnore
@@ -280,22 +280,18 @@ public class Node {
                 setName(healthValue.getName());
             }
         }
-        if (calculatedRunningSince == null) {
-            Instant nowInstant = Instant.now();
-            try {
-                OffsetDateTime date = OffsetDateTime.parse(healthValue.getRunningSince());
-                Instant reqInstant = date.toInstant();
 
-                // We only correlate now in health if time is in the future
-                if (reqInstant.isAfter(nowInstant)) {
-                    healthValue.setRunningSince(nowInstant.toString());
-                    calculatedRunningSince = nowInstant.toString();
-                }
+        OffsetDateTime runningSince = null;
+        if (healthValue.getRunningSince() != null) {
+            try {
+                runningSince = OffsetDateTime.parse(healthValue.getRunningSince());
             } catch (Exception e) {
-                healthValue.setRunningSince(nowInstant.toString());
-                calculatedRunningSince = nowInstant.toString();
             }
-        } else {
+        }
+        if (runningSince == null) {
+            if (calculatedRunningSince == null) {
+                calculatedRunningSince = Instant.now().toString();
+            }
             healthValue.setRunningSince(calculatedRunningSince);
         }
 
