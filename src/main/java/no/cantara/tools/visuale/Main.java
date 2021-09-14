@@ -74,7 +74,6 @@ public final class Main {
      * @return the created {@link WebServer} instance
      */
     public WebServer startServer(int port, String contextPath, boolean usingMockEnvironment) {
-
         if (usingMockEnvironment) {
             statusResource.getStatusService().queueFullEnvironment(MOCK_ENVORONMENT, "Visuale DEVTEST");
             startHealthReportSimulator(healthResource, statusResource.getStatusService(), null);
@@ -84,6 +83,11 @@ public final class Main {
             statusResource.getStatusService().queue(environmentConfig.getEnvironment());
             startHealthReportSimulator(healthResource, statusResource.getStatusService(), environmentConfig);
         }
+
+        return startServer(port, contextPath);
+    }
+
+    public WebServer startServer(int port, String contextPath) {
 
         Routing routing = Routing.builder()
                 .register(contextPath, healthResource)

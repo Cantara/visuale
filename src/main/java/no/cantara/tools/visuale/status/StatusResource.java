@@ -172,7 +172,7 @@ public class StatusResource implements Service {
         request.content().as(String.class)
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
-                    if (health != null && health.getRunningSince() != null && health.getRunningSince().length() > 5) {
+                    if (health != null) {
                         statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
                     }
                 })

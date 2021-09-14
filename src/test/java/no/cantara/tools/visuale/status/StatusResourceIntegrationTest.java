@@ -45,7 +45,7 @@ public class StatusResourceIntegrationTest {
     public static void startTheServer() throws Exception {
         main = new Main("");
         contextPath = Main.getConfiguredContextPath();
-        server = main.startServer(0, contextPath, false);
+        server = main.startServer(0, contextPath);
         server.start().await(5, TimeUnit.SECONDS);
     }
 
@@ -207,6 +207,29 @@ public class StatusResourceIntegrationTest {
         System.out.printf("JSON AFTER: %s%n", json);
     }
 
+    @Test
+    public void thatUibFailed() throws IOException {
+
+        StatusService statusService = main.getStatusResource().getStatusService();
+
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+
+        String failed1Json = readResourceAsString("failed/foo-failed-1.json");
+        String failed2Json = readResourceAsString("failed/foo-failed-2.json");
+
+        Client client = ClientBuilder.newClient();
+
+        putHealth(failed1Json, client, "/api/status/myenv/Foo/n1", "bar", "CS");
+        putHealth(failed2Json, client, "/api/status/myenv/Foo/n1", "bar", "CS");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+        String json = getStatus(client);
+        System.out.printf("JSON AFTER: %s%n", json);
+
+        Environment environment = StatusService.mapper.readValue(json, Environment.class);
+        Set<Service> services = environment.getServices();
+        assertTrue(services.stream().anyMatch(service -> service.getName().equals("Foo")));
+    }
+
     private void putHealth(String healthJson, Client client, String path, String serviceTag, String serviceType) {
         Response jsonObject = client
                 .target(getConnectionString(path))
@@ -216,6 +239,18 @@ public class StatusResourceIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(healthJson, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(204, jsonObject.getStatus(), "PUT health status code");
+    }
+
+    private String getStatus(Client client) throws com.fasterxml.jackson.core.JsonProcessingException {
+        Response jsonObject = client
+                .target(getConnectionString("/status"))
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        assertEquals(200, jsonObject.getStatus(), "GET health status code");
+        String json = jsonObject.readEntity(String.class);
+        assertTrue(json.length() > 5);
+        return json;
     }
 
     private String verifyStatus(Client client) throws com.fasterxml.jackson.core.JsonProcessingException {

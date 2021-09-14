@@ -290,7 +290,23 @@ public class Node {
         }
         if (runningSince == null) {
             if (calculatedRunningSince == null) {
-                calculatedRunningSince = Instant.now().toString();
+                if (healthValue.getNow() != null) {
+                    calculatedRunningSince = healthValue.getNow();
+                } else if (healthValue.getReceivedNow() != null) {
+                    calculatedRunningSince = healthValue.getReceivedNow();
+                } else {
+                    calculatedRunningSince = Instant.now().toString();
+                }
+                try {
+                    Instant typedCalculatedRunningSince = Instant.parse(calculatedRunningSince);
+                    if (typedCalculatedRunningSince.isAfter(Instant.now())) {
+                        // running-since not allowed to be in the future
+                        calculatedRunningSince = Instant.now().toString();
+                    }
+                } catch (RuntimeException e) {
+                    // invalid format of running-since, set to now
+                    calculatedRunningSince = Instant.now().toString();
+                }
             }
             healthValue.setRunningSince(calculatedRunningSince);
         }
