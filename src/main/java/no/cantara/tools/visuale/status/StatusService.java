@@ -183,13 +183,17 @@ public class StatusService implements Runnable {
                     break;
                 case NODE:
                     NodeHealthData environmentUpdateHolder = event.environmentUpdateHolder();
-                    updateNode(
+                    environmentUpdated = updateNode(
                             environmentUpdateHolder.envName,
                             environmentUpdateHolder.serviceName,
                             environmentUpdateHolder.serviceTag,
                             environmentUpdateHolder.serviceType,
                             environmentUpdateHolder.nodeName,
                             environmentUpdateHolder.health);
+                    break;
+                case SERVICE:
+                    Service service = event.service();
+                    environmentCache.addService(service);
                     environmentUpdated = true;
                     break;
             }
