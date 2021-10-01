@@ -133,7 +133,7 @@ public class SlackNotificationClient implements Runnable {
     }
 
     private void doNotifySlackAlarm(String service, String message) {
-        if (alertingIsEnabled) {
+        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
                     .text(SLACK_ALERT_EMOJI + environmentNameSupplier.get() + " - service:" + service + " is down. \n       - " + message)
@@ -155,7 +155,7 @@ public class SlackNotificationClient implements Runnable {
     }
 
     private void doClearSlackAlarm(String service, String timestampText) {
-        if (alertingIsEnabled) {
+        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackAlarmChannel)
                     .text(SLACK_REVIVED_EMOJI + " " + environmentNameSupplier.get() + " - service: " + service + " is back in service. " + timestampText)
@@ -177,7 +177,7 @@ public class SlackNotificationClient implements Runnable {
     }
 
     private void doNotifySlackWarning(String service, String message) {
-        if (alertingIsEnabled) {
+        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
                     .text(SLACK_WARNING_EMOJI + " " + environmentNameSupplier.get() + " - service: " + service + " is having trouble. \n       - " + message)
@@ -199,7 +199,7 @@ public class SlackNotificationClient implements Runnable {
     }
 
     private void doClearSlackWarning(String service, String timestampText) {
-        if (alertingIsEnabled) {
+        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                     .channel(slackWarningChannel)
                     .text(SLACK_REVIVED_EMOJI + " " + environmentNameSupplier.get() + " - service: " + service + " is back in service. " + timestampText)
