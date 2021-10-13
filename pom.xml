@@ -115,7 +115,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
-            <version>2.35</version>
+            <version>3.0.3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client -->
         <dependency>
@@ -322,8 +322,8 @@
                                 </excludes>
                             </artifactSet>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.schemas</resource>
                                 </transformer>
