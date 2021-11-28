@@ -33,7 +33,7 @@
     "@babel/preset-env": "7.16.4",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
-    "@nuxtjs/eslint-config": "7.0.0",
+    "@nuxtjs/eslint-config": "8.0.0",
     "@nuxtjs/eslint-module": "3.0.2",
     "@nuxtjs/fontawesome": "1.1.2",
     "@nuxtjs/style-resources": "1.2.1",
