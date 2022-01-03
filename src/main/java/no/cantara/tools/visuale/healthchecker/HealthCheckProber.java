@@ -41,20 +41,22 @@ public class HealthCheckProber {
         return badHealthCheckURLSet.size();
     }
 
+    Runnable checkHealthTask = null;
+
     public HealthCheckProber(HealthResource healthResource, StatusService statusService, EnvironmentConfig environmentConfig) {
         this.healthResource = healthResource;
         this.statusService = statusService;
         readConfig(environmentConfig);
         healthResource.setOkPollingURLs(healthCheckURLSet);
         healthResource.setFailedPollingURLs(badHealthCheckURLSet);
+        checkHealthTask = () -> {
+            checkHealth();
+        };
     }
 
 
     public void startScheduler() {
         if (healthCheckURLSet.size() > 0) {
-            Runnable checkHealthTask = () -> {
-                checkHealth();
-            };
 
             ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(checkHealthTask, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
         }
