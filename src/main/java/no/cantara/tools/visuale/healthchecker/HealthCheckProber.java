@@ -102,6 +102,7 @@ public class HealthCheckProber {
                 String json = new CommandGetHealthJson(u).execute();
                 if (json != null && !json.toLowerCase().contains("html")) {
                     Health health = HealthMapper.fromRealWorldJson(json);
+                    health.setProbedFrom("Visuale");
                     ConfNode confNode = environmentPathMap.get(u);
                     String serviceName = confNode.getServiceName();
                     String serviceTag = confNode.getServiceTag();

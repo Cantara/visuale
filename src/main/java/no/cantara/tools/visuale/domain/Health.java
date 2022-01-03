@@ -1,12 +1,7 @@
 
 package no.cantara.tools.visuale.domain;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -19,6 +14,7 @@ import static no.cantara.tools.visuale.domain.HealthMapper.extractIpv4Address;
         "Status",
         "name",
         "version",
+        "probed_from",
         "now",
         "running since",
         "ip",
@@ -31,6 +27,8 @@ public class Health {
     private String status;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("probed_from")
+    private String probedFrom = "Agent";
     @JsonProperty("now")
     private String now;
 
@@ -104,6 +102,16 @@ public class Health {
             return;
         }
         this.name = name.trim();
+    }
+
+    @JsonProperty("probed_from")
+    public String getProbedFrom() {
+        return probedFrom;
+    }
+
+    @JsonProperty("probed_from")
+    public void setProbedFrom(String probedFrom) {
+        this.probedFrom = probedFrom;
     }
 
     public Health withName(String name) {
