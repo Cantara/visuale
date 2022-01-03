@@ -33,7 +33,7 @@ public class StatusService implements Runnable {
             .enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature())
             .findAndRegisterModules();//.enable(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature());
 
-    public static final Logger logger = LoggerFactory.getLogger(StatusService.class);
+    public static final Logger log = LoggerFactory.getLogger(StatusService.class);
 
     private final Thread eventConsumerThread;
     private final BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
@@ -101,7 +101,7 @@ public class StatusService implements Runnable {
         try {
             environment = mapper.readValue(envJson, Environment.class);
         } catch (Exception e) {
-            logger.error("Unable to initialise dashboard environment", e);
+            log.error("Unable to initialise dashboard environment", e);
         }
         environment.setName(environment_name);
         queue(environment);
@@ -159,10 +159,10 @@ public class StatusService implements Runnable {
                 }
 
             } catch (Throwable t) {
-                logger.error("", t);
+                log.error("", t);
             }
         }
-        logger.info("Status event-loop stopped");
+        log.info("Status event-loop stopped");
     }
 
     private boolean processEventInternal(Event event) {
@@ -195,7 +195,7 @@ public class StatusService implements Runnable {
             }
 
         } catch (Exception e) {
-            logger.error("Unable to update environmentAsString:", e);
+            log.error("Unable to update environmentAsString:", e);
         }
 
         return environmentUpdated;
@@ -223,44 +223,48 @@ public class StatusService implements Runnable {
 
                     if (nodesWithMatchingName.size() > 0) {
                         // at least one node match on name
+                        try {
 
-                        for (Node node : nodesWithMatchingName) {
-                            if (hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
-                                // node matches name and ip
-                                if (health != null && node != null && node.getVersion() != null && health.getVersion() != null
-                                        && !node.getVersion().equalsIgnoreCase(health.getVersion())) {
-                                    node.setVersion(health.getVersion());
-                                }
-                                node.addHealth(health);
-                                return true;
-                            }
-                        }
-
-                        // no nodes match on ip
-
-                        for (Node node : nodesWithMatchingName) {
-                            if (!hasValue(node.getIp()) || node.getIp().equals("0.0.0.0")) {
-                                // existing node has ip empty or 0.0.0.0, update ip and use node
-                                node.setIp(health.getIp());
-                                node.addHealth(health);
-                                return true;
-                            }
-                        }
-
-                        if (!hasValue(health.getIp()) || health.getIp().equals("0.0.0.0")) {
-                            // incoming node has ip empty or 0.0.0.0, so use this first found node with name match
                             for (Node node : nodesWithMatchingName) {
-                                node.addHealth(health);
-                                return true;
+                                if (hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
+                                    // node matches name and ip
+                                    if (health != null && node != null && node.getVersion() != null && health.getVersion() != null
+                                            && !node.getVersion().equalsIgnoreCase(health.getVersion())) {
+                                        node.setVersion(health.getVersion());
+                                    }
+                                    node.addHealth(health);
+                                    return true;
+                                }
                             }
-                        }
 
-                        // Node-name conflict detected, there exists a node within service that match on node-name but ip-address is different.
-                        // We will allow this to cause another node with same name to be created, but log a warning in Visuale.
-                        Node conflictingNode = nodesWithMatchingName.get(0);
-                        logger.warn("Conflicting node-name in Service '{}:{}'. Node '{}:{}' conflicts with node '{}:{}'",
-                                service.getServiceTag(), service.getName(), nodeName, health.getIp(),
-                                conflictingNode.getName(), conflictingNode.getIp());
+                            // no nodes match on ip
+
+                            for (Node node : nodesWithMatchingName) {
+                                if (!hasValue(node.getIp()) || node.getIp().equals("0.0.0.0")) {
+                                    // existing node has ip empty or 0.0.0.0, update ip and use node
+                                    node.setIp(health.getIp());
+                                    node.addHealth(health);
+                                    return true;
+                                }
+                            }
+
+                            if (!hasValue(health.getIp()) || health.getIp().equals("0.0.0.0")) {
+                                // incoming node has ip empty or 0.0.0.0, so use this first found node with name match
+                                for (Node node : nodesWithMatchingName) {
+                                    node.addHealth(health);
+                                    return true;
+                                }
+                            }
+
+                            // Node-name conflict detected, there exists a node within service that match on node-name but ip-address is different.
+                            // We will allow this to cause another node with same name to be created, but log a warning in Visuale.
+                            Node conflictingNode = nodesWithMatchingName.get(0);
+                            log.warn("Conflicting node-name in Service '{}:{}'. Node '{}:{}' conflicts with node '{}:{}'",
+                                    service.getServiceTag(), service.getName(), nodeName, health.getIp(),
+                                    conflictingNode.getName(), conflictingNode.getIp());
+                        } catch (Exception e) {
+                            log.error("Unable to process new health.", e);
+                        }
                     }
 
                     // Service matches, but no matching node found. Create node and add to service
