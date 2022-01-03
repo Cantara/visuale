@@ -58,7 +58,7 @@ public class HealthCheckProber {
     public void startScheduler() {
         if (healthCheckURLSet.size() > 0) {
 
-            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(checkHealthTask, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(checkHealthTask, 55, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
         }
     }
 
