@@ -80,7 +80,9 @@ public class StatusService implements Runnable {
     }
 
     private void queueInternal(Object object) {
-        eventQueue.add(new Event(Instant.now(), object));
+        if (object != null) {
+            eventQueue.add(new Event(Instant.now(), object));
+        }
     }
 
     public void queue(Environment environment) {
