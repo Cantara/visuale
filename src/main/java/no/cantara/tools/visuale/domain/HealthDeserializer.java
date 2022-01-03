@@ -63,6 +63,7 @@ public class HealthDeserializer extends StdDeserializer<Health> {
         }
 
         String nameValue = jsonFlattenedMap.remove("name");
+        String probedFrom = jsonFlattenedMap.remove("probed_from");
 
         if ((ipValue == null || ipValue.length() < 1) && (versionValue != null && versionValue.length() > 30)) {
             int beginindex = 1 + versionValue.lastIndexOf("-");
@@ -103,6 +104,7 @@ public class HealthDeserializer extends StdDeserializer<Health> {
 
         Health customSerializedhealth = new Health().withStatus(statusValue).withName(nameValue)
                 .withIp(ipValue).withVersion(versionValue).withNow(nowValue)
+                .withProbedFrom(probedFrom)
                 .withRunningSince(runningSinceValue)
                 .withAdditionalProperties(additionalProperties);
         return customSerializedhealth;

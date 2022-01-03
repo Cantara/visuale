@@ -104,6 +104,14 @@ public class Health {
         this.name = name.trim();
     }
 
+    public Health withProbedFrom(String probedFrom) {
+        if (probedFrom == null) {
+            return this;
+        }
+        this.probedFrom = probedFrom.trim();
+        return this;
+    }
+
     @JsonProperty("probed_from")
     public String getProbedFrom() {
         return probedFrom;
