@@ -17,13 +17,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class HealthCheckProber {
 
@@ -55,9 +49,14 @@ public class HealthCheckProber {
         healthResource.setFailedPollingURLs(badHealthCheckURLSet);
     }
 
+
     public void startScheduler() {
         if (healthCheckURLSet.size() > 0) {
-            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(this::checkHealth, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
+            Runnable checkHealthTask = () -> {
+                checkHealth();
+            };
+
+            ScheduledFuture<?> scheduledFuture = ses.scheduleAtFixedRate(checkHealthTask, 5, SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS, TimeUnit.SECONDS);
         }
     }
 
