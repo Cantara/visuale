@@ -227,7 +227,7 @@ public class StatusService implements Runnable {
                         for (Node node : nodesWithMatchingName) {
                             if (hasValue(health.getIp()) && hasValue(node.getIp()) && health.getIp().equalsIgnoreCase(node.getIp())) {
                                 // node matches name and ip
-                                if (!node.getVersion().equalsIgnoreCase(health.getVersion())) {
+                                if (health != null && node != null && !node.getVersion().equalsIgnoreCase(health.getVersion())) {
                                     node.setVersion(health.getVersion());
                                 }
                                 node.addHealth(health);
