@@ -41,7 +41,7 @@
     "babel-jest": "27.4.6",
     "eslint": "8.6.0",
     "eslint-plugin-nuxt": "3.1.0",
-    "jest": "27.4.6",
+    "jest": "27.4.7",
     "node-sass": "6.0.1",
     "postcss-loader": "3.0.0",
     "sass-loader": "10.2.0",
