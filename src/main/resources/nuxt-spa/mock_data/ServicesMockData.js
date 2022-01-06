@@ -2,6 +2,13 @@
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
+
+
+function pickRandomItem(array){
+  const random = Math.floor(Math.random() * array.length);
+  return array[random]
+}
+
 export function randomMockData(){
   let serviceNames = ['A','B','C','D']
   let serviceTypes = ['CS','H2A','A2A','ACS']
@@ -40,6 +47,7 @@ export function randomMockData(){
             "Status" : "OK",
             "name" : "quadim-skill-service",
             "version" : "0.0.4-SNAPSHOT",
+            "probed_from":pickRandomItem(["Visuale","Agent"]),
             "now" : "2020-04-30T15:01:02.847516Z",
             "running since" : "2020-04-27T10:48:04.933717Z",
             "ip" : "172.31.41.32",
