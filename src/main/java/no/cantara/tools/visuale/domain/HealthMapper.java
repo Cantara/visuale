@@ -80,7 +80,11 @@ public class HealthMapper {
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(source);
         if (matcher.find()) {
-            return matcher.group() + "-" + postfix;
+            if (postfix.length() > 1) {
+                return matcher.group() + "-" + postfix;
+            } else {
+                return matcher.group();
+            }
         } else {
             return "0.0.0.0";
         }
