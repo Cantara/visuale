@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,11 +72,15 @@ public class HealthMapper {
         if (source == null) {
             return "0.0.0.0";
         }
+        String postfix = "";
+        if (source.toLowerCase(Locale.ROOT).endsWith("-xff")) {
+            postfix = "xff";
+        }
         String IPADDRESS_PATTERN = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(source);
         if (matcher.find()) {
-            return matcher.group();
+            return matcher.group() + postfix;
         } else {
             return "0.0.0.0";
         }
