@@ -237,11 +237,6 @@ public class StatusService implements Runnable {
 
                                     }
                                     node.addHealth(health);
-                                    // Update ip on node if found in later health
-                                    if (node.getIp() == null || node.getIp().length() < 5 || node.getIp().toLowerCase().equalsIgnoreCase("10.10.10.10")) {
-                                        node.setIp(health.getIp());
-                                    }
-
                                     return true;
                                 }
                             }
