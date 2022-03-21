@@ -118,7 +118,10 @@ public class StatusResource implements Service {
                     if (hasValue(sTa)) {
                         health.setServiceTag(sTa);
                     }
-                    if (health.getIp() == null || health.getIp().length() < 5 || health.getIp().toLowerCase().equalsIgnoreCase("10.10.10.10")) {
+                    if (health.getIp() == null ||
+                            health.getIp().length() < 5 ||
+                            health.getIp().equalsIgnoreCase("10.10.10.10") ||
+                            health.getIp().equalsIgnoreCase("0.0.0.0")) {
                         health.setIp(sXff);
                     }
                     List<String> missingFields = new ArrayList<>();
