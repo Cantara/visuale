@@ -94,6 +94,14 @@ public class StatusResource implements Service {
         }
         final String sNa = serviceName;
 
+        // Attempt to capture sender IP if reported ip=10.10.10.10 or missing
+        Map<String, List<String>> headerMap = request.headers().toMap();
+        String xff = "";
+        if (headerMap.get("X-Forwarded-For") != null) {
+            xff = headerMap.get("X-Forwarded-For").get(0);
+        }
+        final String sXff = xff;
+
         request.content().as(String.class)
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
@@ -109,6 +117,9 @@ public class StatusResource implements Service {
                     }
                     if (hasValue(sTa)) {
                         health.setServiceTag(sTa);
+                    }
+                    if (health.getIp() == null || health.getIp().length() < 5 || health.getIp().toLowerCase().equalsIgnoreCase("10.10.10.10")) {
+                        health.setIp(sXff);
                     }
                     List<String> missingFields = new ArrayList<>();
                     if (!hasValue(health.getServiceName())) {
