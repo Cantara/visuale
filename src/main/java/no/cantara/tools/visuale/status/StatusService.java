@@ -233,13 +233,15 @@ public class StatusService implements Runnable {
                                     if (health != null && node != null && node.getVersion() != null && health.getVersion() != null
                                             && !node.getVersion().equalsIgnoreCase(health.getVersion())) {
                                         node.setVersion(health.getVersion());
-                                        // Update ip on node if found in later health
-                                        if (node.getIp() == null || node.getIp().length() < 5 || node.getIp().toLowerCase().equalsIgnoreCase("10.10.10.10")) {
-                                            node.setIp(health.getIp());
-                                        }
+
 
                                     }
                                     node.addHealth(health);
+                                    // Update ip on node if found in later health
+                                    if (node.getIp() == null || node.getIp().length() < 5 || node.getIp().toLowerCase().equalsIgnoreCase("10.10.10.10")) {
+                                        node.setIp(health.getIp());
+                                    }
+
                                     return true;
                                 }
                             }
@@ -247,7 +249,7 @@ public class StatusService implements Runnable {
                             // no nodes match on ip
 
                             for (Node node : nodesWithMatchingName) {
-                                if (!hasValue(node.getIp()) || node.getIp().equals("0.0.0.0")) {
+                                if (!hasValue(node.getIp()) || node.getIp().equals("0.0.0.0") || node.getIp().equals("10.10.10.10")) {
                                     // existing node has ip empty or 0.0.0.0, update ip and use node
                                     node.setIp(health.getIp());
                                     node.addHealth(health);
@@ -255,9 +257,10 @@ public class StatusService implements Runnable {
                                 }
                             }
 
-                            if (!hasValue(health.getIp()) || health.getIp().equals("0.0.0.0")) {
+                            if (!hasValue(health.getIp()) || health.getIp().equals("0.0.0.0") || health.getIp().equals("10.10.10.10")) {
                                 // incoming node has ip empty or 0.0.0.0, so use this first found node with name match
                                 for (Node node : nodesWithMatchingName) {
+                                    node.setIp(health.getIp());
                                     node.addHealth(health);
                                     return true;
                                 }
