@@ -122,7 +122,7 @@ public class StatusResource implements Service {
                             health.getIp().length() < 5 ||
                             health.getIp().equalsIgnoreCase("10.10.10.10") ||
                             health.getIp().equalsIgnoreCase("0.0.0.0")) {
-                        health.setIp(sXff + "xff");
+                        health.setIp(sXff + "-xff");
                     }
                     List<String> missingFields = new ArrayList<>();
                     if (!hasValue(health.getServiceName())) {
