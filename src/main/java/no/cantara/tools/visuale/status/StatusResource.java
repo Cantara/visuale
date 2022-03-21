@@ -183,10 +183,24 @@ public class StatusResource implements Service {
 //        String sTa = "";
 //        String sTy = "";
 
+        // Attempt to capture sender IP if reported ip=10.10.10.10 or missing
+        Map<String, List<String>> headerMap = request.headers().toMap();
+        String xff = "";
+        if (headerMap.get("X-Forwarded-For") != null) {
+            xff = headerMap.get("X-Forwarded-For").get(0);
+        }
+        final String sXff = xff;
+
         request.content().as(String.class)
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
                     if (health != null) {
+                        if (health.getIp() == null ||
+                                health.getIp().length() < 5 ||
+                                health.getIp().equalsIgnoreCase("10.10.10.10") ||
+                                health.getIp().equalsIgnoreCase("0.0.0.0")) {
+                            health.setIp(sXff + "-xff");
+                        }
                         statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
                     }
                 })
