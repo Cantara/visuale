@@ -123,6 +123,7 @@ public class StatusResource implements Service {
                             health.getIp().equalsIgnoreCase("10.10.10.10") ||
                             health.getIp().equalsIgnoreCase("0.0.0.0")) {
                         health.setIp(sXff + "-xff");
+                        health.setProbedFrom("Unknown");
                     }
                     List<String> missingFields = new ArrayList<>();
                     if (!hasValue(health.getServiceName())) {
@@ -200,6 +201,7 @@ public class StatusResource implements Service {
                                 health.getIp().equalsIgnoreCase("10.10.10.10") ||
                                 health.getIp().equalsIgnoreCase("0.0.0.0")) {
                             health.setIp(sXff + "-xff");
+                            health.setProbedFrom("Unknown");
                         }
                         statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
                     }
