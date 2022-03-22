@@ -102,6 +102,12 @@ public class StatusResource implements Service {
         }
         final String sXff = xff;
 
+        String remote_address = "";
+        if (headerMap.get("Remote Address") != null) {
+            remote_address = headerMap.get("Remote Address").get(0);
+        }
+        final String rAddr = remote_address;
+
         request.content().as(String.class)
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
@@ -122,9 +128,14 @@ public class StatusResource implements Service {
                             health.getIp().length() < 5 ||
                             health.getIp().equalsIgnoreCase("10.10.10.10") ||
                             health.getIp().equalsIgnoreCase("0.0.0.0")) {
-                        health.setIp(sXff + "-xff");
+                        if (sXff.length() > 1) {
+                            health.setIp(sXff + "-xff");
+                        } else {
+                            health.setIp(rAddr + "-remote");
+                        }
                         health.setProbedFrom("Unknown");
                     }
+
                     List<String> missingFields = new ArrayList<>();
                     if (!hasValue(health.getServiceName())) {
                         missingFields.add("service_name");
@@ -192,6 +203,13 @@ public class StatusResource implements Service {
         }
         final String sXff = xff;
 
+        String remote_address = "";
+        if (headerMap.get("Remote Address") != null) {
+            remote_address = headerMap.get("Remote Address").get(0);
+        }
+        final String rAddr = remote_address;
+
+
         request.content().as(String.class)
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
@@ -200,7 +218,11 @@ public class StatusResource implements Service {
                                 health.getIp().length() < 5 ||
                                 health.getIp().equalsIgnoreCase("10.10.10.10") ||
                                 health.getIp().equalsIgnoreCase("0.0.0.0")) {
-                            health.setIp(sXff + "-xff");
+                            if (sXff.length() > 1) {
+                                health.setIp(sXff + "-xff");
+                            } else {
+                                health.setIp(rAddr + "-remote");
+                            }
                             health.setProbedFrom("Unknown");
                         }
                         statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);

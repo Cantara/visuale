@@ -76,6 +76,9 @@ public class HealthMapper {
         if (source.toLowerCase(Locale.ROOT).endsWith("-xff")) {
             postfix = "xff";
         }
+        if (source.toLowerCase(Locale.ROOT).endsWith("-remote")) {
+            postfix = "remote";
+        }
         String IPADDRESS_PATTERN = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(source);
