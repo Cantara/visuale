@@ -230,6 +230,39 @@ public class StatusResourceIntegrationTest {
         assertTrue(services.stream().anyMatch(service -> service.getName().equals("Foo")));
     }
 
+    @Test
+    public void thatNodeChangedOfVersion() throws IOException {
+
+        StatusService statusService = main.getStatusResource().getStatusService();
+
+        statusService.queueFullEnvironment("{}", "EntraOS-DEVTEST");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+
+        String personregister1Json = readResourceAsString("versioning/status-personregister-node-1.json");
+        String personregister1UpdatedJson = readResourceAsString(
+            "versioning/status-personregister-node-1-updated.json");
+
+        Client client = ClientBuilder.newClient();
+
+        putHealth(personregister1Json, client, "/status/EntraOS-DEVTEST/EntraOS%20PersonRegister%20API/personregister-1", "EntraOS", "A2A");
+        putHealth(personregister1UpdatedJson, client, "/status/EntraOS-DEVTEST/EntraOS%20PersonRegister%20API/personregister-1", "EntraOS", "A2A");
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+        String json = getStatus(client);
+        System.out.printf("JSON AFTER: %s%n", json);
+
+        {
+            Environment environment = StatusService.mapper.readValue(json, Environment.class);
+            for (Service service : environment.getServices()) {
+                Set<String> nodeNames = new LinkedHashSet<>();
+                for (Node node : service.getNodes()) {
+                    nodeNames.add(node.getName());
+                }
+                assertEquals(1, nodeNames.size());
+                assertTrue(nodeNames.contains("personregister-1"));
+            }
+        }
+    }
+
     private void putHealth(String healthJson, Client client, String path, String serviceTag, String serviceType) {
         Response jsonObject = client
                 .target(getConnectionString(path))
