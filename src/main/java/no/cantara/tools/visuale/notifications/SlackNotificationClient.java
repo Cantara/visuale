@@ -120,6 +120,10 @@ public class SlackNotificationClient implements Runnable {
         queue(service, message, this::doNotifySlackAlarm);
     }
 
+    public void notifySlackInfo(String service, String message) {
+        queue(service, message, this::doNotifySlackInfo);
+    }
+
     public void clearSlackAlarm(String service, String message) {
         queue(service, message, this::doClearSlackAlarm);
     }
@@ -130,6 +134,29 @@ public class SlackNotificationClient implements Runnable {
 
     public void clearSlackWarning(String service, String message) {
         queue(service, message, this::doClearSlackWarning);
+    }
+
+
+    private void doNotifySlackInfo(String service, String message) {
+        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
+            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
+                    .channel(slackAlarmChannel)
+                    .text(":beer:" + environmentNameSupplier.get() + " - service:" + service + " \n       - " + message)
+                    .build();
+
+            try {
+                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
+                if (response != null && !response.isOk()) {
+                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", message, slackAlarmChannel, response);
+                } else {
+                    logger.trace("Slack Response: {}", response);
+                }
+            } catch (IOException e) {
+                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
+            } catch (SlackApiException e) {
+                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
+            }
+        }
     }
 
     private void doNotifySlackAlarm(String service, String message) {

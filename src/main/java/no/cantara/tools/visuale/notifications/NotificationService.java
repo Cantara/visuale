@@ -80,6 +80,13 @@ public class NotificationService {
         return true;
     }
 
+    public boolean sendInfo(String service, String infoMessage) {
+        String timestampText = " - Timestamp: " + Instant.now().toString();
+        infoMessage = infoMessage + timestampText;
+        notificationClient.notifySlackInfo(service, infoMessage);
+        return true;
+    }
+
     public boolean clearService(String service) {
         String timestampText = " - Timestamp: " + Instant.now().toString();
         if (alarmMap.get(service) != null) {
