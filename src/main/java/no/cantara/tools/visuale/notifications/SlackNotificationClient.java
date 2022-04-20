@@ -24,6 +24,7 @@ public class SlackNotificationClient implements Runnable {
     public static final String SLACK_ALERT_EMOJI = ":no_entry:";
     public static final String SLACK_WARNING_EMOJI = ":warning:";
     public static final String SLACK_REVIVED_EMOJI = ":green_heart:";
+    private static final boolean REPORT_INTO_TO_ALARM = false;
 
     private static final String SLACK_ALERTING_ENABLED_KEY = "slack_alerting_enabled";
     private static final String SLACK_TOKEN_KEY = "slack_token";
@@ -138,23 +139,25 @@ public class SlackNotificationClient implements Runnable {
 
 
     private void doNotifySlackInfo(String service, String message) {
-        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
-            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
-                    .channel(slackAlarmChannel)
-                    .text(":beer:" + environmentNameSupplier.get() + " - service:" + service + " \n       - " + message)
-                    .build();
+        if (REPORT_INTO_TO_ALARM) {
+            if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
+                ChatPostMessageRequest request = ChatPostMessageRequest.builder()
+                        .channel(slackAlarmChannel)
+                        .text(":beer:" + environmentNameSupplier.get() + " - service:" + service + " \n       - " + message)
+                        .build();
 
-            try {
-                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
-                if (response != null && !response.isOk()) {
-                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", message, slackAlarmChannel, response);
-                } else {
-                    logger.trace("Slack Response: {}", response);
+                try {
+                    ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
+                    if (response != null && !response.isOk()) {
+                        logger.warn("Failed to send message: {} to channel: {}. Response: {}", message, slackAlarmChannel, response);
+                    } else {
+                        logger.trace("Slack Response: {}", response);
+                    }
+                } catch (IOException e) {
+                    logger.trace("IOException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
+                } catch (SlackApiException e) {
+                    logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
                 }
-            } catch (IOException e) {
-                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
-            } catch (SlackApiException e) {
-                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
             }
         }
 
