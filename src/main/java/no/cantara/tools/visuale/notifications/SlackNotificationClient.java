@@ -157,6 +157,27 @@ public class SlackNotificationClient implements Runnable {
                 logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackAlarmChannel, e.getMessage());
             }
         }
+
+        // Also report to warning channel as this will help understanding rolling upgrades
+        if (alertingIsEnabled && !service.toLowerCase().contains("simulator")) {
+            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
+                    .channel(slackWarningChannel)
+                    .text(":beer:" + environmentNameSupplier.get() + " - service:" + service + " \n       - " + message)
+                    .build();
+
+            try {
+                ChatPostMessageResponse response = methodsClient.chatPostMessage(request);
+                if (response != null && !response.isOk()) {
+                    logger.warn("Failed to send message: {} to channel: {}. Response: {}", message, slackWarningChannel, response);
+                } else {
+                    logger.trace("Slack Response: {}", response);
+                }
+            } catch (IOException e) {
+                logger.trace("IOException when sending message: {} to channel {}. Reason: {}", message, slackWarningChannel, e.getMessage());
+            } catch (SlackApiException e) {
+                logger.trace("SlackApiException when sending message: {} to channel {}. Reason: {}", message, slackWarningChannel, e.getMessage());
+            }
+        }
     }
 
     private void doNotifySlackAlarm(String service, String message) {
