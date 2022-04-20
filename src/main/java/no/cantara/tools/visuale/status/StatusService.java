@@ -232,7 +232,7 @@ public class StatusService implements Runnable {
                                     // node matches name and ip
                                     if (health != null && node != null && node.getVersion() != null && health.getVersion() != null
                                             && !node.getVersion().equalsIgnoreCase(health.getVersion())) {
-                                        notificationService.sendAlarm(node.getName(), String.format("New release [%s] detected", health.getVersion()));
+                                        notificationService.sendInfo(node.getName(), String.format("New release [%s] detected", health.getVersion()));
                                         node.setVersion(health.getVersion());
 
 
