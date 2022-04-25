@@ -285,12 +285,19 @@ public class StatusService implements Runnable {
                     .withName(serviceName).withServiceTag(serviceTag).withServiceType(serviceType);
             Node node = new Node().withName(nodeName).withHealth(health).withIp(health.getIp()).withVersion(health.getVersion());
             service.addNode(node);
+            notifyWhenNewServiceIsFound(service);
             environmentCache.addService(service);
 
             return true;
         }
 
         return false; // no update performed
+    }
+
+    private void notifyWhenNewServiceIsFound(Service service) {
+        if(environmentCache.getServices().stream().noneMatch(s -> s.getName().equals(service.getName()))){
+            notificationService.sendInfo(service.getName(), String.format("New service [%s] detected", service.getName()));
+        }
     }
 
     /*
