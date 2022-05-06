@@ -5,7 +5,7 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>12.11.1</version>
+    <version>12.11.2-SNAPSHOT</version>
 
     <repositories>
         <!-- Needed for parent    -->
@@ -25,7 +25,7 @@
         <developerConnection>scm:git:ssh://git@github.com/cantara/visuale.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/visuale.git</connection>
         <url>https://github.com/cantara/visuale</url>
-        <tag>v12.11.1</tag>
+        <tag>v10.34.39</tag>
     </scm>
     <developers>
         <developer>
