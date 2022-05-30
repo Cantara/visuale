@@ -84,6 +84,7 @@ public class NotificationService {
         String timestampText = " - Timestamp: " + Instant.now().toString();
         infoMessage = infoMessage + timestampText;
         notificationClient.notifySlackInfo(service, infoMessage);
+        clearService(service);
         return true;
     }
 
