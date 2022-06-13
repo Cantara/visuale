@@ -234,8 +234,8 @@ public class StatusService implements Runnable {
                                             && !node.getVersion().equalsIgnoreCase(health.getVersion())) {
                                         notificationService.sendInfo(service.getName() + " - " + node.getName(), String.format("New release [%s] detected", health.getVersion()));
                                         node.setVersion(health.getVersion());
+                                        notificationService.clearService(service.getName());
                                     }
-                                    notificationService.clearService(service.getName());
                                     node.addHealth(health);
                                     return true;
                                 }
@@ -286,7 +286,6 @@ public class StatusService implements Runnable {
             service.addNode(node);
             notifyWhenNewServiceIsFound(service);
             environmentCache.addService(service);
-            notificationService.clearService(service.getName());
 
             return true;
         }
