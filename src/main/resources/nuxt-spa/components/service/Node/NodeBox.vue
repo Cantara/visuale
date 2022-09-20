@@ -8,8 +8,12 @@
         <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/><NodeGoodCitizen :health="node.health"></NodeGoodCitizen></li>
         <li><span class="description">Ver: </span><NodeVersion v-bind:text-length="13" :health="node.health[0]"/></li>
         <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
+        <li>Probed From: <NodeProbedFrom v-bind:origin="node.health[0]" /></li>
       </ul>
     </template>
+<!--    <template v-slot:origin>-->
+<!--      <NodeOrigin v-bind:origin="node.probed_from"/>-->
+<!--    </template>-->
     <template v-slot:modal>
       <Modal  v-if="showModal" :title="node.ip" @close="showModal = false">
         <NodeDetailedInfo :text="node"></NodeDetailedInfo>
@@ -27,9 +31,11 @@
   import NodeHealthStatus from "./NodeHealthStatus";
   import NodeVersion from "./NodeVersion";
   import NodeGoodCitizen from "~/components/service/Node/NodeGoodCitizen";
+  import NodeProbedFrom from "@/components/service/Node/NodeProbedFrom";
   export default {
     name: "Node",
     components:{
+      NodeOrigin,
       NodeTrafficLight,
       NodeUptime,
       Modal,
