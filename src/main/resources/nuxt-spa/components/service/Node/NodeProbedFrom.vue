@@ -13,9 +13,9 @@ import {
   faGlobeAmericas, faNetworkWired, faServer, faTowerBroadcast
 } from '@fortawesome/free-solid-svg-icons'
 export default {
-  name: "NodeOrigin",
+  name: "NodeProbedFrom",
   props: {
-    origin:{
+    health:{
       required:false,
       type: Object | undefined
     }
@@ -34,6 +34,7 @@ export default {
       return faTowerBroadcast;
     },
     getProbedFrom(){
+      console.log("health: " + this.health);
       if(isNullOrUndefined(this.health))
         return 'Agent';
       return this.health.hasOwnProperty('probed_from') ? this.health.probed_from : 'Agent';
