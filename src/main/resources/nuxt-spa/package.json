@@ -24,7 +24,7 @@
     "lodash": "4.17.21",
     "nuxt": "2.15.8",
     "postcss-hexrgba": "2.1.0",
-    "postcss-nested": "4.2.3",
+    "postcss-nested": "6.0.0",
     "postcss-responsive-type": "1.0.0",
     "v-click-outside": "3.2.0",
     "vue-frag": "1.4.1"
