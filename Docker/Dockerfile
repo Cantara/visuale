@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:11.0.16-jre-slim
 MAINTAINER Totto - <totto@totto.org>
 
 RUN apt-get update && apt-get -y install cron curl wget logrotate
