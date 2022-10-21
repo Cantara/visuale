@@ -10,6 +10,9 @@
         <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
       </ul>
     </template>
+    <template v-slot:origin>
+      <NodeProbedFrom :health="node.health[0]" />
+    </template>
     <template v-slot:modal>
       <Modal  v-if="showModal" :title="node.ip" @close="showModal = false">
         <NodeDetailedInfo :text="node"></NodeDetailedInfo>
@@ -27,9 +30,11 @@
   import NodeHealthStatus from "./NodeHealthStatus";
   import NodeVersion from "./NodeVersion";
   import NodeGoodCitizen from "~/components/service/Node/NodeGoodCitizen";
+  import NodeProbedFrom from "@/components/service/Node/NodeProbedFrom";
   export default {
     name: "Node",
     components:{
+      NodeProbedFrom,
       NodeTrafficLight,
       NodeUptime,
       Modal,

@@ -13,6 +13,11 @@
 
         </slot>
       </div>
+      <div class="origin">
+        <slot name="origin">
+
+        </slot>
+      </div>
     </div>
     <slot name="modal">
 
