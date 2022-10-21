@@ -15,6 +15,7 @@ public class MockEnvironment {
             "              {\n" +
             "                \"Status\": \"true\",\n" +
             "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"probed_from\": \"Public\",\n" +
             "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
             "                \"version\": \"0.61.34\"\n" +
             "              }\n" +
@@ -26,6 +27,7 @@ public class MockEnvironment {
             "              {\n" +
             "                \"Status\": \"true\",\n" +
             "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"probed_from\": \"Intranet\",\n" +
             "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
             "                \"version\": \"0.61.34\"\n" +
             "              }\n" +
@@ -37,6 +39,7 @@ public class MockEnvironment {
             "              {\n" +
             "                \"Status\": \"true\",\n" +
             "                \"now\": \"2020-03-24T18:34:35.987Z\",\n" +
+            "                \"probed_from\": \"DMZ\",\n" +
             "                \"running since\": \"2020-03-23T09:11:49.070Z\",\n" +
             "                \"version\": \"0.61.34\"\n" +
             "              }\n" +
@@ -56,7 +59,7 @@ public class MockEnvironment {
             "        ]\n" +
             "      },\n" +
             "      {\n" +
-            "        \"name\": \"Quadim Overlord Profil Service\",\n" +
+            "        \"name\": \"Quadim Overlord Profile Service\",\n" +
             "        \"service_type\": \"A2A\",\n" +
             "        \"nodes\": [\n" +
             "          {\n" +
