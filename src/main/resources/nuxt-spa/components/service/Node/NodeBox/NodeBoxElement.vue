@@ -1,6 +1,6 @@
 <template>
 
-  <div @click="$emit('click')" class="node-block" :class="borderStatus" style="position: relative;">
+  <div @click="$emit('click')" class="node-block" :class="borderStatus">
     <div class="marker">
       <div>
         <div class="title">
@@ -13,7 +13,7 @@
 
         </slot>
       </div>
-      <div class="origin" style="position: absolute; right: 15px; top: 50%; margin-top: -15px;">
+      <div class="origin" style="position: absolute;margin-left: 115px;margin-top: 30px;">
         <slot name="origin">
 
         </slot>
