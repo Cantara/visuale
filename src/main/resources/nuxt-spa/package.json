@@ -19,6 +19,7 @@
     "@nuxtjs/dotenv": "1.4.1",
     "@nuxtjs/proxy": "2.1.0",
     "benchmark": "2.1.4",
+    "floating-vue": "^1.0.0-beta.18",
     "install-changed": "1.1.0",
     "isotope-layout": "3.0.6",
     "lodash": "4.17.21",
