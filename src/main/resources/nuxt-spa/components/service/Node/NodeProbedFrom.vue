@@ -1,9 +1,35 @@
 <template>
-  <span>
-    <font-awesome-icon v-if="getProbedFrom==='Public'" :icon="faPublic" class="normal"/>
-    <font-awesome-icon v-else-if="getProbedFrom==='Intranet'" :icon="faIntranet" class="normal"/>
-    <font-awesome-icon v-else-if="getProbedFrom==='DMZ'" :icon="faDMZ" class="normal"/>
-    <font-awesome-icon v-else-if="getProbedFrom==='Agent'" :icon="faAgent" class="normal"/>
+  <span v-if="getProbedFrom==='Public'">
+    <VTooltip>
+      <font-awesome-icon  :icon="faPublic" class="normal"/>
+      <template #popper>
+        Probed from Public
+      </template>
+    </VTooltip>
+  </span>
+  <span v-else-if="getProbedFrom==='Intranet'">
+    <VTooltip>
+      <font-awesome-icon  :icon="faIntranet" class="normal"/>
+      <template #popper>
+        Probed from Intranet
+      </template>
+    </VTooltip>
+  </span>
+  <span v-else-if="getProbedFrom==='DMZ'">
+    <VTooltip>
+      <font-awesome-icon  :icon="faDMZ" class="normal"/>
+      <template #popper>
+        Probed from DMZ
+      </template>
+    </VTooltip>
+  </span>
+  <span v-else-if="getProbedFrom==='Agent'">
+    <VTooltip>
+      <font-awesome-icon  :icon="faAgent" class="normal"/>
+      <template #popper>
+        Probed from Agent
+      </template>
+    </VTooltip>
   </span>
 </template>
 
@@ -35,7 +61,6 @@ export default {
       return faTowerBroadcast;
     },
     getProbedFrom() {
-      console.log("health: " + this.health);
       if (isNullOrUndefined(this.health)) {
         return 'Agent';
       }
