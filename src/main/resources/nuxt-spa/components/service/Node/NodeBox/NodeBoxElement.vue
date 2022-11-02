@@ -159,7 +159,7 @@ export default {
 .node-block {
   border: 1px solid $color--nested-sub-border;
   border-radius: 10px;
-  height: 55px;
+  height: 60px;;
 }
 
 
