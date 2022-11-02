@@ -19,6 +19,7 @@
   import ServerExceptionHandling from "../components/serverExceptionHandling/ServerExceptionHandling";
   import StoreMediator from "../components/StoreMediator";
   export default {
+
     errorCaptured(error, vm, info) {
       console.log(error, vm, info);
       return false;

@@ -18,6 +18,22 @@ import GroupTagOverService from "../components/groupTagOverService";
 
 export default {
   name: "main",
+  head() {
+    return {
+      title:  this.services.name,
+      head() {
+        return {
+          title:  this.services.name,
+          meta: [
+            {hid: 'description', name: 'description'}
+          ]
+        }
+      },
+      meta: [
+        {hid: 'description', name: 'description'}
+      ]
+    }
+  },
   components: {
     GroupTagOverService,
     Service,

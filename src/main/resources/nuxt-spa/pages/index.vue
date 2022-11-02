@@ -7,6 +7,7 @@
   import Main from "~/components/Main";
   export default {
     name: "index",
+
     components:{
       Main
     }
