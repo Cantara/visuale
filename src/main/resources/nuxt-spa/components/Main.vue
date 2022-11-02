@@ -21,16 +21,11 @@ export default {
   head() {
     return {
       title:  this.services.name,
-      head() {
-        return {
-          title:  this.services.name,
-          meta: [
-            {hid: 'description', name: 'description'}
-          ]
-        }
-      },
       meta: [
-        {hid: 'description', name: 'description'}
+        {
+          hid: 'description',
+          name: 'description',
+        }
       ]
     }
   },
