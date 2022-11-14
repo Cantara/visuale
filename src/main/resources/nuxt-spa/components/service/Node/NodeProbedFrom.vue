@@ -31,6 +31,14 @@
       </template>
     </VTooltip>
   </span>
+  <span v-else>
+    <VTooltip>
+      <font-awesome-icon  :icon="faPublic" class="normal"/>
+      <template #popper>
+        Probed from not-set
+      </template>
+    </VTooltip>
+  </span>
 </template>
 
 <script>
