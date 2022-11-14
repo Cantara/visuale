@@ -1,7 +1,7 @@
 <template>
   <span v-if="getProbedFrom==='Public'">
     <VTooltip>
-      <font-awesome-icon  :icon="faPublic" class="normal" style="color:#abdbe3"/>
+      <font-awesome-icon  :icon="faPublic" class="normal" style="color:#eeeee4"/>
       <template #popper>
         Probed from Public
       </template>
@@ -9,7 +9,7 @@
   </span>
   <span v-else-if="getProbedFrom==='Intranet'">
     <VTooltip>
-      <font-awesome-icon  :icon="faIntranet" class="normal" style="color:#abdbe3"/>
+      <font-awesome-icon  :icon="faIntranet" class="normal" style="color:#eeeee4"/>
       <template #popper>
         Probed from Intranet
       </template>
@@ -17,7 +17,7 @@
   </span>
   <span v-else-if="getProbedFrom==='DMZ'">
     <VTooltip>
-      <font-awesome-icon  :icon="faDMZ" class="normal" style="color:#abdbe3"/>
+      <font-awesome-icon  :icon="faDMZ" class="normal" style="color:#eeeee4"/>
       <template #popper>
         Probed from DMZ
       </template>
@@ -25,7 +25,7 @@
   </span>
   <span v-else-if="getProbedFrom==='Agent'">
     <VTooltip>
-      <font-awesome-icon  :icon="faAgent" class="normal" style="color:#abdbe3"/>
+      <font-awesome-icon  :icon="faAgent" class="normal" style="color:#eeeee4"/>
       <template #popper>
         Probed from Agent
       </template>
@@ -33,7 +33,7 @@
   </span>
   <span v-else>
     <VTooltip>
-      <font-awesome-icon  :icon="faPublic" class="normal" style="color:#abdbe3"/>
+      <font-awesome-icon  :icon="faPublic" class="normal" style="color:#eeeee4"/>
       <template #popper>
         Probed from not-set
       </template>
