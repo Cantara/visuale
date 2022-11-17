@@ -28,7 +28,7 @@
     "postcss-nested": "4.2.3",
     "postcss-responsive-type": "1.0.0",
     "v-click-outside": "3.2.0",
-    "vue-frag": "1.4.1"
+    "vue-frag": "1.4.2"
   },
   "devDependencies": {
     "@babel/preset-env": "7.20.2",
