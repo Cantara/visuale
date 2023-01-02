@@ -54,7 +54,7 @@ pre{
 
   text-align: left;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-wrap: break-word;
   max-height: 70vh;
   padding: 10px;
