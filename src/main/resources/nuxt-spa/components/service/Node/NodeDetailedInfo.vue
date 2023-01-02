@@ -18,13 +18,20 @@
             json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
             return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)|(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/g, function (match) {
               let cls = 'number';
-              if (/^"/.test(match)) {
-                if (/^"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/.test(match)) {
-                  match = match.slice(1, -1);
-                  let date = new Date(Date.parse(match));
-                  match = date.toLocaleDateString() + " " + date.toLocaleTimeString();
-                  cls = 'date';
-                } else if (/:$/.test(match)) {
+              if (/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/.test(match)) {
+                let idx = 0;
+                while (idx !== -1) {
+                  idx = match.search(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/);
+                  if (idx === -1)
+                    break;
+
+                  let date = match.substring(idx, idx+19);
+                  date = date.replace("T", " ");
+                  match = match.substring(0, idx) + date + match.substring(idx + 27, match.length);
+                }
+                cls = 'date';
+              } else if (/^"/.test(match)) {
+                 if (/:$/.test(match)) {
                   cls = 'key';
                 } else {
                   cls = 'string';
@@ -47,7 +54,7 @@ pre{
 
   text-align: left;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-wrap: break-word;
   max-height: 70vh;
   padding: 10px;
