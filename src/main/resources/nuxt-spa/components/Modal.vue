@@ -6,7 +6,7 @@
           <h2>{{ title }}</h2>
         </div>
         <div class="body">
-          <slot></slot>
+          <slot ref="el"></slot>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <div class="copy" v-if="!this.copyEnabled" @click="copyToClipboard">
         <font-awesome-icon :icon="faCopy"/>
       </div>
-      <div class="close" v-if="!this.closeDisabled" @click="$emit('close')">
+      <div class="close" v-if="!this.closeDisabled" @click="close">
         <font-awesome-icon :icon="faTimes"/>
       </div>
     </div>
@@ -41,13 +41,15 @@ export default {
   },
   methods: {
     close() {
-      console.log("close called")
+      console.log("close called");
       //if (!this.closeDisabled)
+      console.log(this);
         this.$emit('close');
     },
     copyToClipboard() {
       console.log("copyToClipboard called");
-      document.execCommand('copy');
+      let text = this?.$slots?.default[0]?.elm?.outerText;
+      navigator.clipboard.writeText(text);
     },
     handleEscape(event) {
       if (event.key === 'Escape' || event.keyCode === 27) {
