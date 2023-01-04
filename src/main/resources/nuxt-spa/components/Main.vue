@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard">
-    <h1 v-if="mobile" id="heading">{{ services.name }}</h1>
-    <pre v-else-if="services.name !== undefined" id="heading">{{ verticalText }}</pre>
+    <h1 v-if="mobile" id="heading">{{ getServicesName }}</h1>
+    <pre v-else id="heading">{{ verticalText }}</pre>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
@@ -40,7 +40,7 @@ export default {
     ...mapState(['serviceType']),
     ...mapGetters({
       dashboardContainerHeight: 'layout/dashboardContainerHeight',
-      services: 'getServices'
+      services: 'getServices',
     }),
     dashboardHeight() {
       if (!this.mobile)
@@ -48,14 +48,16 @@ export default {
           'height': this.dashboardContainerHeight + 'px',
         };
     },
-    verticalText: function() {
-      if (!this.mobile && this.services.name !== undefined) {
-        let verticalText = "";
-        for (let char of this.services.name.split('')) {
-          verticalText += char + '\n';
-        }
-        return verticalText;
+    verticalText() {
+      let text = "";
+      for (let char of this.getServicesName.split('')) {
+        text += char + '\n';
       }
+      return text;
+    },
+    getServicesName()  {
+      if (this.services === undefined || this.services.name === undefined )
+        return "SERVICE UNDEFINED";
       return this.services.name;
     }
   },
