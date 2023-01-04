@@ -1,6 +1,7 @@
 <template>
   <div id="dashboard">
-    <h1 id="heading">{{ services.name }}</h1>
+    <h1 v-if="mobile" id="heading">{{ services.name }}</h1>
+    <pre v-else id="heading">{{ verticalText }}</pre>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
@@ -39,13 +40,23 @@ export default {
     ...mapState(['serviceType']),
     ...mapGetters({
       dashboardContainerHeight: 'layout/dashboardContainerHeight',
-      services: 'getServices',
+      services: 'getServices'
     }),
     dashboardHeight() {
       if (!this.mobile)
         return {
           'height': this.dashboardContainerHeight + 'px',
         };
+    },
+    verticalText: function() {
+      if (!this.mobile) {
+        let verticalText = "";
+        for (let char of this.services.name.split('')) {
+          verticalText += char + '\n';
+        }
+        return verticalText;
+      }
+      return this.services.name;
     }
   },
   methods: {
@@ -53,7 +64,7 @@ export default {
       setToken: 'auth/setToken',
       setStrategy: 'setStrategy',
       setServiceType: 'setServiceType'
-    })
+    }),
   },
 
 }
@@ -85,10 +96,24 @@ export default {
   padding: 0 0.7em 0.7em;
 }
 
-h1 {
-  padding: 0.35em 0.7em;
-  height: 2em;
-  color: $color--description;
-  display: block;
+
+@media only screen and (min-width: 991px) {
+  pre {
+    display: inline-flex;
+    max-width: 3vw;
+    color: white;
+    font-size: 24px;
+    background-color: darken(teal, 5%);
+  }
 }
+
+@media only screen and (max-width: 990px) {
+  h1 {
+    padding: 0.35em 0.7em;
+    height: 2em;
+    color: $color--description;
+    display: block;
+  }
+}
+
 </style>
