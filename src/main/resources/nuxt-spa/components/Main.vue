@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard">
     <h1 v-if="mobile" id="heading">{{ services.name }}</h1>
-    <pre v-else id="heading">{{ verticalText }}</pre>
+    <pre v-else-if="services.name !== undefined" id="heading">{{ verticalText }}</pre>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
@@ -49,7 +49,7 @@ export default {
         };
     },
     verticalText: function() {
-      if (!this.mobile) {
+      if (!this.mobile && this.services.name !== undefined) {
         let verticalText = "";
         for (let char of this.services.name.split('')) {
           verticalText += char + '\n';
