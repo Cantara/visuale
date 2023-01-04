@@ -5,7 +5,7 @@
   "author": "Marius Årnes",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev && nuxt",
+    "dev": "cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3000 nuxt",
     "build": "nuxt build",
     "pre-run": "install-changed",
     "start": "cross-env NODE_ENV=dev && nuxt start",

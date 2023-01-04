@@ -50,17 +50,18 @@ export default {
     verticalText() {
       if (this.mobile)
       {
-        return this.getServicesName
+        return this.getServicesName.toUpperCase()
       }
       else {
         let text = "";
-        for (let char of this.getServicesName.split('')) {
+        for (let char of this.getServicesName.toUpperCase().split('')) {
           text += char + '\n';
         }
         return text;
       }
     },
     getServicesName()  {
+      this.services.name = "HALLO CHERYL! ICH LIEBE DICH UNENDLICH!"
       if (this.services === undefined || this.services.name === undefined )
         return "SERVICE UNDEFINED";
       return this.services.name;
@@ -111,6 +112,7 @@ export default {
     color: $color--description;
     font-size: 24px;
     background-color: darken(teal, 5%);
+    overflow: hidden;
   }
 }
 
