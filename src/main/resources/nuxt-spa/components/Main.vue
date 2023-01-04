@@ -1,7 +1,6 @@
 <template>
   <div id="dashboard">
-    <h1 v-if="mobile" id="heading">{{ getServicesName }}</h1>
-    <pre v-else id="heading">{{ verticalText }}</pre>
+    <pre id="heading">{{ verticalText }}</pre>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
@@ -49,11 +48,17 @@ export default {
         };
     },
     verticalText() {
-      let text = "";
-      for (let char of this.getServicesName.split('')) {
-        text += char + '\n';
+      if (this.mobile)
+      {
+        return this.getServicesName
       }
-      return text;
+      else {
+        let text = "";
+        for (let char of this.getServicesName.split('')) {
+          text += char + '\n';
+        }
+        return text;
+      }
     },
     getServicesName()  {
       if (this.services === undefined || this.services.name === undefined )
@@ -103,18 +108,21 @@ export default {
   pre {
     display: inline-flex;
     max-width: 3vw;
-    color: white;
+    color: $color--description;
     font-size: 24px;
     background-color: darken(teal, 5%);
   }
 }
 
 @media only screen and (max-width: 990px) {
-  h1 {
+  pre {
     padding: 0.35em 0.7em;
     height: 2em;
     color: $color--description;
     display: block;
+    font-size: 24px;
+    text-align: center;
+    background-color: darken(teal, 5%);
   }
 }
 
