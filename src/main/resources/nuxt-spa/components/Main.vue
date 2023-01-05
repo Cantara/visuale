@@ -1,7 +1,6 @@
 <template>
   <div id="dashboard">
-    <h1 v-if="mobile" id="heading">{{ services.name }}</h1>
-    <pre v-else-if="services.name !== undefined" id="heading">{{ verticalText }}</pre>
+    <pre id="heading">{{ verticalText }}</pre>
     <div class="container" :style="dashboardHeight">
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
@@ -40,7 +39,7 @@ export default {
     ...mapState(['serviceType']),
     ...mapGetters({
       dashboardContainerHeight: 'layout/dashboardContainerHeight',
-      services: 'getServices'
+      services: 'getServices',
     }),
     dashboardHeight() {
       if (!this.mobile)
@@ -48,14 +47,22 @@ export default {
           'height': this.dashboardContainerHeight + 'px',
         };
     },
-    verticalText: function() {
-      if (!this.mobile && this.services.name !== undefined) {
-        let verticalText = "";
-        for (let char of this.services.name.split('')) {
-          verticalText += char + '\n';
-        }
-        return verticalText;
+    verticalText() {
+      if (this.mobile)
+      {
+        return this.getServicesName.toUpperCase()
       }
+      else {
+        let text = "";
+        for (let char of this.getServicesName.toUpperCase().split('')) {
+          text += char + '\n';
+        }
+        return text;
+      }
+    },
+    getServicesName()  {
+      if (this.services === undefined || this.services.name === undefined )
+        return "SERVICE UNDEFINED";
       return this.services.name;
     }
   },
@@ -78,6 +85,15 @@ export default {
     min-height: 100vh;
     overflow-x: auto;
   }
+
+  #heading {
+    display: inline-flex;
+    max-width: 3vw;
+    color: $color--description;
+    font-size: 24px;
+    background-color: darken(teal, 5%);
+    overflow: hidden;
+  }
 }
 
 @media only screen and (max-width: 990px) {
@@ -85,6 +101,16 @@ export default {
     text-align: center;
     overflow-y: auto;
     height: 100vh;
+  }
+
+  #heading {
+    padding: 0.35em 0.7em;
+    height: 2em;
+    color: $color--description;
+    display: block;
+    font-size: 24px;
+    text-align: center;
+    background-color: darken(teal, 5%);
   }
 }
 
@@ -94,26 +120,6 @@ export default {
   max-width: 100vw;
   flex-flow: column wrap;
   padding: 0 0.7em 0.7em;
-}
-
-
-@media only screen and (min-width: 991px) {
-  pre {
-    display: inline-flex;
-    max-width: 3vw;
-    color: white;
-    font-size: 24px;
-    background-color: darken(teal, 5%);
-  }
-}
-
-@media only screen and (max-width: 990px) {
-  h1 {
-    padding: 0.35em 0.7em;
-    height: 2em;
-    color: $color--description;
-    display: block;
-  }
 }
 
 </style>
