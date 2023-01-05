@@ -61,7 +61,6 @@ export default {
       }
     },
     getServicesName()  {
-      this.services.name = "HALLO CHERYL! ICH LIEBE DICH UNENDLICH!"
       if (this.services === undefined || this.services.name === undefined )
         return "SERVICE UNDEFINED";
       return this.services.name;

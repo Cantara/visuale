@@ -11,14 +11,16 @@
         ...mapMutations({
           setWindowHeight: 'layout/setWindowHeight',
           setHeadingHeight: 'layout/setHeadingHeight',
-          setheadingPaddingBottom: 'layout/setHeadingPaddingBottom',
+          setHeadingPaddingBottom: 'layout/setHeadingPaddingBottom',
           changeMobileState:'layout/changeMobileState',
         }),
         handleResize() {
           const heading = document.getElementById('heading');
-          this.setheadingPaddingBottom(parseInt(window.getComputedStyle(heading).paddingBottom));
+          if (heading) {
+            this.setHeadingHeight(heading.offsetHeight);
+            this.setHeadingPaddingBottom(parseInt(window.getComputedStyle(heading).paddingBottom));
+          }
           this.setWindowHeight(window.innerHeight);
-          this.setHeadingHeight(heading.offsetHeight);
           this.changeMobileState(window.innerWidth < 990);
         },
 
