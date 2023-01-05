@@ -85,27 +85,8 @@ export default {
     min-height: 100vh;
     overflow-x: auto;
   }
-}
 
-@media only screen and (max-width: 990px) {
-  #dashboard {
-    text-align: center;
-    overflow-y: auto;
-    height: 100vh;
-  }
-}
-
-.container {
-  margin: 0 auto;
-  display: inline-flex;
-  max-width: 100vw;
-  flex-flow: column wrap;
-  padding: 0 0.7em 0.7em;
-}
-
-
-@media only screen and (min-width: 991px) {
-  pre {
+  #heading {
     display: inline-flex;
     max-width: 3vw;
     color: $color--description;
@@ -116,7 +97,13 @@ export default {
 }
 
 @media only screen and (max-width: 990px) {
-  pre {
+  #dashboard {
+    text-align: center;
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  #heading {
     padding: 0.35em 0.7em;
     height: 2em;
     color: $color--description;
@@ -125,6 +112,14 @@ export default {
     text-align: center;
     background-color: darken(teal, 5%);
   }
+}
+
+.container {
+  margin: 0 auto;
+  display: inline-flex;
+  max-width: 100vw;
+  flex-flow: column wrap;
+  padding: 0 0.7em 0.7em;
 }
 
 </style>
