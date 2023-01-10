@@ -62,7 +62,7 @@ export default {
     },
     getServicesName()  {
       if (this.services === undefined || this.services.name === undefined )
-        return "SERVICE UNDEFINED";
+        return "THIS SERVICE DASHBOARD NAME IS UNDEFINED";
       return this.services.name;
     }
   },
