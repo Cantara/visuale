@@ -100,6 +100,7 @@ export default {
   #dashboard {
     text-align: center;
     overflow-y: auto;
+    min-height: 100vh;
     height: 100vh;
   }
 
@@ -118,6 +119,7 @@ export default {
   margin: 0 auto;
   display: inline-flex;
   max-width: 100vw;
+  min-height: 100vh;
   flex-flow: column wrap;
   padding: 0 0.7em 0.7em;
 }
