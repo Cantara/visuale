@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard">
     <div class="container" :style="dashboardHeight">
-      <pre id="heading">{{ verticalText }}</pre>
+      <pre id="heading">&nbsp;&nbsp;{{ verticalText }}&nbsp;&nbsp;&nbsp;&nbsp;</pre>
       <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
       <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
       <Service :service-type-status="serviceType" :title="service.name" v-for="(service,index) in services.services"
