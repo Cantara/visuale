@@ -1,5 +1,3 @@
-import webpack from 'webpack'
-
 export default {
   ssr:false,
   target:'static',
