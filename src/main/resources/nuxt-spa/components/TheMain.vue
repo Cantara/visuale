@@ -1,23 +1,25 @@
 <template>
   <div id="dashboard">
-    <div class="container" :style="dashboardHeight">
-      <pre id="heading">{{ verticalText }}</pre>
-      <groupedServicesOverTag
-        :grouped-services-over-tag="services.groupedServicesOverTag"
-      >
-      </groupedServicesOverTag>
-      <groupTagOverService
-        :grouped-tag-over-service="services.groupedTagOverService"
-      >
-      </groupTagOverService>
-      <Service
-        v-for="(service,index) in services.services"
-        :key="index"
-        :service-type-status="serviceType"
-        :title="service.name"
-        :service="service"
-      >
-      </Service>
+    <div class="container">
+      <div>
+        <div id="heading">{{ verticalText }}</div>
+      </div>
+      <!-- <groupedServicesOverTag -->
+      <!--   :grouped-services-over-tag="services.groupedServicesOverTag" -->
+      <!-- > -->
+      <!-- </groupedServicesOverTag> -->
+      <!-- <groupTagOverService -->
+      <!--   :grouped-tag-over-service="services.groupedTagOverService" -->
+      <!-- > -->
+      <!-- </groupTagOverService> -->
+      <!-- <Service -->
+      <!--   v-for="(service,index) in services.services" -->
+      <!--   :key="index" -->
+      <!--   :service-type-status="serviceType" -->
+      <!--   :title="service.name" -->
+      <!--   :service="service" -->
+      <!-- > -->
+      <!-- </Service> -->
     </div>
   </div>
 </template>
@@ -63,15 +65,7 @@ export default {
       }
     },
     verticalText() {
-      if (this.mobile) {
-        return this.getServicesName.toUpperCase()
-      } else {
-        let text = "";
-        for (const ch of this.getServicesName.toUpperCase().split('')) {
-          text += ch + '\n';
-        }
-        return text;
-      }
+      return this.getServicesName.toUpperCase();
     },
     getServicesName()  {
       if (this.services === undefined || this.services.name === undefined)
@@ -96,11 +90,15 @@ export default {
 @media only screen and (min-width: 991px) {
   #dashboard {
     overflow-x: auto;
+    min-height: 100vh;
   }
 
   #heading {
-    display: inline-flex;
-    max-width: 3vw;
+    display: flex;
+
+    padding: 0.5rem;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
     color: $color--description;
     font-size: 24px;
     background-color: darken(teal, 5%);
@@ -112,14 +110,13 @@ export default {
   #dashboard {
     text-align: center;
     overflow-y: auto;
-    height: 100vh;
   }
 
   #heading {
-    padding: 0.35em 0.7em;
+    /* padding: 0.35em 0.7em; */
     height: 2em;
     color: $color--description;
-    display: block;
+    display: flex;
     font-size: 24px;
     text-align: center;
     background-color: darken(teal, 5%);
@@ -128,11 +125,13 @@ export default {
 
 .container {
   margin: 0 auto;
-  display: inline-flex;
-  max-width: 100vw;
-  min-height: 100vh;
-  flex-flow: column wrap;
-  padding: 0 0.7em 0.7em;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  /* max-width: 100vw; */
+  /* min-height: 100vh; */
+  /* flex-flow: column wrap; */
+  /* padding: 0 0.7em 0.7em; */
 }
 
 </style>
