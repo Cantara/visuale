@@ -1,14 +1,15 @@
 <template>
   <div id="dashboard">
-    <div class="container">
+    <div class="my-container">
       <div class="heading-container">
         <div id="heading">
           {{ verticalText }}
           </div>
-
-          <GroupedServicesOverTag
-            :grouped-services-over-tag="services.groupedServicesOverTag"
-          />
+          <div>
+            <GroupedServicesOverTag
+              :grouped-services-over-tag="services.groupedServicesOverTag"
+            />
+          </div>
       </div>
       <!-- </groupedServicesOverTag> -->
       <!-- <groupTagOverService -->
@@ -114,7 +115,7 @@ export default {
     background-color: darken(teal, 5%);
     overflow: hidden;
   }
-  .container {
+  .my-container {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
@@ -127,7 +128,7 @@ export default {
     flex-direction: column;
   }
 
-  .container {
+  .my-container {
     display: flex;
     flex-grow: 1;
     flex-direction: row;

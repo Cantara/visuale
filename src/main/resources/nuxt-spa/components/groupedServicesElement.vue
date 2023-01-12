@@ -3,27 +3,24 @@
     <div class="service-tag-block">
       <div class="marker">
         <div>
-          <TitleElement :isGrouped="true">
-            <slot name="title">
-            </slot>
+          <TitleElement :is-grouped="true">
+            <slot name="title" />
           </TitleElement>
         </div>
-        <slot name="content">
-
-        </slot>
+        <slot name="content" />
       </div>
     </div>
   </fragment>
 </template>
 
 <script>
-  import TitleElement from "./TitleElement";
-    export default {
-        name: "groupedServicesElement",
-      components: {
-        TitleElement
-      }
-    }
+import TitleElement from "./TitleElement";
+export default {
+  name: "groupedServicesElement",
+  components: {
+    TitleElement
+  }
+}
 </script>
 
 <style lang="scss" scoped>

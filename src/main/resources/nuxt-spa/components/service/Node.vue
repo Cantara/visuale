@@ -1,13 +1,20 @@
 <template>
   <fragment>
-  <NodeTable v-if="isNodeTableConditionMet" :service="service"></NodeTable>
-  <NodeBox v-else v-for="(node,index) in service.nodes" :key="index" :node="node" :healthy_nodes="service.healthy_nodes"></NodeBox>
+    <NodeTable v-if="isNodeTableConditionMet" :service="service"></NodeTable>
+    <NodeBox
+      v-else
+      v-for="(node,index) in service.nodes"
+      :key="index"
+      :node="node"
+      :healthy_nodes="service.healthy_nodes"
+    >
+    </NodeBox>
   </fragment>
 </template>
 <script>
   import NodeTable from "./Node/NodeTable";
   import NodeBox from "./Node/NodeBox";
-  import {displayNodeTableCondition} from "../../preferences";
+  import { displayNodeTableCondition } from "../../preferences";
     export default {
         name: "Node",
       components:{

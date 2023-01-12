@@ -4,7 +4,7 @@
       <NodeTrafficLight :node="node"/> <span>{{title | truncateText(15)}}</span>
     </template>
     <template v-slot:content>
-      <ul>
+      <ul class="my-list">
         <li><span class="description">Health: </span><NodeHealthStatus v-bind:healthy="node.is_healthy"/><NodeGoodCitizen :health="node.health"></NodeGoodCitizen></li>
         <li><span class="description">Ver: </span><NodeVersion v-bind:text-length="13" :health="node.health[0]"/></li>
         <li><span class="description">Uptime: </span><NodeUptime :health="node.health[0]" /></li>
@@ -70,3 +70,9 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+.my-list {
+  margin: 0;
+}
+</style>

@@ -2,13 +2,13 @@
   <fragment>
   <grouped-services-element v-for="(value, key) in groupedServicesOverTag" :key="key">
     <template #title>
-      <span class="tag-title">
+      <span class="">
         TAG: {{ key | truncateText(34) }}
         </span>
     </template>
     <template #content>
     <div class="align-left">
-      <div id="grid" class="content" :style="dashboardHeight(value)">
+      <div id="" class="my-content">
         <Service
           v-for="(service,index) in value"
           :key="index"
@@ -68,10 +68,10 @@ export default {
     border: 1px solid $color--border;
   }
 
-.content{
-  padding: 0.5rem 0.35rem;
-  max-width: 100vw;
-}
+  .my-content{
+    padding: 0.5rem 0.35rem;
+    max-width: 100vw;
+  }
 
   .marker {
     padding: 0;

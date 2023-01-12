@@ -1,14 +1,13 @@
 <template>
-
   <div @click="$emit('click')" class="node-block" :class="borderStatus">
     <div class="marker">
       <div>
-        <div class="title">
+        <div class="my-title">
           <slot name="title">
           </slot>
         </div>
       </div>
-      <div class="content">
+      <div class="my-content">
         <slot name="content">
 
         </slot>
@@ -49,7 +48,7 @@ export default {
 .node-block {
   border: 1px solid $color--nested-sub-border;
   border-radius: 10px;
-  height: 55px;
+  /* height: 55px; */
 }
 
 
@@ -64,7 +63,7 @@ export default {
 .title {
   background: $color--background none repeat scroll 0 0;
   display: flex;
-  padding: 0 0.35em;
+  /* padding: 0 0.35em; */
   margin: 0 0.75em;
   color: white;
   line-height: 1rem;
@@ -77,7 +76,7 @@ export default {
   color:$color--node-title;
 }
 
-.content {
+.my-content {
   padding: 0;
   color: white;
   text-align: left;
@@ -118,7 +117,7 @@ th {
           </slot>
         </div>
       </div>
-      <div class="content">
+      <div class="my-content">
         <slot name="content">
 
         </slot>
@@ -159,7 +158,7 @@ export default {
 .node-block {
   border: 1px solid $color--nested-sub-border;
   border-radius: 10px;
-  height: 60px;;
+  /* height: 60px;; */
 }
 
 
@@ -171,7 +170,7 @@ export default {
   flex-direction: column;
 }
 
-.title {
+.my-title {
   background: $color--background none repeat scroll 0 0;
   display: flex;
   padding: 0 0.35em;
@@ -182,12 +181,12 @@ export default {
   font-size: 0.9rem;
 }
 
-.title > span {
+.my-title > span {
   padding: 0 0 0 0.35em;
   color:$color--node-title;
 }
 
-.content {
+.my-content {
   padding: 0;
   color: white;
   text-align: left;

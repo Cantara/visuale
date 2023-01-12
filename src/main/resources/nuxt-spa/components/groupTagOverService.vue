@@ -6,7 +6,7 @@
       </template>
       <template v-slot:content>
         <div class="align-left">
-          <div id="grid" class="content" :style="dashboardHeight(value)">
+          <div id="grid" class="my-content" :style="dashboardHeight(value)">
             <Service :service-type-status="serviceType" :title="'TAG: '+tagTitle(service.service_tag)" v-for="(service,key) in value" :key="key" :service="service">
             </Service>
           </div>
@@ -47,7 +47,7 @@
 </script>
 
 <style scoped>
-  .content{
+  .my-content{
     padding: 0.5rem 0.35rem;
   }
 </style>

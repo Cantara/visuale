@@ -1,7 +1,7 @@
 <template>
 
     <div class="marker">
-      <div class="content">
+      <div class="my-content">
         <table>
           <tbody :class="borderStatus">
           <tr>
@@ -56,7 +56,7 @@
     border-color: $color--danger!important;
   }
 
-  .content {
+  .my-content {
     padding: 0;
     color: white;
     text-align: left;

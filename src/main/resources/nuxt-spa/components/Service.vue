@@ -1,16 +1,16 @@
 <template>
-    <ServiceElement :service="service">
-      <template #title>
-        <ServiceBattery
-          :healthy_nodes="service.healthy_nodes"
-        />
-        <span class="tag-title">{{ title|truncateText(34) }}</span>
-        <ServiceType v-if="serviceTypeStatus" :service_type="service.service_type"></ServiceType>
-      </template>
-      <template #content>
-        <Node :service="service"></Node>
-      </template>
-    </ServiceElement>
+  <ServiceElement :service="service">
+    <template #title>
+      <ServiceBattery
+        :healthy_nodes="service.healthy_nodes"
+      />
+      <span class="">{{ title|truncateText(34) }}</span>
+      <ServiceType v-if="serviceTypeStatus" :service_type="service.service_type"></ServiceType>
+    </template>
+    <template #content>
+      <Node :service="service"></Node>
+    </template>
+  </ServiceElement>
 </template>
 <script>
   import ServiceBattery from "./service/ServiceBattery";

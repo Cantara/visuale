@@ -9,7 +9,7 @@
           </slot>
         </ServiceTitleElement>
       </div>
-        <div class="content" :style="gridStyle">
+        <div class="my-content" :style="gridStyle">
           <slot name="content">
           </slot>
         </div>
