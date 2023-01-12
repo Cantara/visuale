@@ -1,6 +1,6 @@
 export default function({ store, route }) {
 
-  let params = route.query;
+  const params = route.query;
   for (const key of Object.keys(params)) {
     const keyValue = params[key];
     if (keyValue !== null && keyValue.length > 0) {
@@ -9,7 +9,7 @@ export default function({ store, route }) {
       if (key.toLowerCase() === 'ui_extension')
         store.commit('setStrategy',keyValue)
       if (key.toLowerCase() === 'servicetype')
-        store.commit('setServiceType',keyValue)
+        store.commit('setServiceType', keyValue === "true")
     }
   }
 

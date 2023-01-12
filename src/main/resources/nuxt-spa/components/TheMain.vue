@@ -5,11 +5,12 @@
         <div id="heading">
           {{ verticalText }}
           </div>
+
+          <GroupedServicesOverTag
+            :grouped-services-over-tag="services.groupedServicesOverTag"
+          />
       </div>
-      <groupedServicesOverTag
-        :grouped-services-over-tag="services.groupedServicesOverTag"
-      >
-      </groupedServicesOverTag>
+      <!-- </groupedServicesOverTag> -->
       <!-- <groupTagOverService -->
       <!--   :grouped-tag-over-service="services.groupedTagOverService" -->
       <!-- > -->
@@ -29,7 +30,7 @@
 <script>
 import {mapState, mapGetters, mapMutations} from 'vuex';
 import Service from "../components/Service";
-import groupedServicesOverTag from "../components/groupedServicesOverTag";
+import GroupedServicesOverTag from "../components/GroupedServicesOverTag";
 import GroupTagOverService from "../components/groupTagOverService";
 
 export default {
@@ -48,7 +49,7 @@ export default {
   components: {
     GroupTagOverService,
     Service,
-    groupedServicesOverTag
+    GroupedServicesOverTag
   },
   computed: {
     ...mapState('layout', ['mobile']),
