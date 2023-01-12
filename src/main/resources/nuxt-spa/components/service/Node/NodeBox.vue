@@ -1,7 +1,10 @@
 <template>
-  <NodeBoxElement @click="showModal = true" :healthy_nodes="healthy_nodes">
+  <NodeBoxElement @click="showModal = true" :healthy-nodes="healthy_nodes">
     <template v-slot:title>
-      <NodeTrafficLight :node="node"/> <span>{{title | truncateText(15)}}</span>
+      <NodeTrafficLight :node="node" class=""/>
+      <span>
+        {{title | truncateText(15)}}
+      </span>
     </template>
     <template v-slot:content>
       <ul class="my-list">

@@ -31,7 +31,7 @@ export default {
     border: 1px solid $color--border;
   }
 
-  .content{
+  .my-content{
     padding: 0.25em 0.5rem 0.5rem;
     max-width: 100vw;
   }
