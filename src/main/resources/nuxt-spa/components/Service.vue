@@ -1,11 +1,13 @@
 <template>
     <ServiceElement :service="service">
-      <template v-slot:title>
-        <ServiceBattery :healthy_nodes="service.healthy_nodes"/>
-        <span class="tag-title">{{title|truncateText(34)}}</span>
+      <template #title>
+        <ServiceBattery
+          :healthy_nodes="service.healthy_nodes"
+        />
+        <span class="tag-title">{{ title|truncateText(34) }}</span>
         <ServiceType v-if="serviceTypeStatus" :service_type="service.service_type"></ServiceType>
       </template>
-      <template v-slot:content>
+      <template #content>
         <Node :service="service"></Node>
       </template>
     </ServiceElement>
@@ -29,8 +31,9 @@
         type: Object,
       },
       title: {
-        required:false,
-        type:String
+        required: false,
+        type: String,
+        default: "",
       },
       serviceTypeStatus:{
         required: false,

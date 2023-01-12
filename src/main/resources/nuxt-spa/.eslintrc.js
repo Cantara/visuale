@@ -50,6 +50,7 @@ module.exports = {
     'vue/html-self-closing': 'off',
     'no-mixed-operators': 'off',
     'vue/order-in-components': 'off',
+    'vue/multi-word-component-names': 'off',
 
   }
 }
