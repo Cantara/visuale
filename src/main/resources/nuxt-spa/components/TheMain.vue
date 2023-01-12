@@ -2,12 +2,14 @@
   <div id="dashboard">
     <div class="container">
       <div class="heading-container">
-        <div id="heading">{{ verticalText }}</div>
+        <div id="heading">
+          {{ verticalText }}
+          </div>
       </div>
-      <!-- <groupedServicesOverTag -->
-      <!--   :grouped-services-over-tag="services.groupedServicesOverTag" -->
-      <!-- > -->
-      <!-- </groupedServicesOverTag> -->
+      <groupedServicesOverTag
+        :grouped-services-over-tag="services.groupedServicesOverTag"
+      >
+      </groupedServicesOverTag>
       <!-- <groupTagOverService -->
       <!--   :grouped-tag-over-service="services.groupedTagOverService" -->
       <!-- > -->
