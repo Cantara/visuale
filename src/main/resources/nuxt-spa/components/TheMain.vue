@@ -1,7 +1,7 @@
 <template>
   <div id="dashboard">
     <div class="container">
-      <div>
+      <div class="heading-container">
         <div id="heading">{{ verticalText }}</div>
       </div>
       <!-- <groupedServicesOverTag -->
@@ -86,16 +86,23 @@ export default {
 
 <style lang="scss" scoped>
 
+#dashboard {
+    min-height: 100vh;
+    display: flex;
+}
+
+.heading-container {
+  display: flex;
+  flex-grow: 1;
+}
 
 @media only screen and (min-width: 991px) {
   #dashboard {
     overflow-x: auto;
-    min-height: 100vh;
   }
 
   #heading {
     display: flex;
-
     padding: 0.5rem;
     writing-mode: vertical-rl;
     text-orientation: upright;
@@ -104,9 +111,25 @@ export default {
     background-color: darken(teal, 5%);
     overflow: hidden;
   }
+  .container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  }
 }
 
 @media only screen and (max-width: 990px) {
+
+  .heading-container {
+    flex-direction: column;
+  }
+
+  .container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+  }
+
   #dashboard {
     text-align: center;
     overflow-y: auto;
@@ -116,22 +139,12 @@ export default {
     /* padding: 0.35em 0.7em; */
     height: 2em;
     color: $color--description;
+    padding: 0.5rem;
     display: flex;
     font-size: 24px;
     text-align: center;
     background-color: darken(teal, 5%);
   }
-}
-
-.container {
-  margin: 0 auto;
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  /* max-width: 100vw; */
-  /* min-height: 100vh; */
-  /* flex-flow: column wrap; */
-  /* padding: 0 0.7em 0.7em; */
 }
 
 </style>
