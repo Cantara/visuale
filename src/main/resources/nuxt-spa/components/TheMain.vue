@@ -1,11 +1,23 @@
 <template>
   <div id="dashboard">
     <div class="container" :style="dashboardHeight">
-      <pre id="heading">&nbsp;<br/>&nbsp;<br/>{{ verticalText }}&nbsp;<br/>&nbsp;<br/>&nbsp;<br/>&nbsp;<br/></pre>
-      <groupedServicesOverTag :grouped-services-over-tag="services.groupedServicesOverTag"></groupedServicesOverTag>
-      <groupTagOverService :grouped-tag-over-service="services.groupedTagOverService"></groupTagOverService>
-      <Service :service-type-status="serviceType" :title="service.name" v-for="(service,index) in services.services"
-               :key="index" :service="service"></Service>
+      <pre id="heading">{{ verticalText }}</pre>
+      <groupedServicesOverTag
+        :grouped-services-over-tag="services.groupedServicesOverTag"
+      >
+      </groupedServicesOverTag>
+      <groupTagOverService
+        :grouped-tag-over-service="services.groupedTagOverService"
+      >
+      </groupTagOverService>
+      <Service
+        v-for="(service,index) in services.services"
+        :key="index"
+        :service-type-status="serviceType"
+        :title="service.name"
+        :service="service"
+      >
+      </Service>
     </div>
   </div>
 </template>
@@ -17,7 +29,7 @@ import groupedServicesOverTag from "../components/groupedServicesOverTag";
 import GroupTagOverService from "../components/groupTagOverService";
 
 export default {
-  name: "main",
+  name: "TheMain",
   head() {
     return {
       title:  this.services.name,
@@ -42,26 +54,27 @@ export default {
       services: 'getServices',
     }),
     dashboardHeight() {
-      if (!this.mobile)
+      if (!this.mobile) {
         return {
-          'height': this.dashboardContainerHeight + 'px',
+          'height': this.dashboardContainerHeight + 'px'
         };
+      } else {
+        return {}
+      }
     },
     verticalText() {
-      if (this.mobile)
-      {
+      if (this.mobile) {
         return this.getServicesName.toUpperCase()
-      }
-      else {
+      } else {
         let text = "";
-        for (let char of this.getServicesName.toUpperCase().split('')) {
-          text += char + '\n';
+        for (const ch of this.getServicesName.toUpperCase().split('')) {
+          text += ch + '\n';
         }
         return text;
       }
     },
     getServicesName()  {
-      if (this.services === undefined || this.services.name === undefined )
+      if (this.services === undefined || this.services.name === undefined)
         return "THIS SERVICE DASHBOARD NAME IS UNDEFINED";
       return this.services.name;
     }
@@ -82,7 +95,6 @@ export default {
 
 @media only screen and (min-width: 991px) {
   #dashboard {
-    min-height: 100vh;
     overflow-x: auto;
   }
 
@@ -100,7 +112,6 @@ export default {
   #dashboard {
     text-align: center;
     overflow-y: auto;
-    min-height: 100vh;
     height: 100vh;
   }
 

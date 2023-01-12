@@ -49,6 +49,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'vue/html-self-closing': 'off',
     'no-mixed-operators': 'off',
+    'vue/order-in-components': 'off',
 
   }
 }

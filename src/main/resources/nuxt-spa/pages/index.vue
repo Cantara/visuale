@@ -1,15 +1,14 @@
 <template>
-  <Main></Main>
+  <TheMain />
 </template>
 
 <script>
 
-  import Main from "~/components/Main";
+  import TheMain from "~/components/TheMain";
   export default {
-    name: "index",
 
     components:{
-      Main
+      TheMain
     }
 
   }
