@@ -91,7 +91,6 @@ export default {
 <style lang="scss" scoped>
 
 .heading-container {
-  flex-grow: 1;
   display: flex;
 }
 
