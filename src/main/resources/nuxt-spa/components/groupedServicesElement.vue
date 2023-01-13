@@ -30,13 +30,13 @@
 
 
   .service-tag-block {
+    display: flex;
     margin: 0.5em;
     border: 1px solid $color--border;
   }
 
   .content{
     padding: 0.25em 0.5rem 0.5rem;
-    max-width: 100vw;
   }
 
   .marker {

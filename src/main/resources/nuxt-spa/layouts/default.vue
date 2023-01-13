@@ -39,7 +39,7 @@
   }
   @media only screen and (max-width: 990px) {
     .background {
-      padding-bottom: 2rem;
+      /* padding-bottom: 2rem; */
     }
   }
 

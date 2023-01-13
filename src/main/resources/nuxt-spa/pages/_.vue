@@ -1,13 +1,12 @@
 <template>
-<Main></Main>
+<TheMain></TheMain>
 </template>
 
 <script>
-import Main from '../components/Main.vue'
+import TheMain from '../components/TheMain.vue'
 export default {
-  name: "_.index",
   components:{
-    Main
+    TheMain
   }
 }
 </script>
