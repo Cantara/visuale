@@ -2,7 +2,7 @@
     <ServiceElement :service="service">
       <template v-slot:title>
         <ServiceBattery :healthy_nodes="service.healthy_nodes"/>
-        <span class="tag-title">{{title|truncateText(28)}}</span>
+        <span class="tag-title">{{title|truncateText(25)}}</span>
         <ServiceType v-if="serviceTypeStatus" :service_type="service.service_type"></ServiceType>
       </template>
       <template v-slot:content>
