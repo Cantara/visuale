@@ -1,5 +1,5 @@
 export function displayNodeTableCondition(nodesLength){
-  return (nodesLength >= 5)
+  return (nodesLength >= 7)
 }
 export function pollingIntervalInMilliseconds(){
   if (process.env.NODE_ENV === "development")
