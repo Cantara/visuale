@@ -106,8 +106,10 @@ public final class Main {
         WebServer ws = WebServer.builder()
                 .port(port)
                 .addMediaSupport(JacksonSupport.create())
-                .routing(routing)
+                .addNamedRouting("visuale", routing)
+                //.routing(routing)
                 .build();
+
 
         // start the server
         //Server server = startServer();

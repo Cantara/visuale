@@ -7,19 +7,7 @@
     <name>${project.artifactId}</name>
     <version>12.15.7-SNAPSHOT</version>
 
-    <repositories>
-        <!-- Needed for parent    -->
-        <repository>
-            <id>cantara-releases</id>
-            <name>Cantara Release Repository</name>
-            <url>https://mvnrepo.cantara.no/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>cantara-snapshots</id>
-            <name>Cantara Snapshot Repository</name>
-            <url>https://mvnrepo.cantara.no/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
+
 
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/cantara/visuale.git</developerConnection>
@@ -61,7 +49,7 @@
     <properties>
         <mainClass>no.cantara.tools.visuale.Main</mainClass>
         <slf4j.version>2.0.6</slf4j.version>
-        <helidon.version>2.5.5</helidon.version>
+        <helidon.version>3.1.0</helidon.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
@@ -376,6 +364,19 @@
         </plugins>
     </build>
 
+    <repositories>
+        <!-- Needed for parent    -->
+        <repository>
+            <id>cantara-releases</id>
+            <name>Cantara Release Repository</name>
+            <url>https://mvnrepo.cantara.no/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>cantara-snapshots</id>
+            <name>Cantara Snapshot Repository</name>
+            <url>https://mvnrepo.cantara.no/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
