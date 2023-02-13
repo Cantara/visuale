@@ -60,7 +60,7 @@
         <dependency>
             <groupId>no.cantara.config</groupId>
             <artifactId>property-config</artifactId>
-            <version>0.8.14</version>
+            <version>0.8.15</version>
         </dependency>
 
         <dependency>
