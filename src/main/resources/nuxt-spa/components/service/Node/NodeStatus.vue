@@ -61,13 +61,13 @@
         }
       },
       mounted: function () {
-        this.runningSince = this.health['running since'];
+        this.runningSince = this.health['running_since'];
         this.startTimer();
       },
       watch: {
         health: {
           handler() {
-            this.runningSince = this.health['running since'];
+            this.runningSince = this.health['running_since'];
           },
           deep: true
         }

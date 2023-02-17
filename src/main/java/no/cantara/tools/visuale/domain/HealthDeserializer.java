@@ -57,7 +57,10 @@ public class HealthDeserializer extends StdDeserializer<Health> {
 
         String ipValue = jsonFlattenedMap.remove("ip");
         String versionValue = jsonFlattenedMap.remove("version");
-        String runningSinceValue = jsonFlattenedMap.remove("running since");
+        String runningSinceValue = jsonFlattenedMap.remove("running_since");
+        if ((runningSinceValue == null || runningSinceValue.length() < 1)) {
+            runningSinceValue = jsonFlattenedMap.remove("running since");
+        }
         if ((runningSinceValue == null || runningSinceValue.length() < 1)) {
             runningSinceValue = jsonFlattenedMap.remove("runningsince");
         }

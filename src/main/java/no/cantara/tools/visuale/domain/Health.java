@@ -11,19 +11,20 @@ import static no.cantara.tools.visuale.domain.HealthMapper.extractIpv4Address;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "Status",
+        "status",
         "name",
         "version",
         "probed_from",
         "now",
-        "running since",
+        "running_since",
         "ip",
         "original_health",
         "additionalProperties"
 })
 public class Health {
 
-    @JsonProperty("Status")
+    @JsonProperty("status")
+    @JsonAlias("Status")
     private String status;
     @JsonProperty("name")
     private String name;
@@ -33,7 +34,8 @@ public class Health {
     private String now;
 
     private String receivedNow;
-    @JsonProperty("running since")
+    @JsonProperty("running_since")
+    @JsonAlias("running since")
     private String runningSince;
     @JsonProperty("version")
     private String version;
@@ -50,7 +52,8 @@ public class Health {
     private String serviceType;
 
     //@JsonIgnore
-    @JsonProperty("additionalProperties")
+    @JsonProperty("additional_properties")
+    @JsonAlias("additionalProperties")
     private Map<String, String> additionalProperties = new HashMap<String, String>();
 
     @JsonIgnore
@@ -72,7 +75,7 @@ public class Health {
         return key;
     }
 
-    @JsonProperty("Status")
+    @JsonProperty("status")
     public String getStatus() {
         if (status == null || status.length() < 1) {
             return "N/A";
@@ -80,7 +83,8 @@ public class Health {
         return status;
     }
 
-    @JsonProperty("Status")
+    @JsonProperty("status")
+    @JsonAlias("Status")
     public void setStatus(String status) {
         this.status = status;
     }
@@ -166,20 +170,23 @@ public class Health {
         return this;
     }
 
+    @JsonProperty("received_now")
     public String getReceivedNow() {
         return receivedNow;
     }
 
+    @JsonProperty("received_now")
     public void setReceivedNow(String receivedNow) {
         this.receivedNow = receivedNow;
     }
 
-    @JsonProperty("running since")
+    @JsonProperty("running_since")
     public String getRunningSince() {
         return runningSince;
     }
 
-    @JsonProperty("running since")
+    @JsonProperty("running_since")
+    @JsonAlias("running since")
     public void setRunningSince(String runningSince) {
         this.runningSince = runningSince;
     }

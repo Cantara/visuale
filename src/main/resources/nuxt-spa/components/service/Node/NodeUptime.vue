@@ -35,7 +35,7 @@ export default {
     getRunningSince() {
       if (isNullOrUndefined(this.health))
         return 'missing';
-      if (!this.health.hasOwnProperty('running since'))
+      if (!this.health.hasOwnProperty('running_since'))
         return 'missing';
       if (this.minutesSince < 60)
         // small m since it means minutes, Uppercase M means Months
@@ -74,13 +74,13 @@ export default {
     }
   },
   mounted: function () {
-    this.runningSince = this.health['running since'];
+    this.runningSince = this.health['running_since'];
     this.startTimer();
   },
   watch: {
     health: {
       handler() {
-        this.runningSince = this.health['running since'];
+        this.runningSince = this.health['running_since'];
       },
       deep: true
     }
