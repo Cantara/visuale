@@ -11,7 +11,7 @@ RUN useradd --home $HOME  --shell /bin/bash $APP
 
 COPY scripts/* $HOME/scripts/
 COPY environment_config.json $HOME/
-COPY local_config.properties $HOME/
+COPY local_override.properties $HOME/
 RUN chown -R $APP $HOME/
 RUN chown -R $APP $HOME/*
 RUN chown -R $APP $HOME/scripts/*

@@ -88,9 +88,9 @@ more ./environment_config.json
 }
 ```
 
-If you want to override the server port, you may add a local_config.properties file
+If you want to override the server port, you may add a local_override.properties file
 
-more ./local_config.properties
+more ./local_override.properties
 ```
 server.port=9292
 #  default server.port=8080
