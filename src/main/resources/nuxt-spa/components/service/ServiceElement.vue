@@ -53,7 +53,7 @@
         };
       },
       nodeBoxWidth(){
-        if(this.service.name.length > 8)
+        if(this.service.name.length >= 8)
           return 2;
         return this.service.nodes.length > 1 ? 2 : 1;
       },
