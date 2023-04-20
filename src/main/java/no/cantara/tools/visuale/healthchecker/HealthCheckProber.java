@@ -65,13 +65,15 @@ public class HealthCheckProber {
     private void readConfig(EnvironmentConfig environmentConfig) {
         if (environmentConfig != null) {
             ConfEnv confEnv = environmentConfig.getConfEnv();
-            for (ConfNode s : confEnv.getNodes()) {
-                try {
-                    URI pollingURI = URI.create(s.getHealthUrl());
-                    environmentPathMap.put(pollingURI, s);
-                    healthCheckURLSet.add(pollingURI);
-                } catch (Exception e) {
-                    logger.warn("Found illegal URL in config: ", e);
+            if (confEnv != null && confEnv.getNodes() != null) {
+                for (ConfNode s : confEnv.getNodes()) {
+                    try {
+                        URI pollingURI = URI.create(s.getHealthUrl());
+                        environmentPathMap.put(pollingURI, s);
+                        healthCheckURLSet.add(pollingURI);
+                    } catch (Exception e) {
+                        logger.warn("Found illegal URL in config: ", e);
+                    }
                 }
             }
         } else {
