@@ -15,6 +15,14 @@
       </template>
     </VTooltip>
   </span>
+  <span v-else-if="getProbedFrom==='Visuale'">
+    <VTooltip>
+      <font-awesome-icon  :icon="faDMZ" class="normal" style="color:#eeeee4"/>
+      <template #popper>
+        Probed from Visuale
+      </template>
+    </VTooltip>
+  </span>
   <span v-else-if="getProbedFrom==='DMZ'">
     <VTooltip>
       <font-awesome-icon  :icon="faDMZ" class="normal" style="color:#eeeee4"/>
