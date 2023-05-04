@@ -111,6 +111,7 @@ slack_warning_channel=#devtest-warnings
 #### Slack "bot"
 
 To create the visuale slack bot follow the guide from api.slack.com and use the following manifest as a base.
+Profile image can be found [here.](https://github.com/cantara/visuale/visuale/master/doc/images/visuale.jpg)
 
 ``` json
 {
