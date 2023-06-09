@@ -2,6 +2,11 @@
   "extends": ["config:base"],
   "enabled": true,
   "prHourlyLimit": 0,
+  "ignoreDeps": [
+    "floating-vue",
+    "nuxt",
+    "sass-loader"
+  ],
   "packageRules": [
     {
       "matchManagers": ["npm","maven"],
