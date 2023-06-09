@@ -90,6 +90,16 @@ export default {
         }
       }
     },
+    babel: {
+      presets(env, [preset, options]) {
+        return [
+          ["@babel/preset-env", {
+            ...options,
+            useBuiltIns: "usage"
+          }]
+        ]
+      }
+    },
     /*
     ** You can extend webpack config here
     */
