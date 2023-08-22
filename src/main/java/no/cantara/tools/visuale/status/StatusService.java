@@ -113,7 +113,16 @@ public class StatusService implements Runnable {
         return environmentAsString.get();
     }
 
+    final int MIN_INTERVAL_BETWEEN_SENDS_MS = 1000;
+    long lastSent = 0;
     private void publishEnvironmentChanges() throws JsonProcessingException {
+        long now = System.currentTimeMillis();
+        long millisSinceLastSent = Math.max(0, now - lastSent); // avoid negative duration due to clock sync
+        if (millisSinceLastSent < MIN_INTERVAL_BETWEEN_SENDS_MS) {
+            return;
+        }
+        // take note of time before sending message for more accurate throttling
+        lastSent = System.currentTimeMillis();
         String updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environmentCache);
         if (hasValue(updatedEnvironmentString)) {
             environmentAsString.set(updatedEnvironmentString);
@@ -142,8 +151,6 @@ public class StatusService implements Runnable {
          * json string will only be serialized on every X events when there is a backlog in the queue. Once the queue is
          * empty the environment changes are always published immediately.
          */
-        final int MIN_INTERVAL_BETWEEN_SENDS_MS = 1000;
-        long lastSent = 0;
         final int X = 25;
         while (shouldRun.get()) {
             try {
@@ -152,14 +159,8 @@ public class StatusService implements Runnable {
                 for (int i = 1; event != null && shouldRun.get(); i++) {
                     environmentHasChanged |= processEventInternal(event);
                     if (environmentHasChanged && (i % X == 0)) {
-                        long now = System.currentTimeMillis();
-                        long millisSinceLastSent = Math.max(0, now - lastSent); // avoid negative duration due to clock sync
-                        if (millisSinceLastSent > MIN_INTERVAL_BETWEEN_SENDS_MS) {
-                            publishEnvironmentChanges();
-                            environmentHasChanged = false;
-                        }
-                        // take note of time before sending message for more accurate throttling
-                        lastSent = System.currentTimeMillis();
+                        publishEnvironmentChanges();
+                        environmentHasChanged = false;
                     }
                     event = eventQueue.poll();
                 }
