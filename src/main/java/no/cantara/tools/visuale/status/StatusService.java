@@ -113,16 +113,8 @@ public class StatusService implements Runnable {
         return environmentAsString.get();
     }
 
-    final int MIN_INTERVAL_BETWEEN_SENDS_MS = 1000;
-    long lastSent = 0;
     private void publishEnvironmentChanges() throws JsonProcessingException {
-        long now = System.currentTimeMillis();
-        long millisSinceLastSent = Math.max(0, now - lastSent); // avoid negative duration due to clock sync
-        if (millisSinceLastSent < MIN_INTERVAL_BETWEEN_SENDS_MS) {
-            return;
-        }
         // take note of time before sending message for more accurate throttling
-        lastSent = System.currentTimeMillis();
         String updatedEnvironmentString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(environmentCache);
         if (hasValue(updatedEnvironmentString)) {
             environmentAsString.set(updatedEnvironmentString);
@@ -176,6 +168,8 @@ public class StatusService implements Runnable {
         log.info("Status event-loop stopped");
     }
 
+    final int MIN_INTERVAL_BETWEEN_SENDS_MS = 1000;
+    long lastSent = 0;
     private boolean processEventInternal(Event event) {
         boolean environmentUpdated = false;
         try {
@@ -209,6 +203,12 @@ public class StatusService implements Runnable {
             log.error("Unable to update environmentAsString:", e);
         }
 
+        long now = System.currentTimeMillis();
+        long millisSinceLastSent = Math.max(0, now - lastSent); // avoid negative duration due to clock sync
+        if (millisSinceLastSent < MIN_INTERVAL_BETWEEN_SENDS_MS) {
+            return false;
+        }
+        lastSent = System.currentTimeMillis();
         return environmentUpdated;
     }
 
