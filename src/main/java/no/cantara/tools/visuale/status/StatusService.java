@@ -128,7 +128,7 @@ public class StatusService implements Runnable {
             if (healthy_nodes < 1) {
                 notificationService.sendAlarm(service.getName(), "Alarm - No healthy service nodes");
             } else if (healthy_nodes < 2) {
-                notificationService.sendWarning(service.getName(), "Warning - Less than two healthy service nodes, healthy nodes now: [" + healthy_nodes + "]\n" + service + "\n");
+                notificationService.sendWarning(service.getName(), "Warning - Less than two healthy service nodes, healthy nodes now: [" + healthy_nodes + "]");
             } else {
                 notificationService.clearService(service.getName());
             }
