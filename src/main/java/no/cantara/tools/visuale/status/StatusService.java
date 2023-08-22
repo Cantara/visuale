@@ -146,21 +146,17 @@ public class StatusService implements Runnable {
         while (shouldRun.get()) {
             try {
                 Event event = eventQueue.poll(2, TimeUnit.SECONDS);
-                //boolean environmentHasChanged = false;
-                //for (int i = 1; event != null && shouldRun.get(); i++) {
-                int numChanges = 0;
+                boolean environmentHasChanged = false;
                 for (int i = 1; event != null && shouldRun.get(); i++) {
-                    if (processEventInternal(event)) {
-                        numChanges++;
-                    }
-                    if (numChanges > 0 && (i % X == 0)) {
+                    environmentHasChanged |= processEventInternal(event);
+                    if (environmentHasChanged && (i % X == 0)) {
                         publishEnvironmentChanges();
-                        numChanges = 0;
+                        environmentHasChanged = false;
                     }
                     event = eventQueue.poll();
                 }
 
-                if (numChanges > 0) {
+                if (environmentHasChanged) {
                     publishEnvironmentChanges();
                 }
 
