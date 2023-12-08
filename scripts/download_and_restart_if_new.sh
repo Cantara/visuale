@@ -17,7 +17,7 @@ else
      echo "Running process found - doing nothing"
   else
      echo "Running process not found - restarting process"
-    $(dirname $BASH_SOURCE)/start-service.sh
+     $(dirname $BASH_SOURCE)/start-service.sh
   fi
 
 fi
