@@ -5,13 +5,13 @@
     <groupId>no.cantara.tools</groupId>
     <artifactId>visuale</artifactId>
     <name>${project.artifactId}</name>
-    <version>12.20.6</version>
+    <version>12.20.7-SNAPSHOT</version>
 
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/cantara/visuale.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/visuale.git</connection>
         <url>https://github.com/cantara/visuale</url>
-        <tag>v12.20.6</tag>
+        <tag>v12.19.0</tag>
     </scm>
     <developers>
         <developer>
