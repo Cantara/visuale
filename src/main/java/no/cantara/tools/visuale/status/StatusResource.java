@@ -78,6 +78,7 @@ public class StatusResource implements Service {
         logger.debug("updateHealthInfo");
 
         Map<String, List<String>> queryMap = request.queryParams().toMap();
+        String requestIP = request.remoteAddress();
         String serviceTag = "";
         if (queryMap.get("service_tag") != null) {
             serviceTag = queryMap.get("service_tag").get(0);
@@ -154,6 +155,7 @@ public class StatusResource implements Service {
                         return;
                     }
 
+                    health.setProbedFrom(health.getProbedFrom() + "-IP:" + requestIP);
                     statusService.queue(new NodeHealthData(statusService.getEnvironmentName(), health.getServiceName(),
                             health.getServiceTag(), health.getServiceType(), health.getName(), health));
 
