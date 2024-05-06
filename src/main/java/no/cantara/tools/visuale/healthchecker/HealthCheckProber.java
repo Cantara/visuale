@@ -25,9 +25,10 @@ public class HealthCheckProber {
 
     private static final int SECONDS_BETWEEN_SCHEDULED_IMPORT_RUNS = 10;
 
-    private final Set<URI> healthCheckURLSet = new CopyOnWriteArraySet<>();
+    private final Set<ConfNode> healthCheckURLSet = new CopyOnWriteArraySet<>();
+    private final Set<ConfNode> environmentPathSet = new CopyOnWriteArraySet<>();
     private final Map<URI, ConfNode> environmentPathMap = new ConcurrentHashMap<>();
-    private final Set<URI> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
+    private final Set<ConfNode> badHealthCheckURLSet = new CopyOnWriteArraySet<>();
     private final StatusService statusService;
     private final ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
 
@@ -47,8 +48,16 @@ public class HealthCheckProber {
         this.healthResource = healthResource;
         this.statusService = statusService;
         readConfig(environmentConfig);
-        healthResource.setOkPollingURLs(healthCheckURLSet);
-        healthResource.setFailedPollingURLs(badHealthCheckURLSet);
+        Set<URI> checkSet = new CopyOnWriteArraySet<>();
+        for (ConfNode uri : healthCheckURLSet) {
+            checkSet.add(URI.create(uri.getHealthUrl()));
+        }
+        healthResource.setOkPollingURLs(checkSet);
+        Set<URI> badSet = new CopyOnWriteArraySet<>();
+        for (ConfNode uri : badHealthCheckURLSet) {
+            badSet.add(URI.create(uri.getHealthUrl()));
+        }
+        healthResource.setFailedPollingURLs(badSet);
         checkHealthTask = () -> {
             checkHealth();
         };
@@ -70,7 +79,8 @@ public class HealthCheckProber {
                     try {
                         URI pollingURI = URI.create(s.getHealthUrl());
                         environmentPathMap.put(pollingURI, s);
-                        healthCheckURLSet.add(pollingURI);
+                        environmentPathSet.add(s);
+                        healthCheckURLSet.add(s);
                     } catch (Exception e) {
                         logger.warn("Found illegal URL in config: ", e);
                     }
@@ -87,8 +97,12 @@ public class HealthCheckProber {
                 while (scanner.hasNextLine()) {
                     String healthURL = scanner.nextLine();
                     if (healthURL != null && healthURL.length() > 10 && !healthURL.startsWith("#")) {
+                        ConfNode confNode = new ConfNode();
+                        confNode.setHealthUrl(healthURL);
+                        healthCheckURLSet.add(confNode);
+                        environmentPathSet.add(confNode);
                         URI url = new URI(healthURL);
-                        healthCheckURLSet.add(url);
+                        environmentPathMap.put(url, confNode);
                     }
                 }
             } catch (Exception e) {
@@ -99,13 +113,18 @@ public class HealthCheckProber {
 
 
     public void checkHealth() {
-        for (URI u : healthCheckURLSet) {
+        for (ConfNode u : healthCheckURLSet) {
             try {
-                String json = new CommandGetHealthJson(u).execute();
+                String json = new CommandGetHealthJson(URI.create(u.getHealthUrl())).execute();
                 if (json != null && !json.toLowerCase().contains("html")) {
                     Health health = HealthMapper.fromRealWorldJson(json);
                     health.setProbedFrom("Visuale");
-                    ConfNode confNode = environmentPathMap.get(u);
+                    ConfNode confNode;
+                    if (environmentPathSet.contains(u)) {
+                        confNode = u;
+                    } else {
+                        confNode = environmentPathMap.get(u.getHealthUrl());
+                    }
                     String serviceName = confNode.getServiceName();
                     String serviceTag = confNode.getServiceTag();
                     String serviceType = confNode.getServiceType();
@@ -133,8 +152,17 @@ public class HealthCheckProber {
             healthCheckURLSet.addAll(badHealthCheckURLSet);
             badHealthCheckURLSet.clear();
         }
-        healthResource.setOkPollingURLs(healthCheckURLSet);
-        healthResource.setFailedPollingURLs(badHealthCheckURLSet);
+
+        Set<URI> okURLSet = new CopyOnWriteArraySet<>();
+        for (ConfNode c : healthCheckURLSet) {
+            okURLSet.add(URI.create(c.getHealthUrl()));
+        }
+        healthResource.setOkPollingURLs(okURLSet);
+        Set<URI> failURLSet = new CopyOnWriteArraySet<>();
+        for (ConfNode c : badHealthCheckURLSet) {
+            okURLSet.add(URI.create(c.getHealthUrl()));
+        }
+        healthResource.setFailedPollingURLs(failURLSet);
 
     }
 }

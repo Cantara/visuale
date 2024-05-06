@@ -1,5 +1,24 @@
 {
-  "environment_name": "Quadim DEVTEST",
+  "environment_name": "Visuale DEVTEST",
   "nodes": [
+    {
+      "service_name": "visuale",
+      "service_tag": "Visuale DEVTEST",
+      "node_name": "node1",
+      "health_url": "http://localhost:8080/health"
+    },
+    {
+      "service_name": "visuale",
+      "service_tag": "Visuale QA",
+      "node_name": "node1",
+      "health_url": "http://localhost:8080/health"
+    },
+    {
+      "service_name": "visuale",
+      "service_tag": "Visuale PROD",
+      "node_name": "node1",
+      "health_url": "http://localhost:8080/health"
+    }
+
   ]
 }
