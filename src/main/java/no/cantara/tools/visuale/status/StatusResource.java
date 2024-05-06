@@ -116,6 +116,8 @@ public class StatusResource implements Service {
                         response.status(400).send("Missing json health in body.");
                         return;
                     }
+                    health.setProbedFrom(health.getProbedFrom() + "-IP:" + requestIP);
+
                     if (hasValue(sNa)) {
                         health.setServiceName(sNa);
                     }
@@ -137,6 +139,7 @@ public class StatusResource implements Service {
                         health.setProbedFrom("Unknown");
                     }
 
+
                     List<String> missingFields = new ArrayList<>();
                     if (!hasValue(health.getServiceName())) {
                         missingFields.add("service_name");
@@ -155,7 +158,6 @@ public class StatusResource implements Service {
                         return;
                     }
 
-                    health.setProbedFrom(health.getProbedFrom() + "-IP:" + requestIP);
                     statusService.queue(new NodeHealthData(statusService.getEnvironmentName(), health.getServiceName(),
                             health.getServiceTag(), health.getServiceType(), health.getName(), health));
 
