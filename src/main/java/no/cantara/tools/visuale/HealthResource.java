@@ -93,7 +93,7 @@ public class HealthResource implements Service {
         return "(DEV VERSION)" + " [" + applicationInstanceName + " - " + getMyIPAddresssString() + "]";
     }
 
-    public String getMyIPAddresssesString() {
+    public static String getMyIPAddresssesString() {
 
         String ipAdresses;
 
@@ -116,7 +116,7 @@ public class HealthResource implements Service {
         return ipAdresses;
     }
 
-    public String getMyIPAddresssString() {
+    public static String getMyIPAddresssString() {
         String fullString = getMyIPAddresssesString();
         return fullString.substring(0, fullString.indexOf(" "));
     }

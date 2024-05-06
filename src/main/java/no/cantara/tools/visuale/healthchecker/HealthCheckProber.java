@@ -118,7 +118,7 @@ public class HealthCheckProber {
                 String json = new CommandGetHealthJson(URI.create(u.getHealthUrl())).execute();
                 if (json != null && !json.toLowerCase().contains("html")) {
                     Health health = HealthMapper.fromRealWorldJson(json);
-                    health.setProbedFrom("Visuale");
+                    health.setProbedFrom("Visuale on " + HealthResource.getMyIPAddresssString());
                     ConfNode confNode;
                     if (environmentPathSet.contains(u)) {
                         confNode = u;
