@@ -50,7 +50,7 @@
         <dependency>
             <groupId>no.cantara.config</groupId>
             <artifactId>property-config</artifactId>
-            <version>0.9.12</version>
+            <version>0.9.13</version>
         </dependency>
         <dependency>
             <groupId>no.cantara.base</groupId>
