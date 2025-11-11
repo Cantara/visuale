@@ -55,7 +55,7 @@
         <dependency>
             <groupId>no.cantara.base</groupId>
             <artifactId>Hystrix-BaseCommands</artifactId>
-            <version>0.1.99</version>
+            <version>0.1.100</version>
         </dependency>
         <!--Config-->
         <dependency>
