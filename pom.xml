@@ -52,6 +52,12 @@
             <artifactId>property-config</artifactId>
             <version>0.9.22</version>
         </dependency>
+        <!-- JAXB — required by property-config 0.9.x on Java 11+ -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
         <dependency>
             <groupId>no.cantara.base</groupId>
             <artifactId>Hystrix-BaseCommands</artifactId>
