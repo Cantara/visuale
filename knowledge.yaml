@@ -1,0 +1,26 @@
+id: visuale
+name: Visuale
+version: 12.24.2-SNAPSHOT
+description: |
+  Near real-time dashboard for monitoring microservice health in production.
+  Displays service status, version information, and health trends for fleets of
+  Cantara microservices. Designed as a complement to traditional monitoring
+  tools like Grafana.
+units:
+  - id: dashboard
+    name: Dashboard
+    type: webapp
+    description: Web dashboard UI — real-time service grid with health status and version display.
+    path: src/main/java/no/cantara/tools
+  - id: health-collector
+    name: Health Collector
+    type: component
+    description: Service health polling and aggregation — periodically probes each registered service.
+  - id: service-registry
+    name: Service Registry
+    type: component
+    description: Fleet registry — tracks which services exist, their URLs, and current versions.
+  - id: api
+    name: API
+    type: api
+    description: REST API for health data ingestion (from services) and query (from the dashboard).
