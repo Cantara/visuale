@@ -1,0 +1,226 @@
+name: cantara-visuale
+version: 1.0.0
+description: >
+  Visuale real-time microservice health dashboard. Covers the backend (Helidon,
+  StatusService event-driven architecture, health check probing, Slack notifications),
+  the frontend (Nuxt 2 + Vue SPA), the REST API, and integration patterns for
+  registering services. Useful operational context for monitoring Cantara fleets.
+
+  Trigger phrases: "visuale, visuale dashboard, service monitoring, health dashboard,
+  microservice health, visuale status, health check probing, service grid,
+  visuale api, visuale slack, fleet monitoring"
+
+context:
+  org: cantara
+  repos:
+    - visuale
+
+instructions: |
+  ## Overview
+
+  Visuale is Cantara's near-real-time dashboard for monitoring microservice health in
+  production. It displays a grid of services with health status, version info, and
+  health trends. Designed as a lightweight complement to Grafana/Prometheus.
+
+  **Version:** 12.24.2-SNAPSHOT
+  **Port:** 8080 (default, overridable via `local_override.properties`)
+  **Backend:** Java 11+, Helidon SE (not Jetty/Jersey)
+  **Frontend:** Nuxt 2 + Vue (SPA, built during Maven package)
+
+  ## Architecture
+
+  ```
+  Services (push health via PUT)        Health Check Probing
+       |                                      |
+       v                                      v
+  StatusResource (REST API)           HealthCheckProber (scheduled, 10s)
+       |                                      |
+       v                                      v
+  StatusService (event-driven, blocking queue)
+       |
+       v
+  Cached JSON (environment state)  -->  Nuxt SPA (polls GET /status)
+       |
+       v
+  NotificationService (Slack alerts)
+  ```
+
+  ## Backend Components
+
+  ### Entry Point
+  - `no.cantara.tools.visuale.Main` -- application startup (Helidon SE)
+
+  ### StatusService (Core Engine)
+  - Event-driven architecture using a blocking queue
+  - Processes health updates asynchronously
+  - Throttled: minimum 1 second between updates
+  - Batch processing: every 25 events when backlogged
+  - Publishes changes to a cached JSON string for the frontend
+
+  ### StatusResource (REST API)
+  | Endpoint | Method | Purpose |
+  |----------|--------|---------|
+  | `/status` or `/api/status` | GET | Returns full environment JSON |
+  | `/status` or `/api/status` | PUT | Update health (body: service_name, service_tag, service_type, name) |
+  | `/status/{env}/{service}/{node}` | PUT | Update specific node health |
+
+  ### HealthCheckProber
+  - Scheduled polling service: probes configured health endpoints every 10 seconds
+  - Configuration: `environment_config.json` (list of services and health URLs)
+  - Normalizes diverse health JSON formats via `HealthMapper`
+
+  ### NotificationService
+  - Slack alerting when services go down or come back up
+  - Configured via `local_override.properties`
+
+  ### Domain Model
+  - `Environment` -- top-level: contains services
+  - `Service` -- a logical service: contains nodes
+  - `Node` -- a single instance/replica of a service
+  - `Health` -- a health check response (status, version, IP, running_since)
+  - `HealthMapper` -- normalizes various health JSON formats to standard `Health` model
+
+  **Identification:** Services and nodes are matched by name + tag combination.
+  Tags are case-insensitive. Nodes are matched by name first, then IP address.
+
+  ## Frontend (Nuxt 2 + Vue SPA)
+
+  Located in `src/main/resources/nuxt-spa/`.
+
+  **Key components:**
+  - `PollingService.vue` -- periodically fetches status JSON from backend
+  - `Service.vue` -- renders a service card with its nodes
+  - `ServiceBattery.vue` -- visual health indicator (traffic light)
+  - `Node.vue` -- individual node status display
+  - `groupedServicesOverTag.vue` -- group by tag view
+  - `groupTagOverService.vue` -- group by service view
+
+  **UI Extensions (query params):**
+  - `?ui_extension=groupByTag` -- group services by tag
+  - `?ui_extension=groupByService` -- group by service
+  - `&servicetype=true` -- show service type icons
+
+  **Development:**
+  ```bash
+  cd src/main/resources/nuxt-spa
+  npm run dev      # Dev server on localhost:3000
+  npm run lint     # ESLint
+  npm run test     # Jest tests
+  npm run generate # Build static site
+  ```
+
+  ## Configuration
+
+  ### environment_config.json
+  Defines services and their health endpoint URLs for probing:
+  ```json
+  {
+    "environment_name": "production",
+    "services": [
+      {
+        "service_name": "my-service",
+        "service_tag": "prod",
+        "service_type": "java",
+        "health_url": "http://my-service:8080/health"
+      }
+    ]
+  }
+  ```
+
+  ### local_override.properties
+  ```properties
+  server.port=8080
+  access_token=my-secret-token
+  slack_webhook_url=https://hooks.slack.com/...
+  slack_alerting_enabled=true
+  ```
+
+  ## How To: Common Tasks
+
+  ### Register a service with Visuale (push model)
+  Services push their health status via PUT:
+  ```bash
+  curl -X PUT http://visuale:8080/api/status \
+    -H "Content-Type: application/json" \
+    -d '{
+      "service_name": "my-service",
+      "service_tag": "prod",
+      "service_type": "java",
+      "name": "node-1",
+      "status": "OK",
+      "version": "1.2.3",
+      "ip": "10.0.1.5",
+      "running_since": "2026-01-15T10:00:00Z"
+    }'
+  ```
+
+  ### Register a service with Visuale (pull model)
+  Add the service to `environment_config.json` and HealthCheckProber will poll it
+  every 10 seconds.
+
+  ### Build and run
+  ```bash
+  cd /src/cantara/visuale
+
+  # Full build (Java + Nuxt)
+  mvn clean package
+
+  # Run
+  java -jar target/visuale.jar
+
+  # Test
+  mvn test
+  mvn test -Dtest=StatusServiceTest
+  ```
+
+  ### Develop frontend only
+  ```bash
+  cd /src/cantara/visuale/src/main/resources/nuxt-spa
+  npm install
+  npm run dev  # Hot-reload dev server on :3000
+  ```
+
+  ## Integration with Cantara Ecosystem
+
+  Visuale integrates with other Cantara components:
+
+  - **Stingray-based services:** Stingray health endpoints (`StingrayHealthResource`) follow
+    Cantara health conventions that `HealthMapper` understands automatically.
+  - **Whydah services:** STS, UAS, OAuth2Service all expose `/health` endpoints compatible
+    with Visuale probing.
+  - **Valuereporter:** Complementary monitoring. Visuale = service-level health status.
+    Valuereporter = method-level performance metrics.
+  - **ConfigService:** Can be monitored by Visuale like any other service.
+
+  ## Gotchas & Pitfalls
+
+  1. **Helidon, not Jetty:** Visuale uses Helidon SE, NOT embedded Jetty. This is different
+     from most Cantara services (which use Stingray/Jetty). The REST patterns are slightly
+     different (Helidon routing, not JAX-RS annotations).
+
+  2. **Frontend built during Maven package:** The Nuxt SPA is compiled during `mvn package`
+     and served as static content from the JAR. Changes to the frontend require a full
+     Maven build unless using `npm run dev` for local development.
+
+  3. **Health format normalization:** `HealthMapper` handles diverse health JSON formats from
+     different services. If a new service has an unusual health format, `HealthMapper` may
+     need to be extended.
+
+  4. **Tag case-insensitivity:** Service tags are case-insensitive for matching. "PROD" and
+     "prod" are the same tag. Names are case-sensitive.
+
+  5. **Throttling:** StatusService throttles updates to minimum 1 second apart. Rapid health
+     changes may be batched and the dashboard may lag slightly behind real-time.
+
+  6. **Access token:** If `access_token` is set in properties, all PUT requests must include
+     it in the request. GET requests are always open.
+
+  ## Related Skills
+
+  - `cantara-stingray.yaml` -- Stingray framework (Visuale monitors Stingray-based services)
+  - `cantara-valuereporter.yaml` -- Valuereporter (complementary monitoring)
+  - `cantara-whydah.yaml` -- Whydah (Visuale can monitor Whydah services)
+
+  ## Repository Path
+
+  - Visuale: `/src/cantara/visuale/`
