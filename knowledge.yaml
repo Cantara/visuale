@@ -1,3 +1,17 @@
+kcp_version: "0.21"
+updated: "2026-06-20"
+language: en
+license: "Apache-2.0"
+indexing: private
+temporal:
+  valid_from: "2026-03-14"
+signing:
+  scheme: ed25519
+  scope: this-manifest
+  public_key: "MCowBQYDK2VwAyEAuipgusnqU9vjf3p2yPVLD/DmERT6tBbLOqEETdxAhMU="
+  signature: "https://raw.githubusercontent.com/Cantara/visuale/master/knowledge.yaml.sig"
+not_for: []
+
 id: visuale
 name: Visuale
 version: 12.24.2-SNAPSHOT
@@ -12,15 +26,27 @@ units:
     type: webapp
     description: Web dashboard UI — real-time service grid with health status and version display.
     path: src/main/java/no/cantara/tools
+      content_hash:
+        algorithm: sha256
+        value: ""
   - id: health-collector
     name: Health Collector
     type: component
     description: Service health polling and aggregation — periodically probes each registered service.
+      content_hash:
+        algorithm: sha256
+        value: ""
   - id: service-registry
     name: Service Registry
     type: component
     description: Fleet registry — tracks which services exist, their URLs, and current versions.
+      content_hash:
+        algorithm: sha256
+        value: ""
   - id: api
     name: API
     type: api
     description: REST API for health data ingestion (from services) and query (from the dashboard).
+      content_hash:
+        algorithm: sha256
+        value: ""
