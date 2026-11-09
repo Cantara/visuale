@@ -113,7 +113,7 @@ public class StatusResource implements Service {
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
                     if (health == null) {
-                        response.status(400).send("Missing json health in body.");
+                        response.status(400).send("Unable to parse the body as health json.");
                         return;
                     }
                     health.setProbedFrom(health.getProbedFrom() + "-IP:" + requestIP);
@@ -172,7 +172,8 @@ public class StatusResource implements Service {
     private Health jsonToHealth(String healthJsonString) {
         Health myHealth = null;
         if (healthJsonString != null || healthJsonString.length() < 1) {
-            myHealth = HealthMapper.fromRealWorldJson(healthJsonString);
+            // null when the body cannot be parsed: the PUT handlers answer 400 rather than store an empty Health
+            myHealth = HealthMapper.fromRealWorldJsonOrNull(healthJsonString);
         }
         return myHealth;
     }
@@ -217,22 +218,27 @@ public class StatusResource implements Service {
         request.content().as(String.class)
                 .thenApply(this::jsonToHealth)
                 .thenAccept(health -> {
-                    if (health != null) {
-                        if (health.getIp() == null ||
-                                health.getIp().length() < 5 ||
-                                health.getIp().equalsIgnoreCase("10.10.10.10") ||
-                                health.getIp().equalsIgnoreCase("0.0.0.0")) {
-                            if (sXff.length() > 1) {
-                                health.setIp(sXff + "-xff");
-                            } else {
-                                health.setIp(rAddr + "-remote");
-                            }
-                            health.setProbedFrom("Unknown");
-                        }
-                        statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
+                    if (health == null) {
+                        response.status(400).send("Unable to parse the body as health json.");
+                        return;
                     }
+                    if (health.getIp() == null ||
+                            health.getIp().length() < 5 ||
+                            health.getIp().equalsIgnoreCase("10.10.10.10") ||
+                            health.getIp().equalsIgnoreCase("0.0.0.0")) {
+                        if (sXff.length() > 1) {
+                            health.setIp(sXff + "-xff");
+                        } else {
+                            health.setIp(rAddr + "-remote");
+                        }
+                        health.setProbedFrom("Unknown");
+                    }
+                    statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
+                    response.status(204).send();
                 })
-                .thenAccept(v -> response.status(204).send());
+                .exceptionallyAccept(t -> {
+                    response.status(400).send("Unable to deserialize body as valid health json");
+                });
     }
 
     public StatusService getStatusService() {
