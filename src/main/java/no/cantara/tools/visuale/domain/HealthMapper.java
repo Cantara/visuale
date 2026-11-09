@@ -28,17 +28,25 @@ public class HealthMapper {
     private static boolean tryCustomDeserializer = true;
 
     public static Health fromRealWorldJson(String json) {
+        Health health = fromRealWorldJsonOrNull(json);
+        return health != null ? health : new Health();
+    }
+
+    /**
+     * Like {@link #fromRealWorldJson(String)}, but returns null when the body cannot be parsed, so a caller that
+     * receives health from a sender can refuse it instead of storing an empty Health.
+     */
+    public static Health fromRealWorldJsonOrNull(String json) {
         if (json == null || json.length() < 1) {
             return new Health().withStatus("DOWN");
         }
         json = json.replaceAll("\\p{Cc}", "");
 
-        Health health = new Health();
         if (!tryCustomDeserializer) {
             try {
-                health = mapper.readValue(json, Health.class);
+                Health health = mapper.readValue(json, Health.class);
                 health.setOriginalHealth(json);
-
+                return health;
             } catch (Exception e) {
                 log.error("Unable to jackson deserialize json.  json:{}  exception:{}", json, Arrays.asList(e.getStackTrace()));
             }
@@ -65,7 +73,7 @@ public class HealthMapper {
             }
         }
 
-        return health;
+        return null;
     }
 
     public static String extractIpv4Address(String source) {

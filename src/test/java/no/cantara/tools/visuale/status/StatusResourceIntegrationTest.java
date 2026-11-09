@@ -263,6 +263,31 @@ public class StatusResourceIntegrationTest {
         }
     }
 
+    @Test
+    public void thatUnparseableNodeHealthIsRefusedAndNotStored() throws IOException {
+        // A body that cannot be parsed used to be stored as an empty health under the sender's
+        // X-Forwarded-For address + "-xff": a node with no status, no version and no timestamp,
+        // which nothing ages out and only a restart removes. The sender got 204 and never knew.
+
+        StatusService statusService = main.getStatusResource().getStatusService();
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+
+        Client client = ClientBuilder.newClient();
+        Response response = client
+                .target(getConnectionString("/api/status/myenv/GhostService/node1"))
+                .queryParam("service_tag", "ghost")
+                .queryParam("service_type", "CS")
+                .request()
+                .header("X-Forwarded-For", "16.192.160.240")
+                .put(Entity.entity("{\"status\": \"UP\", \"version\": ", MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(400, response.getStatus(), "PUT of an unparseable health body");
+
+        statusService.waitForEvents(5, TimeUnit.SECONDS);
+        Environment environment = StatusService.mapper.readValue(getStatus(client), Environment.class);
+        assertTrue(environment.getServices().stream().noneMatch(service -> "GhostService".equals(service.getName())),
+                "no node is stored for a body that could not be parsed");
+    }
+
     private void putHealth(String healthJson, Client client, String path, String serviceTag, String serviceType) {
         Response jsonObject = client
                 .target(getConnectionString(path))
