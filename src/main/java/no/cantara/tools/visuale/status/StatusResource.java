@@ -216,12 +216,12 @@ public class StatusResource implements Service {
 
 
         request.content().as(String.class)
-                .thenApply(this::jsonToHealth)
-                .thenAccept(health -> {
-                    if (health == null) {
-                        response.status(400).send("Unable to parse the body as health json.");
-                        return;
-                    }
+                .thenAccept(body -> {
+                    Health parsed = jsonToHealth(body);
+                    // The path names the node, so a body we cannot parse still tells us the node exists and reported
+                    // now. Store that with its own status rather than an empty Health, and tell the sender with a 400.
+                    boolean unparseable = parsed == null;
+                    Health health = unparseable ? HealthMapper.unparseableHealth(body) : parsed;
                     if (health.getIp() == null ||
                             health.getIp().length() < 5 ||
                             health.getIp().equalsIgnoreCase("10.10.10.10") ||
@@ -234,7 +234,12 @@ public class StatusResource implements Service {
                         health.setProbedFrom("Unknown");
                     }
                     statusService.queueNodeHealth(envName, serviceName, sTa, sTy, nodeName, health);
-                    response.status(204).send();
+                    if (unparseable) {
+                        response.status(400).send("Unable to parse the body as health json. The node is shown as "
+                                + HealthMapper.STATUS_UNPARSEABLE + ".");
+                    } else {
+                        response.status(204).send();
+                    }
                 })
                 .exceptionallyAccept(t -> {
                     response.status(400).send("Unable to deserialize body as valid health json");
