@@ -76,6 +76,27 @@ public class HealthMapper {
         return null;
     }
 
+    /** Status of a node whose last health body could not be parsed. Never "OK", so the node is not healthy. */
+    public static final String STATUS_UNPARSEABLE = "UNPARSEABLE";
+
+    /** Longest part of an unparseable body kept for display, so a sender cannot grow the board without bound. */
+    static final int MAX_UNPARSEABLE_BODY_KEPT = 1000;
+
+    /**
+     * Health for a body that could not be parsed: the sender exists and reported now, but what it said is unknown.
+     * It carries the time it was received, so last_seen is real, and the start of the body, so it can be inspected.
+     */
+    public static Health unparseableHealth(String body) {
+        String now = Instant.now().toString();
+        String kept = body == null ? "" : body.replaceAll("\\p{Cc}", "");
+        if (kept.length() > MAX_UNPARSEABLE_BODY_KEPT) {
+            kept = kept.substring(0, MAX_UNPARSEABLE_BODY_KEPT);
+        }
+        Health health = new Health().withStatus(STATUS_UNPARSEABLE).withNow(now).withOriginalHealth(kept);
+        health.setReceivedNow(now);
+        return health;
+    }
+
     public static String extractIpv4Address(String source) {
         if (source == null) {
             return "0.0.0.0";

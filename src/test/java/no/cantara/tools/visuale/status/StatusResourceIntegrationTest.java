@@ -6,6 +6,7 @@ import no.cantara.config.testsupport.ApplicationPropertiesTestHelper;
 import no.cantara.tools.visuale.Main;
 import no.cantara.tools.visuale.domain.Environment;
 import no.cantara.tools.visuale.domain.Health;
+import no.cantara.tools.visuale.domain.HealthMapper;
 import no.cantara.tools.visuale.domain.Node;
 import no.cantara.tools.visuale.domain.Service;
 import org.junit.jupiter.api.AfterAll;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import static no.cantara.tools.visuale.utils.MockEnvironment.MOCK_ENVORONMENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StatusResourceIntegrationTest {
@@ -264,10 +266,12 @@ public class StatusResourceIntegrationTest {
     }
 
     @Test
-    public void thatUnparseableNodeHealthIsRefusedAndNotStored() throws IOException {
+    public void thatUnparseableNodeHealthIsShownAsUnparseableWithItsTime() throws IOException {
         // A body that cannot be parsed used to be stored as an empty health under the sender's
-        // X-Forwarded-For address + "-xff": a node with no status, no version and no timestamp,
-        // which nothing ages out and only a restart removes. The sender got 204 and never knew.
+        // X-Forwarded-For address + "-xff": a node with no status and no timestamp, so its last_seen
+        // was a made-up "30 days ago" and nothing said why. The sender got 204 and never knew.
+        // That a node reported is still worth showing, so it is kept, marked, timed and answered 400.
+        Instant before = Instant.now().minusSeconds(1);
 
         StatusService statusService = main.getStatusResource().getStatusService();
         statusService.waitForEvents(5, TimeUnit.SECONDS);
@@ -284,8 +288,19 @@ public class StatusResourceIntegrationTest {
 
         statusService.waitForEvents(5, TimeUnit.SECONDS);
         Environment environment = StatusService.mapper.readValue(getStatus(client), Environment.class);
-        assertTrue(environment.getServices().stream().noneMatch(service -> "GhostService".equals(service.getName())),
-                "no node is stored for a body that could not be parsed");
+        Service ghost = environment.getServices().stream()
+                .filter(service -> "GhostService".equals(service.getName()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("the node that sent an unparseable body is shown"));
+        assertEquals(1, ghost.getNodes().size());
+        Node node = ghost.getNodes().iterator().next();
+        assertEquals("node1", node.getName());
+        assertFalse(node.isHealthy(), "a node with unparseable health is not healthy");
+        Health latest = node.getLatestHealth();
+        assertEquals(HealthMapper.STATUS_UNPARSEABLE, latest.getStatus());
+        assertTrue(latest.getOriginalHealth().startsWith("{\"status\": \"UP\""), "the body is kept for inspection");
+        assertFalse(Instant.parse(node.getlastSeen()).isBefore(before),
+                "last_seen is when the body arrived, not a default");
     }
 
     private void putHealth(String healthJson, Client client, String path, String serviceTag, String serviceType) {

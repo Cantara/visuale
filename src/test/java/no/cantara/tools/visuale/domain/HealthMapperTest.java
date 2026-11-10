@@ -3,11 +3,26 @@ package no.cantara.tools.visuale.domain;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HealthMapperTest {
 
     ObjectMapper mapper = new ObjectMapper();
+
+    @Test
+    public void unparseableHealthIsMarkedTimedAndKeepsABoundedBody() {
+        String body = "{\"status\": \"UP\", " + "x".repeat(5000);
+        Health health = HealthMapper.unparseableHealth(body);
+        assertEquals(HealthMapper.STATUS_UNPARSEABLE, health.getStatus());
+        assertNotNull(health.getNow());
+        assertEquals(health.getNow(), health.getReceivedNow());
+        assertEquals(HealthMapper.MAX_UNPARSEABLE_BODY_KEPT, health.getOriginalHealth().length());
+        assertTrue(health.getOriginalHealth().startsWith("{\"status\": \"UP\""));
+        assertNull(HealthMapper.fromRealWorldJsonOrNull(body), "the body really is unparseable");
+    }
 
     @Test
     public void testHealthMapper() throws Exception {
